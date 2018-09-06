@@ -1,22 +1,14 @@
 local Visible = false
 
-local Gamemodes = {
-	{title="TDM", desc="Good ol' TDM!", txd="mpweaponscommon", txn="w_ex_grenadesmoke"},
-	{title="ROBLOX", desc="Good game", txd="mpweaponscommon", txn="w_ex_pe"},
-	{title="test", desc="stuff", txd="mpweaponscommon", txn="w_lr_rpg"},
-	{title="aaa", desc="ssssss", txd="mpweaponscommon", txn="w_sg_assaultshotgun"},
-	{title="lol why", desc="kill me", txd="mpweaponscommon", txn="w_sb_microsmg"},
-	{title="xd", desc="sds", txd="mpweaponscommon", txn="w_pi_combatpistol"},
-}
-
 RegisterNetEvent("StartVoteScreen")
-AddEventHandler("StartVoteScreen", function()
+AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
 	Citizen.CreateThread(function()
+		local Gamemodes = SelectedGamemodes
 		local MenuIndex = 0
 		local VotingS = Scaleform.Request("MP_NEXT_JOB_SELECTION")
-		Streaming.RequestTextureDict("mpweaponscommon")
 		Scaleform.CallFunction(VotingS, false, "SET_TITLE", "Next Gamemode", 0)
 		for i=1, #Gamemodes do
+			Streaming.RequestTextureDict(Gamemodes[i].txd)
 			Scaleform.CallFunction(VotingS, false, "SET_GRID_ITEM", i-1, Gamemodes[i].title, Gamemodes[i].txd, Gamemodes[i].txn, Gamemodes[i].textureLoadType or 0, Gamemodes[i].verifiedType or 0, Gamemodes[i].eIcon or -1, Gamemodes[i].bCheck or false, Gamemodes[i].rpMult or 0, Gamemodes[i].cashMult or 0, Gamemodes[i].bDisabled or false, Gamemodes[i].iconCol or 25)
 		end
 		Visible = true
