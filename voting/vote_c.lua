@@ -3,6 +3,7 @@ local Visible = false
 RegisterNetEvent("StartVoteScreen")
 AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
 	Citizen.CreateThread(function()
+		local Instructional = GUI.InstructionalButtons(176, "Vote")
 		local Gamemodes = SelectedGamemodes
 		local MenuIndex = 0
 		local VotingS = Scaleform.Request("MP_NEXT_JOB_SELECTION")
@@ -16,6 +17,7 @@ AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
 			Citizen.Wait(0)
 			if Visible then
 				Scaleform.Render2D(VotingS)
+				Scaleform.Render2D(Instructional)
 				HideHudAndRadarThisFrame()
 				Scaleform.CallFunction(VotingS, false, "SET_SELECTION", MenuIndex, Gamemodes[MenuIndex+1].title, Gamemodes[MenuIndex+1].desc, false)
 				if IsControlJustPressed(0, 172) then -- Up

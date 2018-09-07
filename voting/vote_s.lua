@@ -1,23 +1,35 @@
 local Gamemodes = {
-	{id = 1, title="TDM", desc="Good ol' TDM!", txd="mpweaponscommon", txn="w_ex_grenadesmoke"},
-	{id = 2, title="ROBLOX", desc="Good game", txd="mpweaponscommon", txn="w_ex_pe"},
-	{id = 3, title="test", desc="stuff", txd="mpweaponscommon", txn="w_lr_rpg"},
-	{id = 4, title="aaa", desc="ssssss", txd="mpweaponscommon", txn="w_sg_assaultshotgun"},
-	{id = 5, title="lol why", desc="kill me", txd="mpweaponscommon", txn="w_sb_microsmg"},
-	{id = 6, title="xd", desc="sds", txd="mpweaponscommon", txn="w_pi_combatpistol"},
-	{id = 7, title="xre", desc="sds", txd="mpweaponscommon", txn="w_pi_combatpistol"},
-	{id = 8, title="xr232e", desc="sd23s", txd="mpweaponscommon", txn="w_pi_combatpistol"},
-	{id = 9, title="xr32e", desc="s3ds", txd="mpweaponscommon", txn="w_pi_combatpistol"},
-	{id = 10, title="x222222re", desc="sd44s", txd="mpweaponscommon", txn="w_pi_combatpistol"},
+	{id = 1, title="Team Deathmatch", desc="Good ol' TDM!", txd="mpweaponscommon", txn="w_ex_grenadesmoke"},
+	{id = 2, title="Capture The Flag", desc="Two teams try to capture a flag and bring it back to their base.", txd="mpweaponscommon", txn="w_ex_pe"},
+	{id = 3, title="Free For All", desc="Chaos will ensue! Kill kill kill!", txd="mpweaponscommon", txn="w_lr_rpg"},
+	{id = 4, title="Another Gamemode", desc="This is another gamemode!", txd="mpweaponscommon", txn="w_sg_assaultshotgun"},
+	{id = 5, title="Another Gamemode II", desc="This is another gamemode!", txd="mpweaponscommon", txn="w_sb_microsmg"},
+	{id = 6, title="Another Gamemode III", desc="This is another gamemode!", txd="mpweaponscommon", txn="w_pi_combatpistol"},
+	{id = 7, title="Another Gamemode IV", desc="This is another gamemode!", txd="digitaloverlay", txn="signal2"},
+	{id = 8, title="Another Gamemode V", desc="This is another gamemode!", txd="digitaloverlay", txn="static1"},
+	{id = 9, title="Another Gamemode VI", desc="This is another gamemode!", txd="mpweaponsgang0", txn="w_pi_stungun"},
+	{id = 10, title="Another Gamemode VII", desc="This is another gamemode!", txd="mpweaponsgang0", txn="w_sr_heavysniper"},
 }
 
 function SelectVotedGamemodes()
-	local Chosen = {}
-	-- TODO: Add code here to select 6 random gamemodes and return them
+    local Chosen = {}
+    local Duplicates = {}
+    local Copy = Gamemodes
+    local randomIndex
+    for i=1, 6 do
+        repeat
+            randomIndex = math.random(#Copy)
+        until not Duplicates[randomIndex]
+        Duplicates[randomIndex] = true
+        table.insert(Chosen, Copy[randomIndex])
+        table.remove(Copy, RandomIndex)
+    end
+
+    return Chosen
 end
 
 
-
 RegisterCommand("votedebug", function(source)
-	TriggerClientEvent("StartVoteScreen", source, Gamemodes)
+	local randomGames = SelectVotedGamemodes()
+	TriggerClientEvent("StartVoteScreen", source, randomGames)
 end)
