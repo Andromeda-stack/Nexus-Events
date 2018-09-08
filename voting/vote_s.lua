@@ -33,11 +33,11 @@ local Voted = {}
 RegisterNetEvent("AddVote")
 AddEventHandler("AddVote", function(VotedIndex)
     local found = false 
-    --for i=1, #Voted do
-    --    if Voted[i].id == source then
-    --        found = true
-    --    end
-    --end
+    for i=1, #Voted do
+        if Voted[i].id == source then
+            found = true
+        end
+    end
 
     if not found then
         table.insert(Voted, {id = source, vIndex = VotedIndex})
@@ -48,8 +48,7 @@ AddEventHandler("AddVote", function(VotedIndex)
     end
 end)
 
-
-function UpdateVotes()
+function GetTotalVotes()
     local TotalVoted = {
         [0] = 0,
         [1] = 0,
@@ -65,16 +64,38 @@ function UpdateVotes()
                 TotalVoted[i] = TotalVoted[i] + 1
             end
         end
-        print("Total voted: "..TotalVoted[i]..", "..i)
     end
 
-    TriggerClientEvent("UpdateDisplayVotes", -1, TotalVoted)
+    return TotalVoted
+end
+
+
+function UpdateVotes()
+    local Votes = GetTotalVotes()
+    TriggerClientEvent("UpdateDisplayVotes", -1, Votes)
+end
+
+function StartVoteCounter()
+    Citizen.CreateThread(function()
+        local counter = 20
+        for i=counter, 0, -1 do
+            Wait(1000)
+            if GetNumPlayerIndices() == #Voted then
+                break
+            end
+        end
+
+        local TotalVotes = GetTotalVotes()
+        table.sort(TotalVotes)
+        TriggerClientEvent("PrepareGamemode", -1, TotalVotes[#TotalVotes])
+    end)
 end
 
 
 
 RegisterCommand("votedebug", function(source)
     Voted = {}
+    StartVoteCounter()
 	local randomGames = SelectVotedGamemodes()
-	TriggerClientEvent("StartVoteScreen", source, randomGames)
+	TriggerClientEvent("StartVoteScreen", -1, randomGames)
 end)

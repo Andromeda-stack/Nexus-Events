@@ -24,6 +24,11 @@ end)
 RegisterNetEvent("StartVoteScreen")
 AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
 	Citizen.CreateThread(function()
+		SwitchOutPlayer(PlayerPedId(),0,1)
+		Wait(500)
+		while Citizen.InvokeNative(0x470555300D10B2A5) ~= 5 and Citizen.InvokeNative(0x470555300D10B2A5) ~= 3 do
+			Citizen.Wait(0)
+		end
 		local Instructional = GUI.InstructionalButtons(176, "Vote")
 		local Gamemodes = SelectedGamemodes
 		local MenuIndex = 0
@@ -58,11 +63,22 @@ AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
 					if MenuIndex + 1 >= 0 and MenuIndex + 1 <= 5 then
 						MenuIndex = MenuIndex + 1
 					end
-				elseif IsControlJustPressed(0, 176) then -- Enter
+				elseif IsControlJustPressed(0, 176) and not Voted then -- Enter
 					TriggerServerEvent("AddVote", MenuIndex)
 					Voted = true
 				end
 			end
 		end
 	end)
+end)
+
+RegisterNetEvent("PrepareGamemode")
+AddEventHandler("PrepareGamemode", function(Gamemode)
+	Visible = false
+	Wait(5000)
+	N_0xd8295af639fd9cb8(PlayerPedId())
+end)
+
+RegisterCommand("stopit", function(source)
+    N_0xd8295af639fd9cb8(PlayerPedId())
 end)
