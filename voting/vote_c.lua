@@ -1,4 +1,25 @@
 local Visible = false
+local VotingS
+
+local TotalVoted = {
+	[0] = 0,
+	[1] = 0,
+	[2] = 0,
+	[3] = 0,
+	[4] = 0,
+	[5] = 0,
+}
+
+RegisterNetEvent("UpdateDisplayVotes")
+AddEventHandler("UpdateDisplayVotes", function(VotesTable)
+	--SET_GRID_ITEM_VOTE(i, iNumVotes, voteBGColour, bShowCheckMark, bFlashBG)
+	for i=0, 5 do
+		if TotalVoted[i] ~= VotesTable[i] then
+			Scaleform.CallFunction(VotingS, false, "SET_GRID_ITEM_VOTE", i, VotesTable[i], 25, false, true)
+		end
+	end
+	TotalVoted = VotesTable
+end)
 
 RegisterNetEvent("StartVoteScreen")
 AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
@@ -6,7 +27,8 @@ AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
 		local Instructional = GUI.InstructionalButtons(176, "Vote")
 		local Gamemodes = SelectedGamemodes
 		local MenuIndex = 0
-		local VotingS = Scaleform.Request("MP_NEXT_JOB_SELECTION")
+		VotingS = Scaleform.Request("MP_NEXT_JOB_SELECTION")
+		local Voted = false
 		Scaleform.CallFunction(VotingS, false, "SET_TITLE", "Next Gamemode", 0)
 		for i=1, #Gamemodes do
 			Streaming.RequestTextureDict(Gamemodes[i].txd)
@@ -37,6 +59,8 @@ AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
 						MenuIndex = MenuIndex + 1
 					end
 				elseif IsControlJustPressed(0, 176) then -- Enter
+					TriggerServerEvent("AddVote", MenuIndex)
+					Voted = true
 				end
 			end
 		end

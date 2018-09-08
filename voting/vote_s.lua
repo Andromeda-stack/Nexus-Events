@@ -28,8 +28,53 @@ function SelectVotedGamemodes()
     return Chosen
 end
 
+local Voted = {}
+
+RegisterNetEvent("AddVote")
+AddEventHandler("AddVote", function(VotedIndex)
+    local found = false 
+    --for i=1, #Voted do
+    --    if Voted[i].id == source then
+    --        found = true
+    --    end
+    --end
+
+    if not found then
+        table.insert(Voted, {id = source, vIndex = VotedIndex})
+        print("Inserted the vote for "..VotedIndex)
+        UpdateVotes()
+    else
+        print("Seems like someone is cheating, or it bugged!")
+    end
+end)
+
+
+function UpdateVotes()
+    local TotalVoted = {
+        [0] = 0,
+        [1] = 0,
+        [2] = 0,
+        [3] = 0,
+        [4] = 0,
+        [5] = 0,
+    }
+
+    for i=0, 5 do
+        for x=1, #Voted do
+            if Voted[x].vIndex == i then
+                TotalVoted[i] = TotalVoted[i] + 1
+            end
+        end
+        print("Total voted: "..TotalVoted[i]..", "..i)
+    end
+
+    TriggerClientEvent("UpdateDisplayVotes", -1, TotalVoted)
+end
+
+
 
 RegisterCommand("votedebug", function(source)
+    Voted = {}
 	local randomGames = SelectVotedGamemodes()
 	TriggerClientEvent("StartVoteScreen", source, randomGames)
 end)
