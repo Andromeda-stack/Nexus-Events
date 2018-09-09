@@ -1,21 +1,22 @@
-local Visible = false
+VotingVisible = false
 local VotingS
 
 local TotalVoted = {
-	[0] = 0,
-	[1] = 0,
-	[2] = 0,
-	[3] = 0,
-	[4] = 0,
-	[5] = 0,
+	[0] = {votes = 0, id = 0},
+	[1] = {votes = 0, id = 0},
+	[2] = {votes = 0, id = 0},
+	[3] = {votes = 0, id = 0},
+	[4] = {votes = 0, id = 0},
+	[5] = {votes = 0, id = 0},
 }
+
 
 RegisterNetEvent("UpdateDisplayVotes")
 AddEventHandler("UpdateDisplayVotes", function(VotesTable)
 	--SET_GRID_ITEM_VOTE(i, iNumVotes, voteBGColour, bShowCheckMark, bFlashBG)
 	for i=0, 5 do
-		if TotalVoted[i] ~= VotesTable[i] then
-			Scaleform.CallFunction(VotingS, false, "SET_GRID_ITEM_VOTE", i, VotesTable[i], 25, false, true)
+		if TotalVoted[i].votes ~= VotesTable[i].votes then
+			Scaleform.CallFunction(VotingS, false, "SET_GRID_ITEM_VOTE", i, VotesTable[i].votes, 25, false, true)
 		end
 	end
 	TotalVoted = VotesTable
@@ -39,13 +40,13 @@ AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
 			Streaming.RequestTextureDict(Gamemodes[i].txd)
 			Scaleform.CallFunction(VotingS, false, "SET_GRID_ITEM", i-1, Gamemodes[i].title, Gamemodes[i].txd, Gamemodes[i].txn, Gamemodes[i].textureLoadType or 0, Gamemodes[i].verifiedType or 0, Gamemodes[i].eIcon or -1, Gamemodes[i].bCheck or false, Gamemodes[i].rpMult or 0, Gamemodes[i].cashMult or 0, Gamemodes[i].bDisabled or false, Gamemodes[i].iconCol or 25)
 		end
-		Visible = true
+		VotingVisible = true
 		while true do
 			Citizen.Wait(0)
-			if Visible then
+			if VotingVisible then
 				Scaleform.Render2D(VotingS)
 				Scaleform.Render2D(Instructional)
-				HideHudAndRadarThisFrame()
+				--HideHudAndRadarThisFrame()
 				Scaleform.CallFunction(VotingS, false, "SET_SELECTION", MenuIndex, Gamemodes[MenuIndex+1].title, Gamemodes[MenuIndex+1].desc, false)
 				if IsControlJustPressed(0, 172) then -- Up
 					if MenuIndex - 3 >= 0 and MenuIndex - 3 <= 5 then
@@ -68,16 +69,23 @@ AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
 					Voted = true
 				end
 			end
+
+			if not VotingVisible then
+				break
+			end
 		end
 	end)
 end)
 
-RegisterNetEvent("PrepareGamemode")
-AddEventHandler("PrepareGamemode", function(Gamemode)
-	Visible = false
-	Wait(5000)
-	N_0xd8295af639fd9cb8(PlayerPedId())
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
+		if Citizen.InvokeNative(0x470555300D10B2A5) == 3 or Citizen.InvokeNative(0x470555300D10B2A5) == 5 or Citizen.InvokeNative(0x470555300D10B2A5) == 8 or Citizen.InvokeNative(0x470555300D10B2A5) == 10 then
+			HideHudAndRadarThisFrame()
+		end
+	end
 end)
+
 
 RegisterCommand("stopit", function(source)
     N_0xd8295af639fd9cb8(PlayerPedId())

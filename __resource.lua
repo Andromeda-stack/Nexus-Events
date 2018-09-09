@@ -6,6 +6,9 @@ client_scripts {
 	"functions/colours.lua",
 	"functions/streaming.lua",
 	"functions/gui.lua",
+	--Gamemodes
+	"gamemodes/gamemode_handler_c.lua",
+	"gamemodes/test_gamemode.lua",
 	--VOTING
 	"voting/vote_c.lua",
 	--MAIN
@@ -14,5 +17,10 @@ client_scripts {
 
 server_scripts {
 	"voting/vote_s.lua",
-	"main/main_s.lua"
+	"main/main_s.lua",
+	"gamemodes/gamemode_handler_s.lua"
+}
+
+shared_scripts {
+	"shared.lua"
 }
