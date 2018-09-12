@@ -12,6 +12,16 @@ function GUI.MissionText(text, displayTime, drawImmediately)
 	EndTextCommandPrint(displayTime, drawImmediately)
 end
 
+function GUI.DrawGameNotification(text, blink, picName1, picName2, flash, iconType, sender, subject)
+    SetNotificationTextEntry("STRING")
+    if not picName1 then
+        AddTextComponentSubstringPlayerName(text)
+    else
+        SetNotificationMessage(picName1, picName2, flash, iconType, sender, subject)
+    end
+    DrawNotification(blink, true)
+end
+
 function GUI.DrawText(text, position, font, colour, scale, shadow, outline, center, rightJustify, width)
 	SetTextFont(font)
 	SetTextColour(colour.r, colour.g, colour.b, colour.a)
