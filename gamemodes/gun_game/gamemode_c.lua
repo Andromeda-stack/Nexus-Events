@@ -13,10 +13,13 @@ AddEventHandler("Gamemode:Init:4", function(GamemodeData)
     SetCamFov(view1, 45.0)
     RenderScriptCams(true, 1, 500,  true,  true)
 
+end)
+
+AddEventHandler("Gamemode:Start:4", function()
     StartMain()
 end)
 
-local GunLevel = 1
+local GunLevels = {}
 
 local WeaponLevels = {
     "WEAPON_PISTOL",
@@ -61,7 +64,7 @@ function StartMain()
     end)
 end
 
-function UpdateGunLevel()
+function UpdateGunLevel(GunLevel)
     local OldWeapon = WeaponLevels[GunLevel - 1]
     local NewWeapon = WeaponLevels[GunLevel]
     local ped = PlayerPedId()
@@ -72,8 +75,18 @@ function UpdateGunLevel()
 end
 
 RegisterNetEvent("gun_game:UpGunLevel")
-AddEventHandler("gun_game:UpGunLevel", function()
-    GunLevel = GunLevel + 1
+AddEventHandler("gun_game:UpGunLevel", function(GunLevel)
     GUI.DrawGameNotification("~g~Level up!~s~ Your gun level is now: ~g~"..GunLevel, true)
-    UpdateGunLevel()
+    UpdateGunLevel(GunLevel)
+end)
+
+RegisterNetEvent("gun_game:UpdateLevels")
+AddEventHandler("gun_game:UpdateLevels", function(GunData)
+    GunLevels = GunData
+    local top3 = {}
+    table.sort(GunLevels)
+    for k, v in pairs(GunLevels) do
+        print(k, v)
+        table.insert(top3, {sid = k, score = v})
+    end
 end)
