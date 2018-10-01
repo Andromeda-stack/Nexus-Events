@@ -1,5 +1,4 @@
 local GunLevels = {}
-/run TriggerClientEvent("Gamemode:Start:4", -1)
 
 AddEventHandler("Gamemode:Start:4", function()
     for i=0, GetNumPlayerIndices()-1 do

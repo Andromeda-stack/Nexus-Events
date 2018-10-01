@@ -10,6 +10,7 @@ client_scripts {
 	--Gamemodes
 	"gamemodes/gamemode_handler_c.lua",
 	"gamemodes/gun_game/gamemode_c.lua",
+	"gamemodes/gun_game/pickup_c.lua",
 	--VOTING
 	"voting/vote_c.lua",
 	--MAIN
