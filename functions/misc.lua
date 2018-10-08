@@ -15,3 +15,15 @@ function Misc.LeavingArea(x, y, z, x2, y2, z2, timer, missionmsg, timertext, sca
         end_time = nil
     end
 end
+
+function Misc.SplitString(inputstr, sep)
+    if sep == nil then
+            sep = "%s"
+    end
+    local t={} ; i=1
+    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+            t[i] = str
+            i = i + 1
+    end
+    return t
+end
