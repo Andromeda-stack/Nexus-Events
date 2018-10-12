@@ -1,17 +1,10 @@
 local InitPos = {3615.9, 3789.83, 29.2}
-Sessionised = true
+Sessionised = false
 
 RegisterNetEvent("Gamemode:Start:4")
 RegisterNetEvent("Gamemode:Session:4")
 RegisterNetEvent("Gamemode:FetchCoords:4")
 
-Citizen.CreateThread(function()
-    Citizen.Wait(0)
-    while true do
-        TriggerServerEvent("Gamemode:PollRandomCoords:4")
-        Wait(10000)
-    end
-end)
 
 AddEventHandler("Gamemode:FetchCoords:4", function(Coords)
     CoordsX, CoordsY, CoordsZ = table.unpack(Misc.SplitString(Coords, ","))
@@ -19,21 +12,22 @@ AddEventHandler("Gamemode:FetchCoords:4", function(Coords)
     SetEntityCoords(PlayerPedId(), tonumber(CoordsX), tonumber(CoordsY), tonumber(CoordsZ), 0.0, 0.0, 0.0, 0)
 end)
 
-AddEventHandler("Gamemode:Init:4", function(GamemodeData)
+AddEventHandler("Gamemode:Init:4", function()
     local x,y,z = table.unpack(InitPos)
+    Sessonised = true
 
-    SetEntityCoords(PlayerPedId(), 199.32, -935.56, 32.0, 0.0, 0.0, 0.0, 0)
+    TriggerServerEvent("Gamemode:PollRandomCoords:4")
+
     N_0xd8295af639fd9cb8(PlayerPedId())
 
     while Citizen.InvokeNative(0x470555300D10B2A5) ~= 8 and Citizen.InvokeNative(0x470555300D10B2A5) ~= 10 do
         Citizen.Wait(0)
     end
 
-    SetEntityCoords(PlayerPedId(), 3615.9, 3789.83, 29.2, 0.0, 0.0, 0.0, 0)
     N_0xd8295af639fd9cb8(PlayerPedId())
 
     view1 = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
-    SetCamCoord(view1, 3615.9, 3799.83, 29.2 + 35)
+    SetCamCoord(view1, tonumber(CoordsX), tonumber(CoordsY), tonumber(CoordsZ) + 20)
     SetCamRot(view1, -20.0, 0.0, 180.0)
     SetCamFov(view1, 45.0)
     RenderScriptCams(true, 1, 500,  true,  true)
@@ -43,15 +37,11 @@ AddEventHandler("Gamemode:Init:4", function(GamemodeData)
     DestroyCam(view1, 0)
     RenderScriptCams(0, 0, 1, 1, 1)
     SetFocusEntity(GetPlayerPed(PlayerId()))
+    TriggerEvent("gun_game:UpGunLevel", 2)
 
-    Wait(100000)
-end)
-
-AddEventHandler("Gamemode:Start:4", function()
-    Sessionised = true
+    Wait(10000)
     StartMain()
 end)
-
 
 local GunLevels = {}
 
@@ -75,7 +65,7 @@ function StartMain()
         SetBlipAlpha(Blip, 0)
         UpdateGunLevel(2)
 
-        while true do
+        while Sessionised do
             Citizen.Wait(0)
             if not IsEntityInArea(IsPedInAnyVehicle(PlayerPedId(), true) and GetVehiclePedIsIn(PlayerPedId(), false) or PlayerPedId(), 290.91, -858.1, 20.23, 107.82, -1003.69, 47.8, 1, 1, 1) then
                 if not end_time then end_time = GetNetworkTime() + 30000 end
@@ -95,9 +85,10 @@ function StartMain()
 
 
     Citizen.CreateThread(function()
-        while true do
+        while Sessionised do
             Citizen.Wait(0)
-            GUI.DrawBar(0.13, "YOUR SCORE", GunLevel, nil, 1)
+            GUI.DrawBar(0.13, "LEVEL", GunLevel, nil, 3)
+            GUI.DrawBar(0.13, "KILLS", GunLevel, nil, 4)
         end
     end)
 end
@@ -132,3 +123,6 @@ AddEventHandler("gun_game:UpdateLevels", function(GunData)
         table.insert(top3, {sid = k, score = v})
     end
 end)
+
+
+
