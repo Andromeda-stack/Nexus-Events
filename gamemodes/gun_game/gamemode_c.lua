@@ -17,7 +17,11 @@ AddEventHandler("Gamemode:End:4", function(winner, winnername)
             end
             return
         end
-        DrawGameEndScreen(false, winnername)
+        local start = GetGameTimer()
+
+        while GetGameTimer() - start < 5000 do 
+            DrawGameEndScreen(false, winnername)
+        end
     end) 
 end)
 
