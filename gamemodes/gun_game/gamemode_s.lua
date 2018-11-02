@@ -7,6 +7,7 @@ local SessionRunnable = true
 RegisterNetEvent("Gamemode:UpdatePlayers:4")
 RegisterNetEvent("Gamemode:Heartbeat:4")
 RegisterNetEvent("Gamemode:PollRandomCoords:4")
+RegisterNetEvent("Gamemode:UpdateUI:4")
 
 AddEventHandler("Gamemode:Start:4", function()
     for i=0, GetNumPlayerIndices() - 1 do
@@ -19,12 +20,22 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
     GunLevels[killerid] = GunLevels[killerid] + 1
     TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[killerid])
     TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
+    PlayerList[getPlayerIndex(killerid)].level = PlayerList[getPlayerIndex(killerid)].level + 1
 end)
 
 AddEventHandler("Gamemode:UpdatePlayers:4", function(Operation, Player)
     if Operation == "Append" then
+        -- adding some checks to prevent cheating.
+        for i,v in ipairs(PlayerList) do
+            if v == Player then
+                -- player is cheating.
+                CancelEvent()
+                return
+            end
+        end
         PlayerList[#PlayerList + 1] = Player
     elseif Operation == "Fetch" then
+        -- this doesn't make sense, but shhhh we'll figure it out later :^)
         return PlayerList
     end
 end)
@@ -53,3 +64,11 @@ AddEventHandler("Gamemode:PollRandomCoords:4", function()
 
     TriggerClientEvent("Gamemode:FetchCoords:4", source, AvailableCoords[ChosenIndex])
 end)
+
+local function getPlayerIndex(id)
+    for i,v in ipairs(PlayerList) do
+        if v.serverId == id then
+            return i
+        end
+    end
+end
