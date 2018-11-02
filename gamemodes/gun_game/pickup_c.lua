@@ -43,7 +43,7 @@ AddEventHandler("Gamemode:SpawnPickup:4", function()
         PickupInService = true
 end)
 
-Citizen.CreateThread(function()
+createThread(function()
     while true do
         Citizen.Wait(0)
         if IsControlJustPressed(0, 38) then

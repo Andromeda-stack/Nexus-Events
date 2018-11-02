@@ -76,7 +76,7 @@ function StartMain()
     Wait(2500)
     RenderScriptCams(false, 1, 500,  true,  true)
 
-    Citizen.CreateThread(function()
+    createThread(function()
         local ShardS = Scaleform.Request("MP_BIG_MESSAGE_FREEMODE")
         local bx,by,bz = table.unpack(InitPos)
         local Blip = AddBlipForCoord(bx, by, bz)
@@ -104,7 +104,7 @@ function StartMain()
     end)
 
 
-    Citizen.CreateThread(function()
+    createThread(function()
         while Sessionised do
             Citizen.Wait(0)
             GUI.DrawBar(0.13, "LEVEL", GunLevel, nil, 3)

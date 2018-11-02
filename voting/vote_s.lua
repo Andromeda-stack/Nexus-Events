@@ -68,7 +68,7 @@ function UpdateVotes()
 end
 
 function StartVoteCounter()
-    Citizen.CreateThread(function()
+    createThread(function()
         local counter = 20
         for i=counter, 0, -1 do
             Wait(1000)
