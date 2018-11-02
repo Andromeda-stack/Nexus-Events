@@ -65,6 +65,7 @@ local WeaponLevels = {
     "WEAPON_SMG",
     "WEAPON_RPG",
     "WEAPON_COMBATMG"
+    -- needs more guns here, also normally a gun game should have progressively worse guns instead of the opposite as done here :D
 }
 
 function StartMain()
