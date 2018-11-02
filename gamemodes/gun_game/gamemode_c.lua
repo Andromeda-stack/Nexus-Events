@@ -1,10 +1,25 @@
 local InitPos = {3615.9, 3789.83, 29.2}
+local PlayerServerId = GetPlayerServerId(PlayerId())
 Sessionised = false
 
 RegisterNetEvent("Gamemode:Start:4")
 RegisterNetEvent("Gamemode:Session:4")
 RegisterNetEvent("Gamemode:FetchCoords:4")
+RegisterNetEvent("Gamemode:End:4")
 
+AddEventHandler("Gamemode:End:4", function(winner, winnername) 
+    CreateThread(function()
+        if winner == PlayerServerId then
+            local start = GetGameTimer()
+
+            while GetGameTimer() - start < 5000 do 
+                DrawGameEndScreen(true)
+            end
+            return
+        end
+        DrawGameEndScreen(false, winnername)
+    end) 
+end)
 
 AddEventHandler("Gamemode:FetchCoords:4", function(Coords)
     CoordsX, CoordsY, CoordsZ = table.unpack(Misc.SplitString(Coords, ","))
@@ -103,6 +118,32 @@ function UpdateGunLevel(GunLevel)
     end
 
     GiveWeaponToPed(ped, GetHashKey(NewWeapon), 1000, false, true)
+end
+
+local function DrawGameEndScreen(win, winner)
+    if win then
+        local scaleform = RequestScaleformMovie("mp_big_message_freemode")
+        while not HasScaleformMovieLoaded(scaleform) do
+            Citizen.Wait(0)
+        end
+
+        BeginScaleformMovieMethod(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE")
+        PushScaleformMovieMethodParameterString("You WIN!")
+        PushScaleformMovieMethodParameterString("Nice Job!")
+        PushScaleformMovieMethodParameterInt(5)
+        EndScaleformMovieMethod()
+    else
+        local scaleform = RequestScaleformMovie("mp_big_message_freemode")
+        while not HasScaleformMovieLoaded(scaleform) do
+            Citizen.Wait(0)
+        end
+
+        BeginScaleformMovieMethod(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE")
+        PushScaleformMovieMethodParameterString("You LOSE!")
+        PushScaleformMovieMethodParameterString(winner.."Won The Game.")
+        PushScaleformMovieMethodParameterInt(5)
+        EndScaleformMovieMethod()
+    end
 end
 
 RegisterNetEvent("gun_game:UpGunLevel")

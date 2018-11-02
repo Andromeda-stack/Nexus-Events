@@ -17,6 +17,12 @@ AddEventHandler("Gamemode:Start:4", function()
 end)
 
 AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
+    -- this will be subject to lua injection exploits unfortunately, but there's not much that can be done.
+    if not GunLevels[killerid] then 
+        GunLevels[killerid] = 1
+    elseif GunLevels[killerid] == 24 then
+        TriggerClientEvent("Game:End:4", -1, source, GetPlayerName(source))
+    end
     GunLevels[killerid] = GunLevels[killerid] + 1
     TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[killerid])
     TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
