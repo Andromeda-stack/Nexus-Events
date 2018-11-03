@@ -1,6 +1,8 @@
 resource_manifest_version "44febabe-d386-4d18-afbe-5e627f4af937"
 
 client_scripts {
+	--MAIN (has to be at the top)
+	"main/main_c.lua"
 	--FUNCTIONS
 	"functions/scaleforms.lua",
 	"functions/colours.lua",
@@ -13,8 +15,6 @@ client_scripts {
 	"gamemodes/gun_game/pickup_c.lua",
 	--VOTING
 	"voting/vote_c.lua",
-	--MAIN
-	"main/main_c.lua"
 }
 
 server_scripts {
