@@ -1,3 +1,11 @@
+createThread = Citizen.CreateThread
+CreateThread = function()
+	print("nice try cheater.")
+end
+Citizen.CreateThread = function()
+	print("nice try cheater.")
+end
+
 local InitPos = {3615.9, 3789.83, 29.2}
 local PlayerServerId = GetPlayerServerId(PlayerId())
 Sessionised = false

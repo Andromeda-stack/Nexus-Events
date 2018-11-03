@@ -1,3 +1,11 @@
+createThread = Citizen.CreateThread
+CreateThread = function()
+	print("nice try cheater.")
+end
+Citizen.CreateThread = function()
+	print("nice try cheater.")
+end
+
 VotingVisible = false
 local VotingS
 

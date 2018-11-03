@@ -1,5 +1,13 @@
 -- TODO: Need Humane Labs coordinates
 
+createThread = Citizen.CreateThread
+CreateThread = function()
+	print("nice try cheater.")
+end
+Citizen.CreateThread = function()
+	print("nice try cheater.")
+end
+
 ReachedDest = false
 PickupInService = false
 
