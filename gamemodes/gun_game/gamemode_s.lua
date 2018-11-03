@@ -8,6 +8,7 @@ RegisterNetEvent("Gamemode:UpdatePlayers:4")
 RegisterNetEvent("Gamemode:Heartbeat:4")
 RegisterNetEvent("Gamemode:PollRandomCoords:4")
 RegisterNetEvent("Gamemode:UpdateUI:4")
+RegisterNetEvent("baseevents:onPlayerKilled")
 
 AddEventHandler("Gamemode:Start:4", function()
     for i=0, GetNumPlayerIndices() - 1 do
