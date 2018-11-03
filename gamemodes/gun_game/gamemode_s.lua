@@ -23,7 +23,7 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
     if not GunLevels[killerid] then 
         GunLevels[killerid] = 1
     elseif GunLevels[killerid] == 24 then
-        TriggerClientEvent("Game:End:4", -1, source, GetPlayerName(source))
+        TriggerClientEvent("Game:End:4", -1, killerid, GetPlayerName(killerid))
     end
     GunLevels[killerid] = GunLevels[killerid] + 1
     TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[killerid])
