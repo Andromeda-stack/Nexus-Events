@@ -19,6 +19,7 @@ end)
 
 AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
     -- this will be subject to lua injection exploits unfortunately, but there's not much that can be done.
+    print(GetPlayerName(source).." killed".. GetPlayerName(killerid))
     if not GunLevels[killerid] then 
         GunLevels[killerid] = 1
     elseif GunLevels[killerid] == 24 then

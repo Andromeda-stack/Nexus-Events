@@ -83,7 +83,7 @@ function StartMain()
 
         Scaleform.CallFunction(ShardS, false, "SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "~r~LEAVING AREA", "Head back to the battle!")
         SetBlipAlpha(Blip, 0)
-        UpdateGunLevel(2)
+        UpdateGunLevel(1)
 
         while Sessionised do
             Citizen.Wait(0)
