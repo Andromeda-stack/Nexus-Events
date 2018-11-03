@@ -40,9 +40,6 @@ AddEventHandler("Gamemode:UpdatePlayers:4", function(Operation, Player)
             end
         end
         PlayerList[#PlayerList + 1] = Player
-    elseif Operation == "Fetch" then
-        -- this doesn't make sense, but shhhh we'll figure it out later :^)
-        return PlayerList
     end
 end)
 
