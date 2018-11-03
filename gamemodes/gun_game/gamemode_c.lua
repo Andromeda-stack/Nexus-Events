@@ -111,6 +111,13 @@ function StartMain()
             GUI.DrawBar(0.13, "KILLS", GunLevel, nil, 4)
         end
     end)
+    Citizen.CreateThread(function()
+        while true do
+            Citizen.Wait(0)
+            SetCanAttackFriendly(GetPlayerPed(-1), true, false)
+            NetworkSetFriendlyFireOption(true)
+        end
+    end)
 end
 
 function UpdateGunLevel(GunLevel)
