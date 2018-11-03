@@ -1,11 +1,3 @@
-createThread = Citizen.CreateThread
-CreateThread = function()
-	print("nice try cheater.")
-end
-Citizen.CreateThread = function()
-	print("nice try cheater.")
-end
-
 VotingVisible = false
 local VotingS
 
@@ -32,7 +24,7 @@ end)
 
 RegisterNetEvent("StartVoteScreen")
 AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
-	createThread(function()
+	Citizen.CreateThread(function()
 		SwitchOutPlayer(PlayerPedId(),0,1)
 		Wait(500)
 		while Citizen.InvokeNative(0x470555300D10B2A5) ~= 5 and Citizen.InvokeNative(0x470555300D10B2A5) ~= 3 do
@@ -85,7 +77,7 @@ AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
 	end)
 end)
 
-createThread(function()
+Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		if Citizen.InvokeNative(0x470555300D10B2A5) == 3 or Citizen.InvokeNative(0x470555300D10B2A5) == 5 or Citizen.InvokeNative(0x470555300D10B2A5) == 8 or Citizen.InvokeNative(0x470555300D10B2A5) == 10 then

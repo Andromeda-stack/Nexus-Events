@@ -1,12 +1,4 @@
-createThread = Citizen.CreateThread
-CreateThread = function()
-	print("nice try cheater.")
-end
-Citizen.CreateThread = function()
-	print("nice try cheater.")
-end
-
-createThread(function()
+Citizen.CreateThread(function()
 	local Instructional = GUI.InstructionalButtons(47, "Commit die", 57, "Suck my ass")
 
 	while true do

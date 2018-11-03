@@ -1,11 +1,3 @@
-createThread = Citizen.CreateThread
-CreateThread = function()
-	print("nice try cheater.")
-end
-Citizen.CreateThread = function()
-	print("nice try cheater.")
-end
-
 local InitPos = {3615.9, 3789.83, 29.2}
 local PlayerServerId = GetPlayerServerId(PlayerId())
 Sessionised = false
@@ -16,7 +8,7 @@ RegisterNetEvent("Gamemode:FetchCoords:4")
 RegisterNetEvent("Gamemode:End:4")
 
 AddEventHandler("Gamemode:End:4", function(winner, winnername) 
-    CreateThread(function()
+    Citizen.CreateThread(function()
         if winner == PlayerServerId then
             local start = GetGameTimer()
 
@@ -84,7 +76,7 @@ function StartMain()
     Wait(2500)
     RenderScriptCams(false, 1, 500,  true,  true)
 
-    createThread(function()
+    Citizen.CreateThread(function()
         local ShardS = Scaleform.Request("MP_BIG_MESSAGE_FREEMODE")
         local bx,by,bz = table.unpack(InitPos)
         local Blip = AddBlipForCoord(bx, by, bz)
@@ -112,7 +104,7 @@ function StartMain()
     end)
 
 
-    createThread(function()
+    Citizen.CreateThread(function()
         while Sessionised do
             Citizen.Wait(0)
             GUI.DrawBar(0.13, "LEVEL", GunLevel, nil, 3)

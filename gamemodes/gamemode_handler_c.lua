@@ -1,11 +1,3 @@
-createThread = Citizen.CreateThread
-CreateThread = function()
-	print("nice try cheater.")
-end
-Citizen.CreateThread = function()
-	print("nice try cheater.")
-end
-
 RegisterNetEvent("PrepareGamemode")
 AddEventHandler("PrepareGamemode", function(Gamemode)
     VotingVisible = false

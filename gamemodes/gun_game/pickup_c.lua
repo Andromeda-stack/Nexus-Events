@@ -1,13 +1,5 @@
 -- TODO: Need Humane Labs coordinates
 
-createThread = Citizen.CreateThread
-CreateThread = function()
-	print("nice try cheater.")
-end
-Citizen.CreateThread = function()
-	print("nice try cheater.")
-end
-
 ReachedDest = false
 PickupInService = false
 
@@ -51,7 +43,7 @@ AddEventHandler("Gamemode:SpawnPickup:4", function()
         PickupInService = true
 end)
 
-createThread(function()
+Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
         if IsControlJustPressed(0, 38) then
