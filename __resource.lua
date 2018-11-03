@@ -2,7 +2,7 @@ resource_manifest_version "44febabe-d386-4d18-afbe-5e627f4af937"
 
 client_scripts {
 	--MAIN (has to be at the top)
-	"main/main_c.lua"
+	"main/main_c.lua",
 	--FUNCTIONS
 	"functions/scaleforms.lua",
 	"functions/colours.lua",
