@@ -14,14 +14,22 @@ RegisterNetEvent("baseevents:onPlayerDied")
 AddEventHandler("Gamemode:Start:4", function()
     for i=0, GetNumPlayerIndices() - 1 do
         local player = GetPlayerFromIndex(i)
+        print("initializing player "..GetPlayerName(player) .. " id: ".. player)
         GunLevels[player] = 1
-        PlayerList[getPlayerIndex(player)].level = 1
+        print(json.encode(GunLevels))
+        --PlayerList[getPlayerIndex(player)].level = 1
     end
+    TriggerClientEvent("PrepareGamemode", -1, TargetGamemode)
 end)
 
 AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
     -- this will be subject to lua injection exploits unfortunately, but there's not much that can be done.
     local source = source
+    if GetPlayerName(killerid) == nil then
+        print("passing onPlayerKilled with id: "..source.." to onPlayerDied")
+        TriggerEvent("baseevents:onPlayerDied", nil, nil, source)
+        CancelEvent()
+    end
     print(GetPlayerName(source).." killed".. GetPlayerName(killerid))
     if not GunLevels[killerid] then 
         GunLevels[killerid] = 1
@@ -36,20 +44,22 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
     GunLevels[killerid] = GunLevels[killerid] + 1
     TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[killerid])
     TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
-    PlayerList[getPlayerIndex(killerid)].level = PlayerList[getPlayerIndex(killerid)].level + 1
+    --PlayerList[getPlayerIndex(killerid)].level = PlayerList[getPlayerIndex(killerid)].level + 1
 end)
 
-AddEventHandler("baseevents:onPlayerDied", function()
+AddEventHandler("baseevents:onPlayerDied", function(_,__,s)
     -- this will be subject to lua injection exploits unfortunately, but there's not much that can be done.
-    local source = source
+    local source = s or source
+    print(source)
     print(GetPlayerName(source).." died.")
     if GunLevels[source] == 1 then 
         GunLevels[source] = 1
     else
+        print(json.encode(GunLevels))
         GunLevels[source] = GunLevels[source] - 1
         TriggerClientEvent("gun_game:DownGunLevel", source, GunLevels[source])
         TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
-        PlayerList[getPlayerIndex(source)].level = PlayerList[getPlayerIndex(source)].level - 1
+        --PlayerList[getPlayerIndex(source)].level = PlayerList[getPlayerIndex(source)].level - 1
     end
 end)
 
@@ -92,10 +102,11 @@ AddEventHandler("Gamemode:PollRandomCoords:4", function()
     TriggerClientEvent("Gamemode:FetchCoords:4", source, AvailableCoords[ChosenIndex])
 end)
 
-local function getPlayerIndex(id)
+--[[ function getPlayerIndex(id)
+    print(json.encode(PlayerList))
     for i,v in ipairs(PlayerList) do
         if v.serverId == id then
             return i
         end
     end
-end
+end ]]

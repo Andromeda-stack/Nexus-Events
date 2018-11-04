@@ -92,11 +92,14 @@ function StartVoteCounter()
         for i=1, #Gamemodes do
             if Gamemodes[i].id == IndexToGamemode.id then
                 TargetGamemode = Gamemodes[i]
+                print("TargetGamemode is ".. json.encode(TargetGamemode))
                 break
             end
         end
         print("Attempting to start "..TargetGamemode.id..", "..TargetGamemode.title)
         TriggerClientEvent("PrepareGamemode", -1, TargetGamemode)
+        TriggerEvent("Gamemode:Start:"..TargetGamemode.id,TargetGamemode)
+
         --CurrentGamemode = VotingGamemodes
     end)
 end

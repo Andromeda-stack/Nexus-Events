@@ -6,6 +6,7 @@ RegisterNetEvent("Gamemode:Start:4")
 RegisterNetEvent("Gamemode:Session:4")
 RegisterNetEvent("Gamemode:FetchCoords:4")
 RegisterNetEvent("Gamemode:End:4")
+RegisterNetEvent("Gamemode:Init:4")
 
 AddEventHandler("Gamemode:End:4", function(winner, winnername) 
     Citizen.CreateThread(function()
