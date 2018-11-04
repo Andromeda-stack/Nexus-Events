@@ -24,7 +24,12 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
     if not GunLevels[killerid] then 
         GunLevels[killerid] = 1
     elseif GunLevels[killerid] == 24 then
-        TriggerClientEvent("Game:End:4", -1, killerid, GetPlayerName(killerid))
+        CreateThread(function()
+            TriggerClientEvent("Game:End:4", -1, killerid, GetPlayerName(killerid))
+            TriggerEvent("StartVoting")
+            CancelEvent()
+            return
+        end)
     end
     GunLevels[killerid] = GunLevels[killerid] + 1
     print("triggering")
