@@ -20,6 +20,7 @@ end)
 
 AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
     -- this will be subject to lua injection exploits unfortunately, but there's not much that can be done.
+    local source = source
     print(GetPlayerName(source).." killed".. GetPlayerName(killerid))
     if not GunLevels[killerid] then 
         GunLevels[killerid] = 1
@@ -32,10 +33,23 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
         end)
     end
     GunLevels[killerid] = GunLevels[killerid] + 1
-    print("triggering")
-    TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[killerid])
+    TriggerClientEvent("gun_game:DownGunLevel", killerid, GunLevels[killerid])
     TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
     PlayerList[getPlayerIndex(killerid)].level = PlayerList[getPlayerIndex(killerid)].level + 1
+end)
+
+AddEventHandler("baseevents:onPlayerDied", function()
+    -- this will be subject to lua injection exploits unfortunately, but there's not much that can be done.
+    local source = source
+    print(GetPlayerName(source).." died.")
+    if GunLevels[source] == 1 then 
+        GunLevels[source] = 1
+    else
+        GunLevels[killerid] = GunLevels[killerid] - 1
+        TriggerClientEvent("gun_game:DownGunLevel", source, GunLevels[source])
+        TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
+        PlayerList[getPlayerIndex(source)].level = PlayerList[getPlayerIndex(source)].level - 1
+    end
 end)
 
 AddEventHandler("Gamemode:UpdatePlayers:4", function(Operation, Player)

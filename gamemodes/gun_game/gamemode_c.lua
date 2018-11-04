@@ -160,8 +160,13 @@ end
 
 RegisterNetEvent("gun_game:UpGunLevel")
 AddEventHandler("gun_game:UpGunLevel", function(GunLevel)
-    print("triggered")
     GUI.DrawGameNotification("~g~Level up!~s~ Your gun level is now: ~g~"..GunLevel, true)
+    UpdateGunLevel(GunLevel)
+end)
+
+RegisterNetEvent("gun_game:UpGunLevel")
+AddEventHandler("gun_game:DownGunLevel", function(GunLevel)
+    GUI.DrawGameNotification("~r~Suicide!~s~ Your gun level is now: ~r~"..GunLevel, true)
     UpdateGunLevel(GunLevel)
 end)
 
