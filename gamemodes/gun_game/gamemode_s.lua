@@ -46,7 +46,7 @@ AddEventHandler("baseevents:onPlayerDied", function()
     if GunLevels[source] == 1 then 
         GunLevels[source] = 1
     else
-        GunLevels[killerid] = GunLevels[killerid] - 1
+        GunLevels[source] = GunLevels[source] - 1
         TriggerClientEvent("gun_game:DownGunLevel", source, GunLevels[source])
         TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
         PlayerList[getPlayerIndex(source)].level = PlayerList[getPlayerIndex(source)].level - 1
