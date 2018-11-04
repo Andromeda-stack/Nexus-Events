@@ -34,7 +34,7 @@ end)
 
 AddEventHandler("Gamemode:Init:4", function()
     local x,y,z = table.unpack(InitPos)
-    Sessonised = true
+    Sessionised = true
 
     TriggerServerEvent("Gamemode:PollRandomCoords:4")
 
@@ -88,6 +88,7 @@ function StartMain()
 
         while Sessionised do
             Citizen.Wait(0)
+            --dafaq? this doesnt make sense, to be fixed.
             if not IsEntityInArea(IsPedInAnyVehicle(PlayerPedId(), true) and GetVehiclePedIsIn(PlayerPedId(), false) or PlayerPedId(), 290.91, -858.1, 20.23, 107.82, -1003.69, 47.8, 1, 1, 1) then
                 if not end_time then end_time = GetNetworkTime() + 30000 end
 
@@ -106,7 +107,9 @@ function StartMain()
 
 
     Citizen.CreateThread(function()
+        print('should guiiiiii', Sessionised)
         while Sessionised do
+            print('guiiiiii')
             Citizen.Wait(0)
             GUI.DrawBar(0.13, "LEVEL", GunLevel, nil, 3)
             GUI.DrawBar(0.13, "KILLS", GunLevel, nil, 4)
