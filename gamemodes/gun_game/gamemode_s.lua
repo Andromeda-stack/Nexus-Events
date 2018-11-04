@@ -33,7 +33,7 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
         end)
     end
     GunLevels[killerid] = GunLevels[killerid] + 1
-    TriggerClientEvent("gun_game:DownGunLevel", killerid, GunLevels[killerid])
+    TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[killerid])
     TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
     PlayerList[getPlayerIndex(killerid)].level = PlayerList[getPlayerIndex(killerid)].level + 1
 end)
