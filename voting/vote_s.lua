@@ -97,7 +97,6 @@ function StartVoteCounter()
             end
         end
         print("Attempting to start "..TargetGamemode.id..", "..TargetGamemode.title)
-        TriggerClientEvent("PrepareGamemode", -1, TargetGamemode)
         TriggerEvent("Gamemode:Start:"..TargetGamemode.id,TargetGamemode)
 
         --CurrentGamemode = VotingGamemodes

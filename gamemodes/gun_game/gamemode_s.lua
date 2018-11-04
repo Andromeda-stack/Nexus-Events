@@ -11,7 +11,7 @@ RegisterNetEvent("Gamemode:UpdateUI:4")
 RegisterNetEvent("baseevents:onPlayerKilled")
 RegisterNetEvent("baseevents:onPlayerDied")
 
-AddEventHandler("Gamemode:Start:4", function()
+AddEventHandler("Gamemode:Start:4", function(g)
     for i=0, GetNumPlayerIndices() - 1 do
         local player = GetPlayerFromIndex(i)
         print("initializing player "..GetPlayerName(player) .. " id: ".. player)
@@ -19,7 +19,7 @@ AddEventHandler("Gamemode:Start:4", function()
         print(json.encode(GunLevels))
         --PlayerList[getPlayerIndex(player)].level = 1
     end
-    TriggerClientEvent("PrepareGamemode", -1, TargetGamemode)
+    TriggerClientEvent("PrepareGamemode", -1, g)
 end)
 
 AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
