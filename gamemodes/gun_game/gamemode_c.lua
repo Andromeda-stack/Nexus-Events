@@ -56,7 +56,7 @@ AddEventHandler("Gamemode:Init:4", function()
     DestroyCam(view1, 0)
     RenderScriptCams(0, 0, 1, 1, 1)
     SetFocusEntity(GetPlayerPed(PlayerId()))
-    TriggerEvent("gun_game:UpGunLevel", 2)
+    TriggerEvent("gun_game:UpGunLevel", 1)
 
     Wait(10000)
     StartMain()
@@ -160,6 +160,7 @@ end
 
 RegisterNetEvent("gun_game:UpGunLevel")
 AddEventHandler("gun_game:UpGunLevel", function(GunLevel)
+    print("triggered")
     GUI.DrawGameNotification("~g~Level up!~s~ Your gun level is now: ~g~"..GunLevel, true)
     UpdateGunLevel(GunLevel)
 end)

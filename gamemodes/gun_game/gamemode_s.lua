@@ -14,6 +14,7 @@ AddEventHandler("Gamemode:Start:4", function()
     for i=0, GetNumPlayerIndices() - 1 do
         local player = GetPlayerFromIndex(i)
         GunLevels[player] = 1
+        PlayerList[getPlayerIndex(player)].level = 1
     end
 end)
 
@@ -26,6 +27,7 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
         TriggerClientEvent("Game:End:4", -1, killerid, GetPlayerName(killerid))
     end
     GunLevels[killerid] = GunLevels[killerid] + 1
+    print("triggering")
     TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[killerid])
     TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
     PlayerList[getPlayerIndex(killerid)].level = PlayerList[getPlayerIndex(killerid)].level + 1
