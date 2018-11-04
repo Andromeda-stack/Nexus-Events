@@ -121,14 +121,9 @@ function StartMain()
 end
 
 function UpdateGunLevel(GunLevel)
-    local OldWeapon = WeaponLevels[GunLevel - 1]
     local NewWeapon = WeaponLevels[GunLevel]
     local ped = PlayerPedId()
-
-    if OldWeapon then 
-        RemoveWeaponFromPed(ped, GetHashKey(OldWeapon))
-    end
-
+    RemoveAllPedWeapons(ped, true)
     GiveWeaponToPed(ped, GetHashKey(NewWeapon), 1000, false, true)
 end
 
