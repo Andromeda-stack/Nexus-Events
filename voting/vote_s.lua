@@ -111,7 +111,7 @@ RegisterCommand("votedebug", function(source)
 	TriggerClientEvent("StartVoteScreen", -1, VotingGamemodes)
 end)
 
-AddEventHandler("StartVoting", function(source)
+AddEventHandler("StartVoting", function()
     Voted = {}
     --CurrentGamemode = "vote"
     StartVoteCounter()
