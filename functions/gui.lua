@@ -62,7 +62,7 @@ function GUI.DrawBar(width, text, subText, colour, position, isPlayerText)
 	local hTextMargin = 0.003
 	local textFont = isPlayerText and 4 or 0
 	local subTextFont = 0
-	local textColour = colour or Colour.GetHudFromBlipColour(Colour.BlipWhite())
+	local textColour = colour or { r = 254, g = 254, b = 254, a = 255 }
 	local textScale = isPlayerText and 0.5 or 0.32
 	local subTextScale = 0.5
 	local textMargin = isPlayerText and 0.013 or 0.008
@@ -75,7 +75,7 @@ function GUI.DrawBar(width, text, subText, colour, position, isPlayerText)
 end
 
 function GUI.DrawTimerBar(width, text, seconds, position, isPlayerText)
-	local textColour = seconds <= 10 and Colour.GetHudFromBlipColour(Colour.BlipRed()) or Colour.GetHudFromBlipColour(Colour.BlipWhite())
+	local textColour = seconds <= 10 and { r = 224, g = 50, b = 50, a = 255 } or {r = 254, g = 254, b = 254, a = 255 }
 	GUI.DrawBar(width, text, string.format("%02.f", math.floor(seconds / 60))..':'..string.format("%02.f", math.floor(seconds % 60)), textColour, position, isPlayerText)
 end
 
