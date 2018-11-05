@@ -1,4 +1,4 @@
-local InitPos = {3615.9, 3789.83, 29.2}
+--local InitPos = {3615.9, 3789.83, 29.2}
 local PlayerServerId = GetPlayerServerId(PlayerId())
 local CurrentCenter
 local SpawnManager = exports["spawnmanager"]
@@ -17,6 +17,8 @@ AddEventHandler("Gamemode:End:4", function(winner, winnername)
         for i=1,50 do
             SpawnManager:removeSpawnPoint(i)
         end
+        SpawnManager:addSpawnPoint({x=3615.9, y=3789.83, z=29.2, idx = "main"})
+        SpawnManager:forceRespawn()
         if winner == PlayerServerId then
             local start = GetGameTimer()
 
