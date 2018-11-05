@@ -87,9 +87,35 @@ AddEventHandler("Gamemode:Init:4", function()
     DestroyCam(view1, 0)
     RenderScriptCams(0, 0, 1, 1, 1)
     SetFocusEntity(GetPlayerPed(PlayerId()))
+    FreezeEntityPosition(PlayerPedId(), true)
+    local start = GetGameTimer()
+    -- we could play a sound or smth on the countdown as well
+    while (GetGameTimer() - start) < 10000 do 
+        Wait(0)
+        HideHudAndRadarThisFrame()
+        SetFollowPedCamViewMode(4)
+        -- would be better if we were to freeze the player's cam, anyone knows how?
+        --FreezePedCameraRotation(PlayerPedId())
+        if (GetGameTimer() - start) < 7000 then
+            print("to start")
+            GUI.DrawText("The Game Will Start Shortly", {x=0.5,y=0.5}, 2, {r=57,g=255,b=20,a=255}, 1.0, false, true, true, false, 0.1)
+        end
+        if (GetGameTimer() - start) < 8000 and GetGameTimer() - start > 7000 then
+            print("3")
+            GUI.DrawText("3", {x=0.5,y=0.5}, 2, {r=57,g=255,b=20,a=255}, 1.0, false, true, true, false, 0.1)
+        end
+        if (GetGameTimer() - start) < 9000 and GetGameTimer() - start > 8000 then
+            print("2")
+            GUI.DrawText("2", {x=0.5,y=0.5}, 2, {r=57,g=255,b=20,a=255}, 1.0, false, true, true, false, 0.1)
+        end
+        if (GetGameTimer() - start) > 9000 then
+            print("1")
+            GUI.DrawText("1", {x=0.5,y=0.5}, 2, {r=57,g=255,b=20,a=255}, 1.0, false, true, true, false, 0.1)
+        end
+    end
+    FreezeEntityPosition(PlayerPedId(), false)
+    --Wait(10000)
     TriggerEvent("gun_game:UpGunLevel", 1)
-
-    Wait(10000)
     StartMain()
 end)
 
