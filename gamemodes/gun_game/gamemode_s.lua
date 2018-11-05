@@ -62,17 +62,21 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
             GunLevels[tostring(killerid)] = 1
         elseif GunLevels[tostring(killerid)] == 4 then
             print("Game end, winner: ".. GetPlayerName(killerid))
-            CreateThread(function()
+            Citizen.CreateThread(function()
                 TriggerClientEvent("Gamemode:End:4", -1, killerid, GetPlayerName(killerid))
                 CurrentCoords = {}
                 GunLevels = {}
                 PlayerList = {}
                 SessionActive = false
                 SessionRunnable = true
-                Wait(6000)
+                local start = GetGameTimer()
+
+                while GetGameTimer() - start < 6000 do 
+                    Wait(0)
+                end
                 TriggerEvent("StartVoting")
-                CancelEvent()
-                return
+                --CancelEvent()
+                --return
             end)
         end
         GunLevels[tostring(killerid)] = GunLevels[tostring(killerid)] + 1

@@ -13,29 +13,32 @@ RegisterNetEvent("Gamemode:Init:4")
 
 AddEventHandler("Gamemode:End:4", function(winner, winnername) 
     Citizen.CreateThread(function()
-        print(winner, winnername)
         Sessionised = false
+        print(winner, winnername)
         CurrentCenter = {}
         for i,idx in pairs(SpawnIDX) do
             table.remove( SpawnIDX, i )
             SpawnManager:removeSpawnPoint(idx)
         end
-        SpawnManager:setAutoSpawnCallback(function()end)
+        AddEventHandler("playerSpawned",function()end)
         table.insert( SpawnIDX, SpawnManager:addSpawnPoint({x=3615.9, y=3789.83, z=29.2, model=1657546978,heading=0.0}))
         SpawnManager:forceRespawn()
         if winner == PlayerServerId then
             local start = GetGameTimer()
 
             while GetGameTimer() - start < 5000 do 
+                Wait(0)
                 DrawGameEndScreen(true)
             end
-            return
-        end
-        local start = GetGameTimer()
+        else
+            local start = GetGameTimer()
 
-        while GetGameTimer() - start < 5000 do 
-            DrawGameEndScreen(false, winnername)
+            while GetGameTimer() - start < 5000 do 
+                Wait(0)
+                DrawGameEndScreen(false, winnername)
+            end
         end
+        
     end) 
 end)
 
@@ -60,9 +63,6 @@ end)
 AddEventHandler("Gamemode:Init:4", function()
     SpawnManager:removeSpawnPoint(SpawnIDX[1])
     table.remove(SpawnIDX,1)
-    SpawnManager:setAutoSpawnCallback(function()
-        UpdateGunLevel(GunLevels[tostring(PlayerServerId)])
-    end)
     --local x,y,z = table.unpack(InitPos)
     Sessionised = true
 
@@ -161,6 +161,19 @@ function StartMain()
             DrawMarker(1, CurrentCenter.x, CurrentCenter.y, CurrentCenter.z - 300, 0, 0, 0, 0, 0, 0, 300.0, 300.0, 500.0, 0, 0, 255, 200, 0, 0, 0, 0)
         end
     end)
+    Citizen.CreateThread(function()
+        while Sessionised do
+            Citizen.Wait(0)
+            local CurrentWeapon = WeaponLevels[GunLevels[tostring(PlayerServerId)]]
+            if CurrentWeapon then
+                if GetBestPedWeapon(PlayerPedId(),0) ~= GetHashKey(CurrentWeapon) then
+                    print("Giving weapon: "..CurrentWeapon)
+                    RemoveAllPedWeapons(PlayerPedId(), true)
+                    GiveWeaponToPed(PlayerPedId(), GetHashKey(CurrentWeapon), 1000, false, true)
+                end
+            end
+        end
+    end)
 end
 
 function UpdateGunLevel(GunLevel)
@@ -170,7 +183,7 @@ function UpdateGunLevel(GunLevel)
     GiveWeaponToPed(ped, GetHashKey(NewWeapon), 1000, false, true)
 end
 
-local function DrawGameEndScreen(win, winner)
+function DrawGameEndScreen(win, winner)
     print(win, winner)
     local ShardS = Scaleform.Request("MP_BIG_MESSAGE_FREEMODE")
     if win then
