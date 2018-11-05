@@ -56,17 +56,20 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
             TriggerEvent("baseevents:onPlayerDied", nil, nil, source)
             CancelEvent()
         end
-        print(GetPlayerName(source).." killed".. GetPlayerName(killerid))
-        if not GunLevels[tostring(killerid)] then 
+        print(GetPlayerName(killerid).." killed".. GetPlayerName(source))
+        print(GunLevels[tostring(killerid)])
+        if GunLevels[tostring(killerid)] == nil then 
             GunLevels[tostring(killerid)] = 1
-        elseif GunLevels[tostring(killerid)] == 24 then
+        elseif GunLevels[tostring(killerid)] == 4 then
+            print("Game end, winner: ".. GetPlayerName(killerid))
             CreateThread(function()
-                TriggerClientEvent("Game:End:4", -1, killerid, GetPlayerName(killerid))
+                TriggerClientEvent("Gamemode:End:4", -1, killerid, GetPlayerName(killerid))
                 CurrentCoords = {}
                 GunLevels = {}
                 PlayerList = {}
                 SessionActive = false
                 SessionRunnable = true
+                Wait(6000)
                 TriggerEvent("StartVoting")
                 CancelEvent()
                 return

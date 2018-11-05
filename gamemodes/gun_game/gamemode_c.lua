@@ -13,6 +13,7 @@ RegisterNetEvent("Gamemode:Init:4")
 
 AddEventHandler("Gamemode:End:4", function(winner, winnername) 
     Citizen.CreateThread(function()
+        print(winner, winnername)
         Sessionised = false
         CurrentCenter = {}
         for i,idx in pairs(SpawnIDX) do
@@ -114,7 +115,7 @@ function StartMain()
         while Sessionised do
             Citizen.Wait(0)
             local pCoords = GetEntityCoords(PlayerPedId(), true)
-            if math.sqrt((CurrentCenter.x - pCoords.x)^2 + (CurrentCenter.y - pCoords.y)^2) > 300.0  then
+            if math.sqrt((CurrentCenter.x - pCoords.x)^2 + (CurrentCenter.y - pCoords.y)^2) > 150.0  then
                 if not end_time then end_time = GetNetworkTime() + 30000 end
 
                 if (end_time - GetNetworkTime()) > 0 then
@@ -166,6 +167,7 @@ function UpdateGunLevel(GunLevel)
 end
 
 local function DrawGameEndScreen(win, winner)
+    print(win, winner)
     if win then
         local scaleform = RequestScaleformMovie("mp_big_message_freemode")
         while not HasScaleformMovieLoaded(scaleform) do
