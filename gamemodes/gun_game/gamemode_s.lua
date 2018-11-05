@@ -107,7 +107,7 @@ AddEventHandler("Gamemode:UpdatePlayers:4", function(Operation, Player)
 end)
 
 AddEventHandler("Gamemode:PollRandomCoords:4", function()
-    if not CurrentCoordsthen
+    if not CurrentCoords then
         math.randomseed(os.time())
 
         local ChosenIndex = math.random(1, #AvailableCoords)
