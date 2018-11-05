@@ -20,6 +20,7 @@ AddEventHandler("Gamemode:End:4", function(winner, winnername)
             table.remove( SpawnIDX, i )
             SpawnManager:removeSpawnPoint(idx)
         end
+        SpawnManager:setAutoSpawnCallback(function()end)
         table.insert( SpawnIDX, SpawnManager:addSpawnPoint({x=3615.9, y=3789.83, z=29.2, model=1657546978,heading=0.0}))
         SpawnManager:forceRespawn()
         if winner == PlayerServerId then
@@ -59,6 +60,9 @@ end)
 AddEventHandler("Gamemode:Init:4", function()
     SpawnManager:removeSpawnPoint(SpawnIDX[1])
     table.remove(SpawnIDX,1)
+    SpawnManager:setAutoSpawnCallback(function()
+        UpdateGunLevel(GunLevels[tostring(PlayerServerId)])
+    end)
     --local x,y,z = table.unpack(InitPos)
     Sessionised = true
 
@@ -168,28 +172,12 @@ end
 
 local function DrawGameEndScreen(win, winner)
     print(win, winner)
+    local ShardS = Scaleform.Request("MP_BIG_MESSAGE_FREEMODE")
     if win then
-        local scaleform = RequestScaleformMovie("mp_big_message_freemode")
-        while not HasScaleformMovieLoaded(scaleform) do
-            Citizen.Wait(0)
-        end
+        Scaleform.CallFunction(ShardS, false, "SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "~y~YOU WIN!", "You were the first to reach the maximum level!")
 
-        BeginScaleformMovieMethod(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE")
-        PushScaleformMovieMethodParameterString("You WIN!")
-        PushScaleformMovieMethodParameterString("Nice Job!")
-        PushScaleformMovieMethodParameterInt(5)
-        EndScaleformMovieMethod()
     else
-        local scaleform = RequestScaleformMovie("mp_big_message_freemode")
-        while not HasScaleformMovieLoaded(scaleform) do
-            Citizen.Wait(0)
-        end
-
-        BeginScaleformMovieMethod(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE")
-        PushScaleformMovieMethodParameterString("You LOSE!")
-        PushScaleformMovieMethodParameterString(winner.."Won The Game.")
-        PushScaleformMovieMethodParameterInt(5)
-        EndScaleformMovieMethod()
+        Scaleform.CallFunction(ShardS, false, "SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "~r~YOU LOSE!", winner.." won the game.")
     end
 end
 
