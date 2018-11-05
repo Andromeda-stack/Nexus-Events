@@ -19,6 +19,7 @@ AddEventHandler("Gamemode:Start:4", function(g)
         print(json.encode(GunLevels))
         --PlayerList[getPlayerIndex(player)].level = 1
     end
+    TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
     TriggerClientEvent("PrepareGamemode", -1, g)
 end)
 
@@ -31,9 +32,9 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
         CancelEvent()
     end
     print(GetPlayerName(source).." killed".. GetPlayerName(killerid))
-    if not GunLevels[killerid] then 
-        GunLevels[killerid] = 1
-    elseif GunLevels[killerid] == 24 then
+    if not GunLevels[tostring(killerid)] then 
+        GunLevels[tostring(killerid)] = 1
+    elseif GunLevels[tostring(killerid)] == 24 then
         CreateThread(function()
             TriggerClientEvent("Game:End:4", -1, killerid, GetPlayerName(killerid))
             TriggerEvent("StartVoting")
@@ -41,8 +42,8 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
             return
         end)
     end
-    GunLevels[killerid] = GunLevels[killerid] + 1
-    TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[killerid])
+    GunLevels[tostring(killerid)] = GunLevels[tostring(killerid)] + 1
+    TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[tostring(killerid)])
     TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
     --PlayerList[getPlayerIndex(killerid)].level = PlayerList[getPlayerIndex(killerid)].level + 1
 end)
@@ -52,12 +53,12 @@ AddEventHandler("baseevents:onPlayerDied", function(_,__,s)
     local source = s or source
     print(source)
     print(GetPlayerName(source).." died.")
-    if GunLevels[source] == 1 then 
-        GunLevels[source] = 1
+    if GunLevels[tostring(source)] == 1 then 
+        GunLevels[tostring(source)] = 1
     else
         print(json.encode(GunLevels))
-        GunLevels[source] = GunLevels[source] - 1
-        TriggerClientEvent("gun_game:DownGunLevel", source, GunLevels[source])
+        GunLevels[tostring(source)] = GunLevels[tostring(source)] - 1
+        TriggerClientEvent("gun_game:DownGunLevel", source, GunLevels[tostring(source)])
         TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
         --PlayerList[getPlayerIndex(source)].level = PlayerList[getPlayerIndex(source)].level - 1
     end

@@ -74,7 +74,7 @@ local WeaponLevels = {
 }
 
 function StartMain()
-    Wait(2500)
+    --Wait(2500)
     RenderScriptCams(false, 1, 500,  true,  true)
 
     Citizen.CreateThread(function()
@@ -109,14 +109,14 @@ function StartMain()
     Citizen.CreateThread(function()
         print('should guiiiiii', Sessionised)
         while Sessionised do
-            print('guiiiiii')
+            print(json.encode(GunLevels))
             Citizen.Wait(0)
-            GUI.DrawBar(0.13, "LEVEL", GunLevel, nil, 3)
-            GUI.DrawBar(0.13, "KILLS", GunLevel, nil, 4)
+            GUI.DrawBar(0.13, "LEVEL", GunLevels[tostring(GetPlayerServerId(PlayerId()))], nil, 3)
+            GUI.DrawBar(0.13, "KILLS", GunLevels[tostring(GetPlayerServerId(PlayerId()))], nil, 4)
         end
     end)
     Citizen.CreateThread(function()
-        while true do
+        while Sessionised do
             Citizen.Wait(0)
             SetCanAttackFriendly(GetPlayerPed(-1), true, false)
             NetworkSetFriendlyFireOption(true)
@@ -165,12 +165,14 @@ end)
 
 RegisterNetEvent("gun_game:DownGunLevel")
 AddEventHandler("gun_game:DownGunLevel", function(GunLevel)
+    print("gun_game:DownGunLevel")
     GUI.DrawGameNotification("~r~Suicide!~s~ Your gun level is now: ~r~"..GunLevel, true)
     UpdateGunLevel(GunLevel)
 end)
 
 RegisterNetEvent("gun_game:UpdateLevels")
 AddEventHandler("gun_game:UpdateLevels", function(GunData)
+    print("Received GunData: "..json.encode(GunData))
     local top3 = {}
     GunLevels = GunData
 
