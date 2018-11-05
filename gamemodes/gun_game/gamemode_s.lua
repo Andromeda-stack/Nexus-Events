@@ -3,6 +3,29 @@ local PlayerList = {}
 local Session_
 local SessionActive = false
 local SessionRunnable = true
+local AvailableCoords = {
+    {
+        ['coords'] = {
+    "-2313.08, 437.1, 173.98",
+    "-2343.12, 280.96, 168.98",
+    "-2270.01, 201.15, 169.12",
+    "-2334.46, 243.23, 169.12",
+    "-2315.62, 261.93, 174.12",
+    "-2299.49, 286.95, 184.12",
+    "-2278.35, 286.57, 184.12",
+    "-2249.55, 307.79, 184.12",
+    "-2224.06, 233.01, 174.12",
+    "-2262.93, 205.72, 174.12",
+    "-2326.4, 379.96, 173.98",
+    "-2212.23, 215.88, 174.12",
+    "-2235.71, 265.97, 174.13",
+    "-2259.48, 271.73, 174.6",
+    "-2187.77, 287.58, 169.12"
+        }
+        ['center'] = "-2313.08, 437.1, 173.98"
+    }
+}
+local CurrentCoords = {}
 
 RegisterNetEvent("Gamemode:UpdatePlayers:4")
 RegisterNetEvent("Gamemode:Heartbeat:4")
@@ -37,6 +60,11 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
     elseif GunLevels[tostring(killerid)] == 24 then
         CreateThread(function()
             TriggerClientEvent("Game:End:4", -1, killerid, GetPlayerName(killerid))
+            CurrentCoords = {}
+            GunLevels = {}
+            PlayerList = {}
+            SessionActive = false
+            SessionRunnable = true
             TriggerEvent("StartVoting")
             CancelEvent()
             return
@@ -79,28 +107,20 @@ AddEventHandler("Gamemode:UpdatePlayers:4", function(Operation, Player)
 end)
 
 AddEventHandler("Gamemode:PollRandomCoords:4", function()
-    local AvailableCoords = {
-        "-2313.08, 437.1, 173.98",
-        "-2343.12, 280.96, 168.98",
-        "-2270.01, 201.15, 169.12",
-        "-2334.46, 243.23, 169.12",
-        "-2315.62, 261.93, 174.12",
-        "-2299.49, 286.95, 184.12",
-        "-2278.35, 286.57, 184.12",
-        "-2249.55, 307.79, 184.12",
-        "-2224.06, 233.01, 174.12",
-        "-2262.93, 205.72, 174.12",
-        "-2326.4, 379.96, 173.98",
-        "-2212.23, 215.88, 174.12",
-        "-2235.71, 265.97, 174.13",
-        "-2259.48, 271.73, 174.6",
-        "-2187.77, 287.58, 169.12"
-    }
-    math.randomseed(os.time())
+    if not CurrentCoordsthen
+        math.randomseed(os.time())
 
-    local ChosenIndex = math.random(1, 15)
+        local ChosenIndex = math.random(1, #AvailableCoords)
+        --local _ChosenIndex = math.random(1, #AvailableCoords[ChosenIndex].coords)
 
-    TriggerClientEvent("Gamemode:FetchCoords:4", source, AvailableCoords[ChosenIndex])
+        CurrentCoords = AvailableCoords[ChosenIndex]
+        TriggerClientEvent("Gamemode:FetchCoords:4", source, CurrentCoords.coords, CurrentCoords.center)
+    else
+        math.randomseed(os.time())
+        
+        --local _ChosenIndex = math.random(1, #AvailableCoords[ChosenIndex].coords)
+        TriggerClientEvent("Gamemode:FetchCoords:4", source, CurrentCenter.coords, CurrentCoords.center)
+    end
 end)
 
 --[[ function getPlayerIndex(id)

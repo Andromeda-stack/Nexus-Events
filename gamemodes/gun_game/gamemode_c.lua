@@ -1,5 +1,7 @@
 local InitPos = {3615.9, 3789.83, 29.2}
 local PlayerServerId = GetPlayerServerId(PlayerId())
+local CurrentCenter
+local SpawnManager = exports["spawnmanager"]
 Sessionised = false
 
 RegisterNetEvent("Gamemode:Start:4")
@@ -10,6 +12,11 @@ RegisterNetEvent("Gamemode:Init:4")
 
 AddEventHandler("Gamemode:End:4", function(winner, winnername) 
     Citizen.CreateThread(function()
+        Sessionised = false
+        CurrentCenter = {}
+        for i=1,50 do
+            SpawnManager:removeSpawnPoint(i)
+        end
         if winner == PlayerServerId then
             local start = GetGameTimer()
 
@@ -26,10 +33,19 @@ AddEventHandler("Gamemode:End:4", function(winner, winnername)
     end) 
 end)
 
-AddEventHandler("Gamemode:FetchCoords:4", function(Coords)
-    CoordsX, CoordsY, CoordsZ = table.unpack(Misc.SplitString(Coords, ","))
-    print(CoordsX, CoordsY, CoordsZ)
-    SetEntityCoords(PlayerPedId(), tonumber(CoordsX), tonumber(CoordsY), tonumber(CoordsZ), 0.0, 0.0, 0.0, 0)
+AddEventHandler("Gamemode:FetchCoords:4", function(Coords, Center)
+    --CoordsX, CoordsY, CoordsZ = table.unpack(Misc.SplitString(Coords, ","))
+    CenterX, CenterY, CenterY = table.unpack(Misc.SplitString(Center, ","))
+    for i,spawnpoint in ipairs(Coords) do
+        Coords[i].idx = i
+        SpawnManager:addSpawnPoint(Coords[i])
+    end
+    --print(CoordsX, CoordsY, CoordsZ)
+    print(CenterX, CenterY, CenterZ)
+
+    CurrentCenter = vector3(tonumber(CenterX),tonumber(CenterY),tonumber(CenterZ))
+    --SetEntityCoords(PlayerPedId(), tonumber(CoordsX), tonumber(CoordsY), tonumber(CoordsZ), 0.0, 0.0, 0.0, 0)
+    SpawnManager:forceRespawn()
 end)
 
 AddEventHandler("Gamemode:Init:4", function()
@@ -88,8 +104,8 @@ function StartMain()
 
         while Sessionised do
             Citizen.Wait(0)
-            --dafaq? this doesnt make sense, to be fixed.
-            if not IsEntityInArea(IsPedInAnyVehicle(PlayerPedId(), true) and GetVehiclePedIsIn(PlayerPedId(), false) or PlayerPedId(), 290.91, -858.1, 20.23, 107.82, -1003.69, 47.8, 1, 1, 1) then
+            local pCoords = GetEntityCoords(GetVehiclePedIsIn(PlayerPedId, false) or PlayerPedId(), true)
+            if math.sqrt(math.pow(CurrentCenter.x - pCoords.x, 2) + math.pow(CurrentCenter.y - pCoords.y, 2)) > 300.0  then
                 if not end_time then end_time = GetNetworkTime() + 30000 end
 
                 if (end_time - GetNetworkTime()) > 0 then
@@ -97,6 +113,9 @@ function StartMain()
                     Scaleform.Render2D(ShardS)
                     GUI.DrawTimerBar(0.13, "LEAVING AREA", ((end_time - GetNetworkTime()) / 1000), 1)
                     SetBlipAlpha(Blip, 255)
+                else
+                    ExplodePedHead(PlayerPedId(), 0x1D073A89)
+                    SpawnManager:forceRespawn()
                 end
             else
                 SetBlipAlpha(Blip, 0)
@@ -120,6 +139,12 @@ function StartMain()
             Citizen.Wait(0)
             SetCanAttackFriendly(GetPlayerPed(-1), true, false)
             NetworkSetFriendlyFireOption(true)
+        end
+    end)
+    Citizen.CreateThread(function()
+        while Sessionised do
+            Citizen.Wait(0)
+            DrawMarker(1, CurrentCenter.x, CurrentCenter.y, CurrentCenter.z - 300, 0, 0, 0, 0, 0, 0, 300.0, 300.0, 500.0, 0, 0, 255, 200, 0, 0, 0, 0)
         end
     end)
 end
