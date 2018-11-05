@@ -1,7 +1,8 @@
 --local InitPos = {3615.9, 3789.83, 29.2}
 local PlayerServerId = GetPlayerServerId(PlayerId())
 local CurrentCenter
-local SpawnManager = exports["spawnmanager"]
+local SpawnManager = exports.spawnmanager
+local SpawnIDX = {}
 Sessionised = false
 
 RegisterNetEvent("Gamemode:Start:4")
@@ -14,10 +15,11 @@ AddEventHandler("Gamemode:End:4", function(winner, winnername)
     Citizen.CreateThread(function()
         Sessionised = false
         CurrentCenter = {}
-        for i=1,50 do
-            SpawnManager:removeSpawnPoint(i)
+        for i,idx in pairs(SpawnIDX) do
+            table.remove( SpawnIDX, i )
+            SpawnManager:removeSpawnPoint(idx)
         end
-        SpawnManager:addSpawnPoint({x=3615.9, y=3789.83, z=29.2, idx = "main"})
+        table.insert( SpawnIDX, SpawnManager:addSpawnPoint({x=3615.9, y=3789.83, z=29.2, model=1657546978,heading=0.0}))
         SpawnManager:forceRespawn()
         if winner == PlayerServerId then
             local start = GetGameTimer()
@@ -37,10 +39,13 @@ end)
 
 AddEventHandler("Gamemode:FetchCoords:4", function(Coords, Center)
     --CoordsX, CoordsY, CoordsZ = table.unpack(Misc.SplitString(Coords, ","))
-    CenterX, CenterY, CenterY = table.unpack(Misc.SplitString(Center, ","))
+    print(Center)
+    CenterX, CenterY, CenterZ = table.unpack(Misc.SplitString(Center, ","))
     for i,spawnpoint in ipairs(Coords) do
-        Coords[i].idx = i
-        SpawnManager:addSpawnPoint(Coords[i])
+        print(Coords[i])
+        --beautify this later kek
+        Coords[i] = vector3(tonumber(Misc.SplitString(Coords[i], ",")[1]),tonumber(Misc.SplitString(Coords[i], ",")[2]),tonumber(Misc.SplitString(Coords[i], ",")[3]))
+        table.insert( SpawnIDX, SpawnManager:addSpawnPoint({x=Coords[i].x,y=Coords[i].y,z=Coords[i].z,model=1657546978,heading=0.0}))
     end
     --print(CoordsX, CoordsY, CoordsZ)
     print(CenterX, CenterY, CenterZ)
@@ -51,7 +56,9 @@ AddEventHandler("Gamemode:FetchCoords:4", function(Coords, Center)
 end)
 
 AddEventHandler("Gamemode:Init:4", function()
-    local x,y,z = table.unpack(InitPos)
+    SpawnManager:removeSpawnPoint(SpawnIDX[1])
+    table.remove(SpawnIDX,1)
+    --local x,y,z = table.unpack(InitPos)
     Sessionised = true
 
     TriggerServerEvent("Gamemode:PollRandomCoords:4")
@@ -65,7 +72,7 @@ AddEventHandler("Gamemode:Init:4", function()
     N_0xd8295af639fd9cb8(PlayerPedId())
 
     view1 = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
-    SetCamCoord(view1, tonumber(CoordsX), tonumber(CoordsY), tonumber(CoordsZ) + 20)
+    SetCamCoord(view1, tonumber(CurrentCenter.x), tonumber(CurrentCenter.y), tonumber(CurrentCenter.z) + 20)
     SetCamRot(view1, -20.0, 0.0, 180.0)
     SetCamFov(view1, 45.0)
     RenderScriptCams(true, 1, 500,  true,  true)
@@ -97,17 +104,17 @@ function StartMain()
 
     Citizen.CreateThread(function()
         local ShardS = Scaleform.Request("MP_BIG_MESSAGE_FREEMODE")
-        local bx,by,bz = table.unpack(InitPos)
-        local Blip = AddBlipForCoord(bx, by, bz)
+        --local bx,by,bz = table.unpack(InitPos)
+        --local Blip = AddBlipForCoord(bx, by, bz)
 
         Scaleform.CallFunction(ShardS, false, "SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "~r~LEAVING AREA", "Head back to the battle!")
-        SetBlipAlpha(Blip, 0)
+        --SetBlipAlpha(Blip, 0)
         UpdateGunLevel(1)
 
         while Sessionised do
             Citizen.Wait(0)
-            local pCoords = GetEntityCoords(GetVehiclePedIsIn(PlayerPedId, false) or PlayerPedId(), true)
-            if math.sqrt(math.pow(CurrentCenter.x - pCoords.x, 2) + math.pow(CurrentCenter.y - pCoords.y, 2)) > 300.0  then
+            local pCoords = GetEntityCoords(PlayerPedId(), true)
+            if math.sqrt((CurrentCenter.x - pCoords.x)^2 + (CurrentCenter.y - pCoords.y)^2) > 300.0  then
                 if not end_time then end_time = GetNetworkTime() + 30000 end
 
                 if (end_time - GetNetworkTime()) > 0 then
@@ -128,9 +135,9 @@ function StartMain()
 
 
     Citizen.CreateThread(function()
-        print('should guiiiiii', Sessionised)
+        --print('should guiiiiii', Sessionised)
         while Sessionised do
-            print(json.encode(GunLevels))
+            --print(json.encode(GunLevels))
             Citizen.Wait(0)
             GUI.DrawBar(0.13, "LEVEL", GunLevels[tostring(GetPlayerServerId(PlayerId()))], nil, 3)
             GUI.DrawBar(0.13, "KILLS", GunLevels[tostring(GetPlayerServerId(PlayerId()))], nil, 4)

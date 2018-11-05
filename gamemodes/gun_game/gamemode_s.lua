@@ -44,51 +44,56 @@ AddEventHandler("Gamemode:Start:4", function(g)
     end
     TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
     TriggerClientEvent("PrepareGamemode", -1, g)
+    SessionActive = true
 end)
 
 AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
     -- this will be subject to lua injection exploits unfortunately, but there's not much that can be done.
-    local source = source
-    if GetPlayerName(killerid) == nil then
-        print("passing onPlayerKilled with id: "..source.." to onPlayerDied")
-        TriggerEvent("baseevents:onPlayerDied", nil, nil, source)
-        CancelEvent()
-    end
-    print(GetPlayerName(source).." killed".. GetPlayerName(killerid))
-    if not GunLevels[tostring(killerid)] then 
-        GunLevels[tostring(killerid)] = 1
-    elseif GunLevels[tostring(killerid)] == 24 then
-        CreateThread(function()
-            TriggerClientEvent("Game:End:4", -1, killerid, GetPlayerName(killerid))
-            CurrentCoords = {}
-            GunLevels = {}
-            PlayerList = {}
-            SessionActive = false
-            SessionRunnable = true
-            TriggerEvent("StartVoting")
+    if SessionActive then
+        local source = source
+        if GetPlayerName(killerid) == nil then
+            print("passing onPlayerKilled with id: "..source.." to onPlayerDied")
+            TriggerEvent("baseevents:onPlayerDied", nil, nil, source)
             CancelEvent()
-            return
-        end)
+        end
+        print(GetPlayerName(source).." killed".. GetPlayerName(killerid))
+        if not GunLevels[tostring(killerid)] then 
+            GunLevels[tostring(killerid)] = 1
+        elseif GunLevels[tostring(killerid)] == 24 then
+            CreateThread(function()
+                TriggerClientEvent("Game:End:4", -1, killerid, GetPlayerName(killerid))
+                CurrentCoords = {}
+                GunLevels = {}
+                PlayerList = {}
+                SessionActive = false
+                SessionRunnable = true
+                TriggerEvent("StartVoting")
+                CancelEvent()
+                return
+            end)
+        end
+        GunLevels[tostring(killerid)] = GunLevels[tostring(killerid)] + 1
+        TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[tostring(killerid)])
+        TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
+        --PlayerList[getPlayerIndex(killerid)].level = PlayerList[getPlayerIndex(killerid)].level + 1
     end
-    GunLevels[tostring(killerid)] = GunLevels[tostring(killerid)] + 1
-    TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[tostring(killerid)])
-    TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
-    --PlayerList[getPlayerIndex(killerid)].level = PlayerList[getPlayerIndex(killerid)].level + 1
 end)
 
 AddEventHandler("baseevents:onPlayerDied", function(_,__,s)
     -- this will be subject to lua injection exploits unfortunately, but there's not much that can be done.
-    local source = s or source
-    print(source)
-    print(GetPlayerName(source).." died.")
-    if GunLevels[tostring(source)] == 1 then 
-        GunLevels[tostring(source)] = 1
-    else
-        print(json.encode(GunLevels))
-        GunLevels[tostring(source)] = GunLevels[tostring(source)] - 1
-        TriggerClientEvent("gun_game:DownGunLevel", source, GunLevels[tostring(source)])
-        TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
-        --PlayerList[getPlayerIndex(source)].level = PlayerList[getPlayerIndex(source)].level - 1
+    if SessionActive then
+        local source = s or source
+        print(source)
+        print(GetPlayerName(source).." died.")
+        if GunLevels[tostring(source)] == 1 then 
+            GunLevels[tostring(source)] = 1
+        else
+            print(json.encode(GunLevels))
+            GunLevels[tostring(source)] = GunLevels[tostring(source)] - 1
+            TriggerClientEvent("gun_game:DownGunLevel", source, GunLevels[tostring(source)])
+            TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
+            --PlayerList[getPlayerIndex(source)].level = PlayerList[getPlayerIndex(source)].level - 1
+        end
     end
 end)
 
@@ -107,19 +112,23 @@ AddEventHandler("Gamemode:UpdatePlayers:4", function(Operation, Player)
 end)
 
 AddEventHandler("Gamemode:PollRandomCoords:4", function()
-    if not CurrentCoords then
+    if CurrentCoords.coords == nil or CurrentCoords.center == nil then
         math.randomseed(os.time())
+        print("Creating CurrentCoords")
 
-        local ChosenIndex = math.random(1, #AvailableCoords)
+        local ChosenIndex = math.random(1, tablelength(AvailableCoords))
         --local _ChosenIndex = math.random(1, #AvailableCoords[ChosenIndex].coords)
-
+        print(ChosenIndex)
+        print(json.encode(AvailableCoords))
         CurrentCoords = AvailableCoords[ChosenIndex]
+        print(json.encode(CurrentCoords))
         TriggerClientEvent("Gamemode:FetchCoords:4", source, CurrentCoords.coords, CurrentCoords.center)
     else
         math.randomseed(os.time())
         
         --local _ChosenIndex = math.random(1, #AvailableCoords[ChosenIndex].coords)
-        TriggerClientEvent("Gamemode:FetchCoords:4", source, CurrentCenter.coords, CurrentCoords.center)
+        print(json.encode(CurrentCoords))
+        TriggerClientEvent("Gamemode:FetchCoords:4", source, CurrentCoords.coords, CurrentCoords.center)
     end
 end)
 
@@ -131,3 +140,9 @@ end)
         end
     end
 end ]]
+
+function tablelength(T)
+    local count = 0
+    for _ in pairs(T) do count = count + 1 end
+    return count
+end
