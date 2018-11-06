@@ -39,6 +39,7 @@ AddEventHandler("Gamemode:End:4", function(winner, winnername)
                 DrawGameEndScreen(false, winnername)
             end
         end
+        SpawnManager:forceRespawn()
         
     end) 
 end)
