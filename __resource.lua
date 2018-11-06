@@ -6,6 +6,7 @@ client_scripts {
 	"functions/streaming.lua",
 	"functions/gui.lua",
 	"functions/misc.lua",
+	"functions/spawnmanager.lua",
 	--Gamemodes
 	"gamemodes/gamemode_handler_c.lua",
 	"gamemodes/gun_game/gamemode_c.lua",
