@@ -69,11 +69,7 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
                 PlayerList = {}
                 SessionActive = false
                 SessionRunnable = true
-                local start = GetGameTimer()
-
-                while GetGameTimer() - start < 6000 do 
-                    Wait(0)
-                end
+                Citizen.Wait(0)
                 TriggerEvent("StartVoting")
                 --CancelEvent()
                 --return

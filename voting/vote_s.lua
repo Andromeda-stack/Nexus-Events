@@ -118,6 +118,7 @@ end)
 
 AddEventHandler("StartVoting", function()
     Citizen.CreateThread(function()
+        print("StartVoting was triggered.")
         Voted = {}
         --CurrentGamemode = "vote"
         StartVoteCounter()

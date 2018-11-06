@@ -16,9 +16,10 @@ AddEventHandler("Gamemode:End:4", function(winner, winnername)
         Sessionised = false
         print(winner, winnername)
         CurrentCenter = {}
-        for i,idx in pairs(SpawnIDX) do
+        for i,idx in ipairs(SpawnIDX) do
             table.remove( SpawnIDX, i )
             SpawnManager:removeSpawnPoint(idx)
+            print("removing IDX: ".. idx)
         end
         AddEventHandler("playerSpawned",function()end)
         table.insert( SpawnIDX, SpawnManager:addSpawnPoint({x=3615.9, y=3789.83, z=29.2, model=1657546978,heading=0.0}))
@@ -52,6 +53,7 @@ AddEventHandler("Gamemode:FetchCoords:4", function(Coords, Center)
         Coords[i] = vector3(tonumber(Misc.SplitString(Coords[i], ",")[1]),tonumber(Misc.SplitString(Coords[i], ",")[2]),tonumber(Misc.SplitString(Coords[i], ",")[3]))
         table.insert( SpawnIDX, SpawnManager:addSpawnPoint({x=Coords[i].x,y=Coords[i].y,z=Coords[i].z,model=1657546978,heading=0.0}))
     end
+    print("Spawnpoints: "..json.encode(SpawnIDX))
     --print(CoordsX, CoordsY, CoordsZ)
     print(CenterX, CenterY, CenterZ)
 
@@ -61,8 +63,19 @@ AddEventHandler("Gamemode:FetchCoords:4", function(Coords, Center)
 end)
 
 AddEventHandler("Gamemode:Init:4", function()
-    SpawnManager:removeSpawnPoint(SpawnIDX[1])
-    table.remove(SpawnIDX,1)
+    -- this removes the initial spawn, no matter what.
+    if SpawnIDX[1] ~= 1 then
+        print("Removing initial spawnpoint (SpawnIDX[1] ~= 1)") 
+        SpawnManager:removeSpawnPoint(1)
+        SpawnManager:removeSpawnPoint(SpawnIDX[1])
+        table.remove(SpawnIDX,1) 
+    else
+        print("Removing initial spawnpoint (SpawnIDX[1] == 1)")
+        SpawnManager:removeSpawnPoint(SpawnIDX[1])
+        table.remove(SpawnIDX,1)
+    end
+    --print("removing: " .. SpawnIDX[1])
+    --print(json.encode(SpawnIDX))
     --local x,y,z = table.unpack(InitPos)
     Sessionised = true
 
@@ -214,7 +227,6 @@ function DrawGameEndScreen(win, winner)
     local ShardS = Scaleform.Request("MP_BIG_MESSAGE_FREEMODE")
     if win then
         Scaleform.CallFunction(ShardS, false, "SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "~y~YOU WIN!", "You were the first to reach the maximum level!")
-
     else
         Scaleform.CallFunction(ShardS, false, "SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "~r~YOU LOSE!", winner.." won the game.")
     end
