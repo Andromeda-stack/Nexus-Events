@@ -36,3 +36,15 @@ function SpawnManager.removeSpawnPointByIdx(idx)
         end
     end
 end
+
+function SpawnManager.forceRespawn()
+    s:forceRespawn()
+end
+
+function SpawnManager.spawnPlayer(idx,cb)
+    s:spawnPlayer(idx,cb)
+end
+
+function SpawnManager.setAutoSpawn(toggle)
+    s:setAutoSpawn(toggle)
+end

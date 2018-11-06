@@ -1,8 +1,6 @@
 --local InitPos = {3615.9, 3789.83, 29.2}
 local PlayerServerId = GetPlayerServerId(PlayerId())
 local CurrentCenter
-local SpawnManager = exports.spawnmanager
-local SpawnIDX = {}
 Sessionised = false
 
 RegisterNetEvent("Gamemode:Start:4")
@@ -16,14 +14,10 @@ AddEventHandler("Gamemode:End:4", function(winner, winnername)
         Sessionised = false
         print(winner, winnername)
         CurrentCenter = {}
-        for i,idx in ipairs(SpawnIDX) do
-            table.remove( SpawnIDX, i )
-            SpawnManager:removeSpawnPoint(idx)
-            print("removing IDX: ".. idx)
-        end
+        SpawnManager.removeAllSpawnPoints()
         AddEventHandler("playerSpawned",function()end)
-        table.insert( SpawnIDX, SpawnManager:addSpawnPoint({x=3615.9, y=3789.83, z=29.2, model=1657546978,heading=0.0}))
-        SpawnManager:forceRespawn()
+        SpawnManager.addSpawnPoint({x=3615.9, y=3789.83, z=29.2, model=1657546978,heading=0.0})
+        SpawnManager.forceRespawn()
         if winner == PlayerServerId then
             local start = GetGameTimer()
 
@@ -49,11 +43,10 @@ AddEventHandler("Gamemode:FetchCoords:4", function(Coords, Center)
     print(Center)
     CenterX, CenterY, CenterZ = table.unpack(Misc.SplitString(Center, ","))
     for i,spawnpoint in ipairs(Coords) do
-        print(Coords[i])
-        --beautify this later kek
-        Coords[i] = vector3(tonumber(Misc.SplitString(Coords[i], ",")[1]),tonumber(Misc.SplitString(Coords[i], ",")[2]),tonumber(Misc.SplitString(Coords[i], ",")[3]))
-        table.insert( SpawnIDX, SpawnManager:addSpawnPoint({x=Coords[i].x,y=Coords[i].y,z=Coords[i].z,model=1657546978,heading=0.0}))
+        local spawnx,spawny,spawnz = table.unpack(Misc.SplitString(Coords[i], ","))
+        Coords[i] = {x=spawnx, y= spawny, z= spawnz, model=1657546978,heading=0.0}
     end
+    SpawnManager:addSpawnPoints(Coords)
     print("Spawnpoints: "..json.encode(SpawnIDX))
     --print(CoordsX, CoordsY, CoordsZ)
     print(CenterX, CenterY, CenterZ)
@@ -65,16 +58,7 @@ end)
 
 AddEventHandler("Gamemode:Init:4", function()
     -- this removes the initial spawn, no matter what.
-    if SpawnIDX[1] ~= 1 then
-        print("Removing initial spawnpoint (SpawnIDX[1] ~= 1)") 
-        SpawnManager:removeSpawnPoint(1)
-        SpawnManager:removeSpawnPoint(SpawnIDX[1])
-        table.remove(SpawnIDX,1) 
-    else
-        print("Removing initial spawnpoint (SpawnIDX[1] == 1)")
-        SpawnManager:removeSpawnPoint(SpawnIDX[1])
-        table.remove(SpawnIDX,1)
-    end
+    SpawnManager.removeSpawnPointByCoords({x=3615.9, y=3789.83, z=29.2})
     --print("removing: " .. SpawnIDX[1])
     --print(json.encode(SpawnIDX))
     --local x,y,z = table.unpack(InitPos)
