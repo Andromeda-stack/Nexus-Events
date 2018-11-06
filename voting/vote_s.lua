@@ -8,7 +8,8 @@ function SelectVotedGamemodes()
     local randomIndex
     for i=1, 6 do
         repeat
-            randomIndex = math.random(#Copy)
+            Citizen.Wait(0)
+            randomIndex = math.random(1,#Copy)
         until not Duplicates[randomIndex]
         Duplicates[randomIndex] = true
         table.insert(Chosen, Copy[randomIndex])
@@ -106,17 +107,21 @@ end
 
 
 RegisterCommand("votedebug", function(source)
-    Voted = {}
-    --CurrentGamemode = "vote"
-    StartVoteCounter()
-	VotingGamemodes = SelectVotedGamemodes()
-	TriggerClientEvent("StartVoteScreen", -1, VotingGamemodes)
+    Citizen.CreateThread(function()
+        Voted = {}
+        --CurrentGamemode = "vote"
+        StartVoteCounter()
+        VotingGamemodes = SelectVotedGamemodes()
+        TriggerClientEvent("StartVoteScreen", -1, VotingGamemodes)
+    end)
 end)
 
 AddEventHandler("StartVoting", function()
-    Voted = {}
-    --CurrentGamemode = "vote"
-    StartVoteCounter()
-	VotingGamemodes = SelectVotedGamemodes()
-	TriggerClientEvent("StartVoteScreen", -1, VotingGamemodes)
+    Citizen.CreateThread(function()
+        Voted = {}
+        --CurrentGamemode = "vote"
+        StartVoteCounter()
+	    VotingGamemodes = SelectVotedGamemodes()
+	    TriggerClientEvent("StartVoteScreen", -1, VotingGamemodes)
+    end)
 end)
