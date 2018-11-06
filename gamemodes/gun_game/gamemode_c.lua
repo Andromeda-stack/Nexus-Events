@@ -218,6 +218,7 @@ function DrawGameEndScreen(win, winner)
     else
         Scaleform.CallFunction(ShardS, false, "SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "~r~YOU LOSE!", winner.." won the game.")
     end
+    Scaleform.Render2D(ShardS)
 end
 
 RegisterNetEvent("gun_game:UpGunLevel")
