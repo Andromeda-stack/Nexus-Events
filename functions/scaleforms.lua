@@ -83,3 +83,7 @@ end
 function Scaleform.Render3D(scaleform, x, y, z, rotx, roty, rotz, scalex, scaley, scalez)
     DrawScaleformMovie_3d(scaleform, x, y, z, rotx, roty, rotz, 2.0, 2.0, 1.0, scalex, scaley, scalez, 2)
 end
+
+function Scaleform.Render2DMasked(scaleform1, scaleform2, r, g, b, a)
+    DrawScaleformMovieFullscreenMasked(scaleform1, scaleform2, r, g, b, a)
+end
