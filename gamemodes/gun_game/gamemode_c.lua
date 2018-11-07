@@ -15,7 +15,6 @@ AddEventHandler("Gamemode:End:4", function(winner, winnername)
         print(winner, winnername)
         CurrentCenter = {}
         SpawnManager.removeAllSpawnPoints()
-        AddEventHandler("playerSpawned",function()end)
         SpawnManager.addSpawnPoint({x=3615.9, y=3789.83, z=29.2, heading=0.0, model=1657546978})
         SpawnManager.forceRespawn()
         if winner == PlayerServerId then
