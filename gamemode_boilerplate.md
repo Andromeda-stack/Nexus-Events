@@ -10,7 +10,7 @@
 
 your gamemode will begin in the `"Gamemode:Init:"..Gamemode.id` event, where Gamemode.id is the id you copied before. This id is what you wil use to register all your events, just like the init event.
 
-### things to put in the init event:
+#### things to put in the init event:
 
 * remove the initial spawn! it is done like this: `SpawnManager.removeSpawnPointByCoords({x=3615.9, y=3789.83, z=29.2})`
 * add your gamemode's spawn, there are multiple ways to do this, you can use `SpawnManager.addSpawnPoint({x=0.0,y=0.0,z=0.0,heading=0.0,model=0})` or you can pass a table with all the spawns in the format i just showed you to `SpawnManager.addSpawnPoints`
@@ -23,7 +23,7 @@ your gamemode will begin in the `"Gamemode:Init:"..Gamemode.id` event, where Gam
 
 the core of your gamemode is the `StartMain` function, it is what does all the work, from the UI to everything else you might think of.
 
-### things to put in StartMain:
+#### things to put in StartMain:
 
 * all the UI Threads
 * enable PvP loop
@@ -33,7 +33,7 @@ the core of your gamemode is the `StartMain` function, it is what does all the w
 
 the end of the matches is handled by the `Gamemode:End:id` event.
 
-## things to put in the end event:
+#### things to put in the end event:
 
 * reinitialize all the variables, to make sure they dont have weird values the next match.
 * remove all the spawns, using `SpawnManager.removeAllSpawnPoints`
