@@ -42,20 +42,20 @@ AddEventHandler("Gamemode:Leave:4", function(s)
     end
 end)
 
-AddEventHandler("GetGunGameState", function(cb)
+--[[ AddEventHandler("GetGunGameState", function(cb)
     cb(SessionActive)
-end)
+end) ]]
 
 AddEventHandler("Gamemode:Start:4", function(g)
     InitPlayers()
     TriggerClientEvent("PrepareGamemode", -1, g)
     SessionActive = true
-    Citizen.CreateThread(function()
+    --[[ Citizen.CreateThread(function()
         while SessionActive do
             Wait(100)
             InitPlayers()
         end
-    end)
+    end) ]]
 end)
 
 AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
