@@ -47,27 +47,13 @@ AddEventHandler("GetGunGameState", function(cb)
 end)
 
 AddEventHandler("Gamemode:Start:4", function(g)
-    for i=0, GetNumPlayerIndices() - 1 do
-        local player = GetPlayerFromIndex(i)
-        print("initializing player "..GetPlayerName(player) .. " id: ".. player)
-        GunLevels[player] = 1
-        print(json.encode(GunLevels))
-        --PlayerList[getPlayerIndex(player)].level = 1
-    end
-    TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
+    InitPlayers()
     TriggerClientEvent("PrepareGamemode", -1, g)
     SessionActive = true
     Citizen.CreateThread(function()
         while SessionActive do
             Wait(100)
-            for i=0, GetNumPlayerIndices() - 1 do
-                local player = GetPlayerFromIndex(i)
-                print("initializing player "..GetPlayerName(player) .. " id: ".. player)
-                GunLevels[player] = 1
-                print(json.encode(GunLevels))
-                --PlayerList[getPlayerIndex(player)].level = 1
-            end
-            TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
+            InitPlayers()
         end
     end)
 end)
@@ -174,4 +160,15 @@ function tablelength(T)
     local count = 0
     for _ in pairs(T) do count = count + 1 end
     return count
+end
+
+function InitPlayers()
+    for i=0, GetNumPlayerIndices() - 1 do
+        local player = GetPlayerFromIndex(i)
+        print("initializing player "..GetPlayerName(player) .. " id: ".. player)
+        GunLevels[player] = 1
+        print(json.encode(GunLevels))
+        --PlayerList[getPlayerIndex(player)].level = 1
+    end
+    TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
 end
