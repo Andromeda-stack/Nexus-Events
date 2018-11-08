@@ -33,7 +33,7 @@ RegisterNetEvent("Gamemode:PollRandomCoords:4")
 RegisterNetEvent("Gamemode:UpdateUI:4")
 RegisterNetEvent("baseevents:onPlayerKilled")
 RegisterNetEvent("baseevents:onPlayerDied")
-RegisterNetEvent("GetGamemodeState")
+RegisterNetEvent("GetGunGameState")
 
 AddEventHandler("Gamemode:Leave:4", function(s)
     if SessionActive then
@@ -42,7 +42,7 @@ AddEventHandler("Gamemode:Leave:4", function(s)
     end
 end)
 
-AddEventHandler("GetGamemodeState", function(cb)
+AddEventHandler("GetGunGameState", function(cb)
     cb(SessionActive)
 end)
 
