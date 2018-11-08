@@ -117,6 +117,15 @@ AddEventHandler("Gamemode:Init:4", function()
     StartMain()
 end)
 
+AddEventHandler("Gamemode:Join:4", function()
+    TriggerServerEvent("GetGunGameState", function(state)
+        if state == true then
+            TriggerEvent("gun_game:UpGunLevel", 1)
+            StartMain()
+        end
+    end)
+end)
+
 local GunLevels = {}
 
 local WeaponLevels = {

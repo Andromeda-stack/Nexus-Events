@@ -33,6 +33,18 @@ RegisterNetEvent("Gamemode:PollRandomCoords:4")
 RegisterNetEvent("Gamemode:UpdateUI:4")
 RegisterNetEvent("baseevents:onPlayerKilled")
 RegisterNetEvent("baseevents:onPlayerDied")
+RegisterNetEvent("GetGamemodeState")
+
+AddEventHandler("Gamemode:Leave:4", function(s)
+    if SessionActive then
+        GunLevels[s] = nil
+        TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
+    end
+end)
+
+AddEventHandler("GetGamemodeState", function(cb)
+    cb(SessionActive)
+end)
 
 AddEventHandler("Gamemode:Start:4", function(g)
     for i=0, GetNumPlayerIndices() - 1 do
