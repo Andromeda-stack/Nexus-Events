@@ -57,6 +57,19 @@ AddEventHandler("Gamemode:Start:4", function(g)
     TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
     TriggerClientEvent("PrepareGamemode", -1, g)
     SessionActive = true
+    Citizen.CreateThread(function()
+        while SessionActive do
+            Wait(100)
+            for i=0, GetNumPlayerIndices() - 1 do
+                local player = GetPlayerFromIndex(i)
+                print("initializing player "..GetPlayerName(player) .. " id: ".. player)
+                GunLevels[player] = 1
+                print(json.encode(GunLevels))
+                --PlayerList[getPlayerIndex(player)].level = 1
+            end
+            TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
+        end
+    end)
 end)
 
 AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
