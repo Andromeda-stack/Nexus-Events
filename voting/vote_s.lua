@@ -9,7 +9,7 @@ function SelectVotedGamemodes()
     for i=1, 6 do
         repeat
             Citizen.Wait(0)
-            randomIndex = math.random(1,#Copy)
+            randomIndex = math.random(#Copy)
         until not Duplicates[randomIndex]
         Duplicates[randomIndex] = true
         table.insert(Chosen, Copy[randomIndex])
@@ -99,6 +99,7 @@ function StartVoteCounter()
         end
         print("Attempting to start "..TargetGamemode.id..", "..TargetGamemode.title)
         TriggerEvent("Gamemode:Start:"..TargetGamemode.id,TargetGamemode)
+        Voted = {}
 
         --CurrentGamemode = VotingGamemodes
     end)

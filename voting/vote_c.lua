@@ -25,10 +25,12 @@ end)
 RegisterNetEvent("StartVoteScreen")
 AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
 	Citizen.CreateThread(function()
+		print("voting")
 		SwitchOutPlayer(PlayerPedId(),0,1)
 		Wait(500)
 		while Citizen.InvokeNative(0x470555300D10B2A5) ~= 5 and Citizen.InvokeNative(0x470555300D10B2A5) ~= 3 do
 			Citizen.Wait(0)
+			print("Waiting")
 		end
 		local Instructional = GUI.InstructionalButtons(176, "Vote")
 		local Gamemodes = SelectedGamemodes
@@ -71,6 +73,7 @@ AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
 			end
 
 			if not VotingVisible then
+				print("breaking")
 				break
 			end
 		end

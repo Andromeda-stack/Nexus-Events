@@ -19,19 +19,19 @@ end
 
 function SpawnManager.removeAllSpawnPoints()
     for k,v in pairs(SpawnIDX) do
-        s:removeSpawnPoint(k)
+        s:removeSpawnPoint(tonumber(k))
         SpawnIDX[k] = nil
     end
-    print("removed all spawnpoints")
+    --print("removed all spawnpoints")
 end
 
 function SpawnManager.removeSpawnPointByCoords(coords)
     for k,v in pairs(SpawnIDX) do
-        print("v.x: "..v.x.." coords.x: "..coords.x.."v.y: "..v.y.." coords.y: "..coords.y.."v.z: "..v.z.." coords.z: "..coords.z)
+        --print("v.x: "..v.x.." coords.x: "..coords.x.."v.y: "..v.y.." coords.y: "..coords.y.."v.z: "..v.z.." coords.z: "..coords.z)
         if v.x == coords.x and v.y == coords.y and v.z == coords.z then
-            s:removeSpawnPoint(k)
+            s:removeSpawnPoint(tonumber(k))
             SpawnIDX[k] = nil
-            print("removed idx by coords: "..k)    
+            --print("removed idx by coords: "..k)    
         end
     end
     print(json.encode(SpawnIDX))
@@ -42,7 +42,7 @@ function SpawnManager.removeSpawnPointByIdx(idx)
         if k==idx then
             s:removeSpawnPoint(k)
             SpawnIDX[k] = nil
-            print("removed idx "..k)
+            --print("removed idx "..k)
         end
     end
 end

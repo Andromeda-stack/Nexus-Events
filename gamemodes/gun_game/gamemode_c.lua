@@ -63,6 +63,7 @@ AddEventHandler("Gamemode:Init:4", function()
     --print(json.encode(SpawnIDX))
     --local x,y,z = table.unpack(InitPos)
     Sessionised = true
+    VotingVisible = false
 
     TriggerServerEvent("Gamemode:PollRandomCoords:4")
 
@@ -95,19 +96,19 @@ AddEventHandler("Gamemode:Init:4", function()
         -- would be better if we were to freeze the player's cam, anyone knows how?
         --FreezePedCameraRotation(PlayerPedId())
         if (GetGameTimer() - start) < 7000 then
-            print("to start")
+            --print("to start")
             GUI.DrawText("The Game Will Start Shortly", {x=0.5,y=0.5}, 2, {r=57,g=255,b=20,a=255}, 1.0, false, true, true, false, 0.1)
         end
         if (GetGameTimer() - start) < 8000 and GetGameTimer() - start > 7000 then
-            print("3")
+            --print("3")
             GUI.DrawText("3", {x=0.5,y=0.5}, 2, {r=57,g=255,b=20,a=255}, 1.0, false, true, true, false, 0.1)
         end
         if (GetGameTimer() - start) < 9000 and GetGameTimer() - start > 8000 then
-            print("2")
+            --print("2")
             GUI.DrawText("2", {x=0.5,y=0.5}, 2, {r=57,g=255,b=20,a=255}, 1.0, false, true, true, false, 0.1)
         end
         if (GetGameTimer() - start) > 9000 then
-            print("1")
+            --print("1")
             GUI.DrawText("1", {x=0.5,y=0.5}, 2, {r=57,g=255,b=20,a=255}, 1.0, false, true, true, false, 0.1)
         end
     end
