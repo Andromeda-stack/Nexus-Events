@@ -91,5 +91,6 @@ end)
 
 
 RegisterCommand("stopit", function(source)
-    N_0xd8295af639fd9cb8(PlayerPedId())
+	N_0xd8295af639fd9cb8(PlayerPedId())
+	VotingVisible = false
 end)
