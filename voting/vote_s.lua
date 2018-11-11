@@ -1,43 +1,5 @@
-local CurrentGamemode = "vote"
-local VotingGamemodes
-
-function SelectVotedGamemodes()
-    local Chosen = {}
-    local Duplicates = {}
-    local Copy = Gamemodes
-    local randomIndex
-    for i=1, 6 do
-        repeat
-            Citizen.Wait(0)
-            randomIndex = math.random(#Copy)
-        until not Duplicates[randomIndex]
-        Duplicates[randomIndex] = true
-        table.insert(Chosen, Copy[randomIndex])
-        table.remove(Copy, RandomIndex)
-    end
-
-    return Chosen
-end
-
 local Voted = {}
-
-RegisterNetEvent("AddVote")
-AddEventHandler("AddVote", function(VotedIndex)
-    local found = false 
-    for i=1, #Voted do
-        if Voted[i].id == source then
-            found = true
-        end
-    end
-
-    if not found then
-        table.insert(Voted, {id = source, vIndex = VotedIndex})
-        print("Inserted the vote for "..VotedIndex)
-        UpdateVotes()
-    else
-        print("Seems like someone is cheating, or it bugged!")
-    end
-end)
+VotingGamemodes = {}
 
 function GetTotalVotes()
     local TotalVoted = {
@@ -62,43 +24,63 @@ function GetTotalVotes()
     return TotalVoted
 end
 
+RegisterNetEvent("AddVote")
+AddEventHandler("AddVote", function(VotedIndex)
+    local found = false 
+    for i=1, #Voted do
+        if Voted[i].id == source then
+            found = true
+        end
+    end
+
+    if not found then
+        table.insert(Voted, {id = source, vIndex = VotedIndex})
+        print("Inserted the vote for "..VotedIndex)
+        UpdateVotes()
+    else
+        print("Seems like someone is cheating, or it bugged!")
+    end
+end)
 
 function UpdateVotes()
+    TriggerClientEvent("UpdateDisplayVotes", -1, GetTotalVotes())
+end
+
+function RandomGamemodes()
+    local g = {}
+    math.randomseed(os.time())
+    for i=1, 6 do
+        local randomindex = math.random(1,#Gamemodes)
+        repeat
+            Citizen.Wait(0)
+            randomindex = math.random(1,#Gamemodes)
+        until not Misc.TableIncludes(g, Gamemodes[randomindex])
+
+        table.insert(g, Gamemodes[randomindex])
+    end
+    return g
+end
+
+function GetWinner()
+    local votes = {}
+    local winner = 0
     local Votes = GetTotalVotes()
-    TriggerClientEvent("UpdateDisplayVotes", -1, Votes)
+
+    for index, entry in pairs(Votes) do
+        if Votes[winner].votes < entry.votes then
+            winner = index
+        end    
+    end
+    return Votes[winner].id
 end
 
 function StartVoteCounter()
     Citizen.CreateThread(function()
-        local counter = 20
-        for i=counter, 0, -1 do
-            Wait(1000)
-            if GetNumPlayerIndices() == #Voted then
-                break
-            end
-        end
-
-        local TotalVotes = GetTotalVotes()
-        local highestIndex = 0
-        local highestValue = false
-        for k, v in ipairs(TotalVotes) do
-            if not highestValue or v.votes > highestValue then
-                highestIndex = k
-                highestValue = v.votes
-            end
-        end
-
-        local IndexToGamemode = TotalVotes[highestIndex]
-        local TargetGamemode
-        for i=1, #Gamemodes do
-            if Gamemodes[i].id == IndexToGamemode.id then
-                TargetGamemode = Gamemodes[i]
-                print("TargetGamemode is ".. json.encode(TargetGamemode))
-                break
-            end
-        end
-        print("Attempting to start "..TargetGamemode.id..", "..TargetGamemode.title)
-        TriggerEvent("Gamemode:Start:"..TargetGamemode.id,TargetGamemode)
+        print(GetNumPlayerIndices())
+        while GetNumPlayerIndices() ~= #Voted do Wait(0) end
+        local TargetGamemode = GetWinner()
+        print("Attempting to start "..TargetGamemode)
+        TriggerEvent("Gamemode:Start:"..TargetGamemode,Gamemodes[TargetGamemode])
         Voted = {}
 
         --CurrentGamemode = VotingGamemodes
@@ -109,21 +91,18 @@ end
 
 RegisterCommand("votedebug", function(source)
     Citizen.CreateThread(function()
-        Voted = {}
-        --CurrentGamemode = "vote"
+        print("StartVoting was triggered.")
         StartVoteCounter()
-        VotingGamemodes = SelectVotedGamemodes()
-        TriggerClientEvent("StartVoteScreen", -1, VotingGamemodes)
+        VotingGamemodes = RandomGamemodes()
+	    TriggerClientEvent("StartVoteScreen", -1, VotingGamemodes)
     end)
 end)
 
 AddEventHandler("StartVoting", function()
     Citizen.CreateThread(function()
         print("StartVoting was triggered.")
-        Voted = {}
-        --CurrentGamemode = "vote"
         StartVoteCounter()
-	    VotingGamemodes = SelectVotedGamemodes()
+        VotingGamemodes = RandomGamemodes()
 	    TriggerClientEvent("StartVoteScreen", -1, VotingGamemodes)
     end)
 end)

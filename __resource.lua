@@ -21,7 +21,9 @@ server_scripts {
 	"voting/vote_s.lua",
 	"main/main_s.lua",
 	"gamemodes/gamemode_handler_s.lua",
-	"gamemodes/gun_game/gamemode_s.lua"
+	"gamemodes/gun_game/gamemode_s.lua",
+	--FUNCTIONS
+	"functions/misc.lua",
 }
 
 shared_scripts {

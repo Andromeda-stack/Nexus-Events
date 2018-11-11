@@ -27,3 +27,13 @@ function Misc.SplitString(inputstr, sep)
     end
     return t
 end
+
+function Misc.TableIncludes (tab, val)
+    for index, value in ipairs(tab) do
+        if value == val then
+            return true
+        end
+    end
+
+    return false
+end
