@@ -31,7 +31,7 @@ server_scripts {
 	"functions/misc.lua",
 	--SQLITE
 	"db/SQLite-Wrapper.net.dll",
-	--"db/System.Data.SQLite.dll"
+	--"System.Data.SQLite.dll"
 }
 
 shared_scripts {
