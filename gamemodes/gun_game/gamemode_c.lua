@@ -148,7 +148,7 @@ function StartMain()
         while Sessionised do
             Citizen.Wait(0)
             local pCoords = GetEntityCoords(PlayerPedId(), true)
-            if math.sqrt((CurrentCenter.x - pCoords.x)^2 + (CurrentCenter.y - pCoords.y)^2) > 150.0  then
+            if math.sqrt((CurrentCenter.x - pCoords.x)^2 + (CurrentCenter.y - pCoords.y)^2) > 300.0  then
                 if not end_time then end_time = GetNetworkTime() + 30000 end
 
                 if (end_time - GetNetworkTime()) > 0 then
@@ -187,7 +187,7 @@ function StartMain()
     Citizen.CreateThread(function()
         while Sessionised do
             Citizen.Wait(0)
-            DrawMarker(1, CurrentCenter.x, CurrentCenter.y, CurrentCenter.z - 300, 0, 0, 0, 0, 0, 0, 300.0, 300.0, 500.0, 0, 0, 255, 200, 0, 0, 0, 0)
+            DrawMarker(1, CurrentCenter.x, CurrentCenter.y, CurrentCenter.z - 300, 0, 0, 0, 0, 0, 0, 600.0, 600.0, 500.0, 0, 0, 255, 200, 0, 0, 0, 0)
         end
     end)
     Citizen.CreateThread(function()
