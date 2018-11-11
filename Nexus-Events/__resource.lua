@@ -1,5 +1,10 @@
 resource_manifest_version "44febabe-d386-4d18-afbe-5e627f4af937"
 
+description 'Nexus Events'
+author 'IceHax & Shayan'
+version 'v0.1'
+resource_type 'gametype' { name = 'Nexus Events' }
+
 client_scripts {
 	--FUNCTIONS
 	"functions/scaleforms.lua",
@@ -24,6 +29,9 @@ server_scripts {
 	"gamemodes/gun_game/gamemode_s.lua",
 	--FUNCTIONS
 	"functions/misc.lua",
+	--SQLITE
+	"db/SQLite-Wrapper.net.dll",
+	--"db/System.Data.SQLite.dll"
 }
 
 shared_scripts {
