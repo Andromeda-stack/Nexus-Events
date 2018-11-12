@@ -30,6 +30,7 @@ server_scripts {
 	--FUNCTIONS
 	"functions/misc.lua",
 	--SQLITE
+	"db/Db.js"
 }
 
 files({
