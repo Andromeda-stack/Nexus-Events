@@ -5,17 +5,33 @@ const resourcePath = global.GetResourcePath ?
 	__dirname
 const safepath = url => path.join(resourcePath, url)
 
+function fileExistsSync (filepath) { // from https://github.com/scottcorgan/file-exists, all credits to scottcorgan. the license can be found at https://github.com/scottcorgan/file-exists/blob/master/LICENSE
+    const _filepath = filepath || '';
+    try {
+      return fs.statSync(_filepath).isFile()
+    }
+    catch (e) {
+      // Check exception. If ENOENT - no such file or directory ok, file doesn't exist.
+      // Otherwise something else went wrong, we don't have rights to access the file, ...
+      if (e.code != 'ENOENT') {
+        throw e
+      }
+  
+      return false
+    }
+  }
+
 class Database {
     constructor(file) {
         file = safepath(`${file}.json`);
-        if (!fs.existsSync()) fs.writeFileSync(file,"[]");
+        if (!fileExistsSync(file)) fs.writeFileSync(file,"[]");
         this.db = JSON.parse(fs.readFileSync(file));
         this.dbFile = file
     }
     GetUser(id) {
         for (const user of this.db) {
             if (user.id == id) {
-                return id
+                return user
             }
         }
         return false
