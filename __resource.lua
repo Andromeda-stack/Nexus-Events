@@ -20,6 +20,8 @@ client_scripts {
 	"voting/vote_c.lua",
 	--MAIN
 	"main/main_c.lua",
+	--ANTICHEAT
+	"ac/ac_c.lua"
 }
 
 server_scripts {
@@ -30,7 +32,9 @@ server_scripts {
 	--FUNCTIONS
 	"functions/misc.lua",
 	--SQLITE
-	"db/Db.js"
+	"db/Db.js",
+	--ANTICHEAT
+	"ac/ac_s.lua"
 }
 
 files({
