@@ -18,6 +18,7 @@ class Database {
                 return id
             }
         }
+        return false
     }
     InsertUser(user) {
         this.db.push(user)
