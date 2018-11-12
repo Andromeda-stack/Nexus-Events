@@ -30,9 +30,11 @@ server_scripts {
 	--FUNCTIONS
 	"functions/misc.lua",
 	--SQLITE
-	"db/SQLite-Wrapper.net.dll",
-	--"System.Data.SQLite.dll"
 }
+
+files({
+	"System.Data.SQLite.dll.config"
+})
 
 shared_scripts {
 	"shared.lua"
