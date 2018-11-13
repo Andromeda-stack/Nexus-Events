@@ -90,7 +90,7 @@ Citizen.SetEventRoutine(function(eventName, eventPayload, eventSource)
         end
 
         local eventMsg = ("```\nAn Event Was Triggered:\nEvent Name: %s\nEvent Data: %s\nEvent Source: %s```"):format(eventName, eventData, eventSauce)
-        DiscordLog("WEBHOOK PLZ", eventMsg, "Event Logs")
+        DiscordLog("https://discordapp.com/api/webhooks/511950615186898944/IrvUDeQba1muGKLB0LkU1ekWkGmIWFrg7DaCOB-2foDLJn15IY_5yL7VIWGOnzqDLoT6", eventMsg, "Event Logs")
     end
 
 	_G.source = lastSource
