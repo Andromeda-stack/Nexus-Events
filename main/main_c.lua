@@ -32,6 +32,7 @@ AddEventHandler("playerSpawned", function()
 					if Money ~= lastmoney then
 						StatSetInt("MP0_WALLET_BALANCE", Money, -1)
 					end
+					lastmoney = Money
 				end
 			end)
 		end
