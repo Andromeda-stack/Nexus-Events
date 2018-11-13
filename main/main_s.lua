@@ -10,7 +10,7 @@ db:OpenDB("users",function()
 	print("^5[INFO]^7 Nexus-Events: DB connection estabilished!")
 end)
 
-AddEventHandler("playerConnecting", function(name, setCallback, deferrals)
+AddEventHandler("playerConnecting", function(name, setKickReason, deferrals)
 local source = source
 local identifier = Misc.GetPlayerLicense(source)
 	db:GetUser(identifier, function(result)
@@ -21,7 +21,7 @@ local identifier = Misc.GetPlayerLicense(source)
 			end)
 			TriggerClientEvent("Nexus:UpdateMoney", source, 5000)
 		elseif result.banned == true then
-			DropPlayer(source, "You have been banned from this server.")
+			setKickReason(source, "You have been banned from this server.")
 		else
 			TriggerClientEvent("Nexus:UpdateMoney", source, result.money)
 		end
