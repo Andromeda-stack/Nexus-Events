@@ -1,15 +1,3 @@
-RegisterNetEvent("TestEvent")
-AddEventHandler("TestEvent", function(data, more)
-    print("Wow, "..data..", Oh damn, "..more)
-end)
-
-
-function DiscordLog(wbhook, text, name)
-	PerformHttpRequest(wbhook, function(errorCode, resultData, resultHeaders)
-		print(resultData)
-	end, "POST", json.encode({username = name, content = text}), {})
-end
-
 local alwaysSafeEvents = {
 	["playerDropped"] = true,
 	["playerConnecting"] = true
@@ -21,7 +9,8 @@ local IgnoredEvents = {
     "getMapDirectives",
     "onResourceStarting",
     "onServerResourceStop",
-    "onResourceStop"
+	"onResourceStop",
+	"playernames:extendContext"
 }
 
 local eventHandlers = {}
@@ -70,7 +59,6 @@ Citizen.SetEventRoutine(function(eventName, eventPayload, eventSource)
 		end
 	end
 
-	-- Custom code to handle event logging
     local send = true
     for i=1, #IgnoredEvents do
         if string.find(eventName, IgnoredEvents[i]) ~= nil then
@@ -80,8 +68,14 @@ Citizen.SetEventRoutine(function(eventName, eventPayload, eventSource)
         end
     end
 
-    if send then 
-        local eventSauce = (eventSource ~= "" and eventSource or "Console/Server")
+	if send then 
+		local SourceData = "None"
+
+		if eventSource ~= "" then
+			local trueSource = string.gsub(eventSource, "net:", "")
+			SourceData = "\n  • Name: "..GetPlayerName(trueSource).."\n  • ID: "..trueSource.."\n  • Identifiers: "..table.concat(GetPlayerIdentifiers(trueSource), ", ")
+		end
+        local eventSauce = (eventSource ~= "" and SourceData or "Console/Server")
         local unpacked = msgpack.unpack(eventPayload)
         if #unpacked > 0 and unpacked ~= nil then
             eventData = json.encode(unpacked)
@@ -89,8 +83,9 @@ Citizen.SetEventRoutine(function(eventName, eventPayload, eventSource)
             eventData = "No data"
         end
 
-        local eventMsg = ("```\nAn Event Was Triggered:\nEvent Name: %s\nEvent Data: %s\nEvent Source: %s```"):format(eventName, eventData, eventSauce)
-        DiscordLog("WEBHOOK PLZ", eventMsg, "Event Logs")
+        local eventMsg = ("```\nAn Event Was Triggered:\nEvent Name: %s\nEvent Data: %s\nSource Data: %s```"):format(eventName, eventData, eventSauce)
+        PerformHttpRequest("webhook", function(errorCode, resultData, resultHeaders)
+        end, "POST", json.encode({username = "Event Logs", content = eventMsg}), {})
     end
 
 	_G.source = lastSource
