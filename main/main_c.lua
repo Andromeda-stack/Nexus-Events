@@ -24,6 +24,7 @@ AddEventHandler("playerSpawned", function()
 			Citizen.CreateThread(function()
 				local lastmoney
 				while true do
+					Wait(0)
 					if IsControlJustPressed(0, 48) then
 						--ShowHudComponentThisFrame(4) we don't need bank stuff
 						DisplayCash(true)
