@@ -37,3 +37,53 @@ function Misc.TableIncludes (tab, val)
 
     return false
 end
+
+function Misc.GetPlayerIdentifer (source, ident, _sub)
+	local len
+	local identifiers
+
+	if ident == nil then return end
+
+	identifiers = GetPlayerIdentifiers(source)
+
+	if _sub then
+		len = string.len(ident)
+
+		for i, identifier in ipairs(identifiers) do
+			if string.sub(identifier, 1, len) == ident then
+				return identifier
+			end
+		end
+	else
+		for i, identifier in ipairs(identifiers) do
+			if ident == identifier then
+				return identifier
+			end
+		end
+	end
+end;
+
+local LIC = 'license:'
+function Misc.GetPlayerLicense (i) return Misc.GetPlayerIdentifer(i, LIC, true) end;
+
+local STM =	'steam:'
+function Misc.GetPlayerSteamId (i) return Misc.GetPlayerIdentifer(i, STM, true) end;
+
+function Misc.PlayerHasIdentifier (source, identifier)
+	return Misc.GetPlayerIdentifer(source, identifier, false) ~= nil
+end
+function Misc.GetPlayerFromIdentifier (identifier)
+	for k, playerId in ipairs(GetPlayers()) do
+		if Misc.PlayerHasIdentifier(playerId, identifier) then
+			return playerId
+		end
+	end
+end
+
+function Misc.DoCountdown(from)
+		local Countdown = from / 1000
+		for i=Countdown, 0.0, -0.1 do
+			Countdown = i
+			Citizen.Wait(100)
+		end
+end

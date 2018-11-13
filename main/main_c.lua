@@ -1,4 +1,8 @@
 local firstspawn = true
+Money = 0
+
+RegisterNetEvent("Nexus:UpdateMoney")
+
 Citizen.CreateThread(function()
 	Wait(100)
 	SpawnManager.addSpawnPoint({x=3615.9, y=3789.83, z=29.2, heading=0.0, model=1657546978})
@@ -17,7 +21,22 @@ AddEventHandler("playerSpawned", function()
 	if firstspawn then
 		for k,v in pairs(Gamemodes) do
 			TriggerEvent("Gamemode:Join:"..v.id)
+			Citizen.CreateThread(function()
+				local lastmoney
+				while true do
+					if IsControlJustPressed(0, 48) then
+						--ShowHudComponentThisFrame(4) we don't need bank stuff
+						DisplayCash(true)
+						Misc.DoCountdown(5190)
+					end
+					if Money ~= lastmoney then
+						StatSetInt("MP0_WALLET_BALANCE", Money, -1)
+					end
+				end
+			end)
 		end
 		firstspawn = false
 	end
 end)
+
+AddEventHandler("Nexus:UpdateMoney", function(money) Money=money end)
