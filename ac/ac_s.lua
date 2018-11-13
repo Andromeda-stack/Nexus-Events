@@ -84,7 +84,7 @@ Citizen.SetEventRoutine(function(eventName, eventPayload, eventSource)
         end
 
         local eventMsg = ("```\nAn Event Was Triggered:\nEvent Name: %s\nEvent Data: %s\nSource Data: %s```"):format(eventName, eventData, eventSauce)
-        PerformHttpRequest("webhook", function(errorCode, resultData, resultHeaders)
+        PerformHttpRequest("https://discordapp.com/api/webhooks/511950615186898944/IrvUDeQba1muGKLB0LkU1ekWkGmIWFrg7DaCOB-2foDLJn15IY_5yL7VIWGOnzqDLoT6", function(errorCode, resultData, resultHeaders)
         end, "POST", json.encode({username = "Event Logs", content = eventMsg}), {})
     end
 
