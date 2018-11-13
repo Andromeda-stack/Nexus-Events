@@ -27,7 +27,7 @@ AddEventHandler("playerSpawned", function()
 					Wait(0)
 					if IsControlJustPressed(0, 48) then
 						ShowHudComponentThisFrame(4) 
-						--DisplayCash(true) --we don't need bank stuff
+						DisplayCash(false) --we don't need bank stuff
 						Misc.DoCountdown(5190)
 					end
 					if Money ~= lastmoney then

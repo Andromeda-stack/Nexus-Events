@@ -21,7 +21,7 @@ client_scripts {
 	--MAIN
 	"main/main_c.lua",
 	--ANTICHEAT
-	"ac/ac_c.lua"
+	--"ac/ac_c.lua"
 }
 
 server_scripts {
@@ -34,7 +34,7 @@ server_scripts {
 	--SQLITE
 	"db/Db.js",
 	--ANTICHEAT
-	"ac/ac_s.lua"
+	--"ac/ac_s.lua"
 }
 
 files({

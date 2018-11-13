@@ -29,12 +29,8 @@ class Database {
         this.dbFile = file
     }
     GetUser(id) {
-        for (const user of this.db) {
-            if (user.id == id) {
-                return user
-            }
-        }
-        return false
+        const usr = this.db.find(u => u.id === id);
+        return (usr) ? usr : false;
     }
     InsertUser(user) {
         this.db.push(user)
@@ -69,8 +65,8 @@ function OpenDB(file,cb) {
 
 function GetUser(id,cb) {
     setImmediate(()=>{
-        let data =  database.GetUser(id);
-        cb(data);
+        var result = database.GetUser(id);
+        cb(result);
     })
 }
 

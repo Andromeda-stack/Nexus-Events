@@ -1,4 +1,4 @@
-local db = exports[GetCurrentResourceName()]
+db = exports[GetCurrentResourceName()]
 
 AddEventHandler("playerDropped", function() 
 	for k,v in pairs(Gamemodes) do
@@ -11,12 +11,14 @@ db:OpenDB("users",function()
 end)
 
 AddEventHandler("playerConnecting", function(name, setKickReason, deferrals)
-local source = source
-local identifier = Misc.GetPlayerLicense(source)
+	print("i got triggered")
+	local source = source
+	local identifier = Misc.GetPlayerSteamId(source)
+	print(identifier)
 	db:GetUser(identifier, function(result)
 		print(result)
 		if not result then
-			db.InsertUser({id=identifier, money=5000, inventory = {}, banned = false, notes = ""}, function()
+			db:InsertUser({id=identifier, money=5000, inventory = {}, banned = false, notes = ""}, function()
 				print("^5[INFO]^7 Added new user to database: "..name)
 			end)
 			TriggerClientEvent("Nexus:UpdateMoney", source, 5000)
