@@ -10,7 +10,12 @@ local IgnoredEvents = {
     "onResourceStarting",
     "onServerResourceStop",
 	"onResourceStop",
-	"playernames:extendContext"
+	"playernames:extendContext",
+	"hostedSession",
+	"chat:init",
+	"playernames:init",
+	"rlUpdateNamesResult",
+	"playerConnecting"
 }
 
 local eventHandlers = {}
