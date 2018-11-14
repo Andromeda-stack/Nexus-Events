@@ -22,48 +22,6 @@ local eventHandlers = {}
 local deserializingNetEvent = false
 
 Citizen.SetEventRoutine(function(eventName, eventPayload, eventSource)
-	-- set the event source
-	local lastSource = _G.source
-	_G.source = eventSource
-
-	-- try finding an event handler for the event
-	local eventHandlerEntry = eventHandlers[eventName]
-	
-	-- deserialize the event structure (so that we end up adding references to delete later on)
-	local data = msgpack.unpack(eventPayload)
-
-	if eventHandlerEntry and eventHandlerEntry.handlers then
-		-- if this is a net event and we don't allow this event to be triggered from the network, return
-		if eventSource:sub(1, 3) == 'net' then
-			if not eventHandlerEntry.safeForNet and not alwaysSafeEvents[eventName] then
-				Citizen.Trace('event ' .. eventName .. " was not safe for net\n")
-
-				return
-			end
-
-			deserializingNetEvent = { source = eventSource }
-			_G.source = tonumber(eventSource:sub(5))
-		end
-
-		-- return an empty table if the data is nil
-		if not data then
-			data = {}
-		end
-
-		-- reset serialization
-		deserializingNetEvent = nil
-
-		-- if this is a table...
-		if type(data) == 'table' then
-			-- loop through all the event handlers
-			for k, handler in pairs(eventHandlerEntry.handlers) do
-				Citizen.CreateThreadNow(function()
-					handler(table.unpack(data))
-				end)
-			end
-		end
-	end
-
     local send = true
     for i=1, #IgnoredEvents do
         if string.find(eventName, IgnoredEvents[i]) ~= nil then
