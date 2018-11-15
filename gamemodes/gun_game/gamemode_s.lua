@@ -73,24 +73,12 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
             GunLevels[tostring(killerid)] = 1
         elseif GunLevels[tostring(killerid)] == 4 then
             print("Game end, winner: ".. GetPlayerName(killerid))
-            Citizen.CreateThread(function()
-                TriggerClientEvent("Gamemode:End:4", -1, killerid, GetPlayerName(killerid))
-                CurrentCoords = {}
-                GunLevels = {}
-                PlayerList = {}
-                SessionActive = false
-                SessionRunnable = true
-                Citizen.Wait(6000)
-                print("voting again!")
-                TriggerEvent("StartVoting")
-                --CancelEvent()
-                --return
-            end)
+            EndGame(killerid)
         end
         GunLevels[tostring(killerid)] = GunLevels[tostring(killerid)] + 1
         TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[tostring(killerid)])
         TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
-        --PlayerList[getPlayerIndex(killerid)].level = PlayerList[getPlayerIndex(killerid)].level + 1
+        PlayerList[getPlayerIndex(killerid)].kills = PlayerList[getPlayerIndex(killerid)].kills + 1
     end
 end)
 
@@ -147,14 +135,13 @@ AddEventHandler("Gamemode:PollRandomCoords:4", function()
     end
 end)
 
---[[ function getPlayerIndex(id)
-    print(json.encode(PlayerList))
+function getPlayerIndex(id)
     for i,v in ipairs(PlayerList) do
         if v.serverId == id then
             return i
         end
     end
-end ]]
+end
 
 function tablelength(T)
     local count = 0
@@ -168,7 +155,40 @@ function InitPlayers()
         print("initializing player "..GetPlayerName(player) .. " id: ".. player)
         GunLevels[player] = 1
         print(json.encode(GunLevels))
-        --PlayerList[getPlayerIndex(player)].level = 1
+        PlayerList[getPlayerIndex(player)].kills = 1
     end
     TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
+end
+
+function EndGame(winner) 
+    Citizen.CreateThread(function()
+        local players = GetPlayers()
+        for i=1, #players do
+            if players[i] == winner then
+                local identifier = Misc.GetPlayerSteamId(source)
+                local xp = 1.5 * (PlayerList[getPlayerIndex(winner)].kills * 50)
+                TriggerClientEvent("Gamemode:End:4", -1, winner, xp)
+                db:GetUser(identifier, function(user)
+                    db:UpdateUser(identifier, {money = user.money + xp/10, xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.") end)
+                end)
+            else
+                local identifier = Misc.GetPlayerSteamId(source)
+                local xp = (PlayerList[getPlayerIndex(winner)].kills * 50)
+                TriggerClientEvent("Gamemode:End:4", -1, winner, xp)
+                db:GetUser(identifier, function(user)
+                    db:UpdateUser(identifier, {money = user.money + xp/10, xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.") end)
+                end)
+            end
+        end
+        CurrentCoords = {}
+        GunLevels = {}
+        PlayerList = {}
+        SessionActive = false
+        SessionRunnable = true
+        Citizen.Wait(16000)
+        print("voting again!")
+        TriggerEvent("StartVoting")
+        --CancelEvent()
+        --return
+    end)
 end

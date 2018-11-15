@@ -21,22 +21,23 @@ AddEventHandler("playerSpawned", function()
 	if firstspawn then
 		for k,v in pairs(Gamemodes) do
 			TriggerEvent("Gamemode:Join:"..v.id)
-			Citizen.CreateThread(function()
-				local lastmoney
-				while true do
-					Wait(0)
-					if IsControlJustPressed(0, 48) then
-						ShowHudComponentThisFrame(4) 
-						DisplayCash(false) --we don't need bank stuff
-						Misc.DoCountdown(5190)
-					end
-					if Money ~= lastmoney then
-						StatSetInt("MP0_WALLET_BALANCE", Money, -1)
-					end
-					lastmoney = Money
-				end
-			end)
 		end
+		Citizen.CreateThread(function()
+			local lastmoney
+			TriggerServerEvent("PollMoney")
+			while true do
+				Wait(0)
+				if IsControlJustPressed(0, 48) then
+					ShowHudComponentThisFrame(4) 
+					DisplayCash(false) --we don't need bank stuff
+					Misc.DoCountdown(5190)
+				end
+				if Money ~= lastmoney then
+					StatSetInt("MP0_WALLET_BALANCE", Money, -1)
+				end
+				lastmoney = Money
+			end
+		end)
 		firstspawn = false
 	end
 end)

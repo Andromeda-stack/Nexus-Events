@@ -1,6 +1,7 @@
 --local InitPos = {3615.9, 3789.83, 29.2}
 local PlayerServerId = GetPlayerServerId(PlayerId())
 local CurrentCenter
+local CurrentKills
 Sessionised = false
 
 RegisterNetEvent("Gamemode:Start:4")
@@ -9,7 +10,7 @@ RegisterNetEvent("Gamemode:FetchCoords:4")
 RegisterNetEvent("Gamemode:End:4")
 RegisterNetEvent("Gamemode:Init:4")
 
-AddEventHandler("Gamemode:End:4", function(winner, winnername) 
+AddEventHandler("Gamemode:End:4", function(winner, xp) 
     Citizen.CreateThread(function()
         Sessionised = false
         print(winner, winnername)
@@ -17,7 +18,7 @@ AddEventHandler("Gamemode:End:4", function(winner, winnername)
         SpawnManager.removeAllSpawnPoints()
         SpawnManager.addSpawnPoint({x=3615.9, y=3789.83, z=29.2, heading=0.0, model=1657546978})
         SpawnManager.forceRespawn()
-        if winner == PlayerServerId then
+        --[[ if winner == PlayerServerId then
             local start = GetGameTimer()
 
             while GetGameTimer() - start < 5000 do 
@@ -31,7 +32,8 @@ AddEventHandler("Gamemode:End:4", function(winner, winnername)
                 Wait(0)
                 DrawGameEndScreen(false, winnername)
             end
-        end
+        end ]]
+        if winner == PlayerServerId then Scaleform.DrawEndScreen(xp, xp/10, true) else Scaleform.DrawEndScreen(xp, xp/10, false) end
         SpawnManager.forceRespawn()
         
     end) 
@@ -119,7 +121,9 @@ AddEventHandler("Gamemode:Init:4", function()
 end)
 
 AddEventHandler("Gamemode:Join:4", function()
-    --spectator mode:TODO
+    if Sessionised then
+        --spectator mode:TODO
+    end
 end)
 
 local GunLevels = {}
@@ -138,11 +142,8 @@ function StartMain()
 
     Citizen.CreateThread(function()
         local ShardS = Scaleform.Request("MP_BIG_MESSAGE_FREEMODE")
-        --local bx,by,bz = table.unpack(InitPos)
-        --local Blip = AddBlipForCoord(bx, by, bz)
 
         Scaleform.CallFunction(ShardS, false, "SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "~r~LEAVING AREA", "Head back to the battle!")
-        --SetBlipAlpha(Blip, 0)
         UpdateGunLevel(1)
 
         while Sessionised do
@@ -152,7 +153,7 @@ function StartMain()
                 if not end_time then end_time = GetNetworkTime() + 30000 end
 
                 if (end_time - GetNetworkTime()) > 0 then
-                    GUI.MissionText("Go to the ~y~shootout.", 1, 1)
+                    GUI.MissionText("Go to the ~b~shootout.", 1, 1)
                     Scaleform.Render2D(ShardS)
                     GUI.DrawTimerBar(0.13, "LEAVING AREA", ((end_time - GetNetworkTime()) / 1000), 1)
                     SetBlipAlpha(Blip, 255)
@@ -174,7 +175,7 @@ function StartMain()
             --print(json.encode(GunLevels))
             Citizen.Wait(0)
             GUI.DrawBar(0.13, "LEVEL", GunLevels[tostring(GetPlayerServerId(PlayerId()))], nil, 3)
-            GUI.DrawBar(0.13, "KILLS", GunLevels[tostring(GetPlayerServerId(PlayerId()))], nil, 4)
+            GUI.DrawBar(0.13, "KILLS", CurrentKills, nil, 4)
         end
     end)
     Citizen.CreateThread(function()
@@ -212,7 +213,7 @@ function UpdateGunLevel(GunLevel)
     GiveWeaponToPed(ped, GetHashKey(NewWeapon), 1000, false, true)
 end
 
-function DrawGameEndScreen(win, winner)
+--[[ function DrawGameEndScreen(win, winner)
     print(win, winner)
     local ShardS = Scaleform.Request("MP_BIG_MESSAGE_FREEMODE")
     if win then
@@ -221,7 +222,7 @@ function DrawGameEndScreen(win, winner)
         Scaleform.CallFunction(ShardS, false, "SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "~r~YOU LOSE!", winner.." won the game.")
     end
     Scaleform.Render2D(ShardS)
-end
+end ]]
 
 RegisterNetEvent("gun_game:UpGunLevel")
 AddEventHandler("gun_game:UpGunLevel", function(GunLevel)
@@ -237,10 +238,18 @@ AddEventHandler("gun_game:DownGunLevel", function(GunLevel)
 end)
 
 RegisterNetEvent("gun_game:UpdateLevels")
-AddEventHandler("gun_game:UpdateLevels", function(GunData)
+AddEventHandler("gun_game:UpdateLevels", function(GunData, PlayersList)
     print("Received GunData: "..json.encode(GunData))
+    function getPlayerIndex(id)
+        for i,v in ipairs(PlayerList) do
+            if v.serverId == id then
+                return i
+            end
+        end
+    end    
     local top3 = {}
     GunLevels = GunData
+    CurrentKills = PlayersList[getPlayerIndex(PlayerServerId)].kills
 
     table.sort(GunLevels)
     
@@ -249,72 +258,3 @@ AddEventHandler("gun_game:UpdateLevels", function(GunData)
         table.insert(top3, {sid = k, score = v})
     end
 end)
-
-RegisterCommand("scaleformtest", function()
-
-    Citizen.CreateThread(function()
-		while true do
-			Citizen.Wait(0)      
-			local scaleforms = {}
-			scaleforms.mp_celeb_bg = Scaleform.Request("MP_CELEBRATION_BG") --A_0
-			scaleforms.mp_celeb_fg = Scaleform.Request("MP_CELEBRATION_FG") -- A_0+4
-			scaleforms.celeb = Scaleform.Request("MP_CELEBRATION") -- A_0 +8
-
-            --[[ for _, scaleform in pairs(scaleforms) do
-                
-                
-            end ]]
-            Scaleform.CallFunction(scaleforms.mp_celeb_bg, false, "CREATE_STAT_WALL", "ch", "HUD_COLOUR_BLACK", -1)
-            Scaleform.CallFunction(scaleforms.mp_celeb_bg, false, "SET_PAUSE_DURATION", 3.0)
-            Scaleform.CallFunction(scaleforms.mp_celeb_bg,false, "ADD_WINNER_TO_WALL", "ch", "CELEB_WINNER", "IceHax", "", 0, false, "", false) -- any text is possible
-            Scaleform.CallFunction(scaleforms.mp_celeb_bg, false, "ADD_STAT_NUMERIC_TO_WALL", "ch", "Levels", 5, true, true)
-            Scaleform.CallFunction(scaleforms.mp_celeb_bg, false, "ADD_JOB_POINTS_TO_WALL", "ch", 1000, true)
-            Scaleform.CallFunction(scaleforms.mp_celeb_bg, false, "ADD_CASH_TO_WALL", "ch", 1000, false)
-            Scaleform.CallFunction(scaleforms.mp_celeb_bg, false, "ADD_REP_POINTS_AND_RANK_BAR_TO_WALL", "ch", 1500, 0, 0, 1000, 1, 2, "Rank", "Up")
-            Scaleform.CallFunction(scaleforms.mp_celeb_bg, false, "ADD_BACKGROUND_TO_WALL", "ch")
-            Scaleform.CallFunction(scaleforms.mp_celeb_bg, false, "SHOW_STAT_WALL", "ch")
-            ---------------------------------------------------------------------------------------------
-            Scaleform.CallFunction(scaleforms.mp_celeb_fg, false, "CREATE_STAT_WALL", "ch", "HUD_COLOUR_RED", -1)
-            Scaleform.CallFunction(scaleforms.mp_celeb_fg, false, "SET_PAUSE_DURATION", 3.0)
-            Scaleform.CallFunction(scaleforms.mp_celeb_fg,false, "ADD_WINNER_TO_WALL", "ch", "CELEB_WINNER", "IceHax", "", 0, false, "", false) -- any text is possible
-            Scaleform.CallFunction(scaleforms.mp_celeb_fg, false, "ADD_STAT_NUMERIC_TO_WALL", "ch", "Levels", 5, true, true)
-            Scaleform.CallFunction(scaleforms.mp_celeb_fg, false, "ADD_JOB_POINTS_TO_WALL", "ch", 1000, true)
-            Scaleform.CallFunction(scaleforms.mp_celeb_fg, false, "ADD_CASH_TO_WALL", "ch", 1000, false)
-            Scaleform.CallFunction(scaleforms.mp_celeb_fg, false, "ADD_REP_POINTS_AND_RANK_BAR_TO_WALL", "ch", 1500, 0, 0, 1000, 1, 2, "Rank", "Up")
-            Scaleform.CallFunction(scaleforms.mp_celeb_fg, false, "ADD_BACKGROUND_TO_WALL", "ch")
-            Scaleform.CallFunction(scaleforms.mp_celeb_fg, false, "SHOW_STAT_WALL", "ch")
-            ---------------------------------------------------------------------------------------------
-            Scaleform.CallFunction(scaleforms.celeb, false, "CREATE_STAT_WALL", "ch", "HUD_COLOUR_BLUE", -1)
-            Scaleform.CallFunction(scaleforms.celeb, false, "SET_PAUSE_DURATION", 3.0)
-            Scaleform.CallFunction(scaleforms.celeb,false, "ADD_WINNER_TO_WALL", "ch", "CELEB_WINNER", "IceHax", "", 0, false, "", false) -- any text is possible
-            Scaleform.CallFunction(scaleforms.celeb, false, "ADD_STAT_NUMERIC_TO_WALL", "ch", "Levels", 5, true, true)
-            Scaleform.CallFunction(scaleforms.celeb, false, "ADD_JOB_POINTS_TO_WALL", "ch", 1000, true)
-            Scaleform.CallFunction(scaleforms.celeb, false, "ADD_CASH_TO_WALL", "ch", 1000, false)
-            Scaleform.CallFunction(scaleforms.celeb, false, "ADD_REP_POINTS_AND_RANK_BAR_TO_WALL", "ch", 1500, 0, 0, 1000, 1, 2, "Rank", "Up")
-            Scaleform.CallFunction(scaleforms.celeb, false, "ADD_BACKGROUND_TO_WALL", "ch")
-            Scaleform.CallFunction(scaleforms.celeb, false, "SHOW_STAT_WALL", "ch")
-			local starttime = GetNetworkTime()
-            while GetNetworkTime() - starttime < 20000 and not canceled do
-				Scaleform.Render2DMasked(scaleforms.mp_celeb_bg, scaleforms.mp_celeb_fg, 255, 255, 255, 255)
-				Scaleform.Render2D(scaleforms.mp_celeb)
-                HideHudAndRadarThisFrame()
-                SetFollowPedCamViewMode(4)
-                Citizen.Wait(0)
-                print(GetNetworkTime() - starttime)
-            end
-			StartScreenEffect("MinigameEndNeutral", 0, 0)
-            PlaySoundFrontend(-1, "SCREEN_FLASH", "CELEBRATION_SOUNDSET")
-            Scaleform.CallFunction(scaleforms.celeb, false, "CLEANUP")
-            Scaleform.CallFunction(scaleforms.mp_celeb_fg, false, "CLEANUP")
-            Scaleform.CallFunction(scaleforms.mp_celeb_bg, false, "CLEANUP")
-
-            Scaleform.Dispose(scaleforms.celeb)
-            Scaleform.Dispose(scaleforms.mp_celeb_bg)
-            Scaleform.Dispose(scaleforms.mp_celeb_fg)
-            return -- end thread
-		end
-	end)
-
-end, false)
-
-
