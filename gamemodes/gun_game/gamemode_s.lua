@@ -73,7 +73,7 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
             TriggerEvent("baseevents:onPlayerDied", nil, nil, source)
             CancelEvent()
         end
-        print(GetPlayerName(killerid).." killed".. GetPlayerName(source))
+        print(GetPlayerName(killerid).." killed ".. GetPlayerName(source))
         print(GunLevels[tostring(killerid)])
         if GunLevels[tostring(killerid)] == nil then 
             GunLevels[tostring(killerid)] = 1
@@ -82,9 +82,9 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
             EndGame(killerid)
         end
         GunLevels[tostring(killerid)] = GunLevels[tostring(killerid)] + 1
+        PlayerList[getPlayerIndex(killerid)].kills = PlayerList[getPlayerIndex(killerid)].kills + 1
         TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[tostring(killerid)])
         TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels,PlayerList)
-        PlayerList[getPlayerIndex(killerid)].kills = PlayerList[getPlayerIndex(killerid)].kills + 1
     end
 end)
 
@@ -170,16 +170,17 @@ function EndGame(winner)
     Citizen.CreateThread(function()
         local players = GetPlayers()
         for i=1, #players do
+            print(players[i])
             if players[i] == winner then
-                local identifier = Misc.GetPlayerSteamId(source)
+                local identifier = Misc.GetPlayerSteamId(winner)
                 local xp = 1.5 * (PlayerList[getPlayerIndex(winner)].kills * 50)
                 TriggerClientEvent("Gamemode:End:4", -1, winner, xp)
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = user.money + xp/10, xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.") end)
                 end)
             else
-                local identifier = Misc.GetPlayerSteamId(source)
-                local xp = (PlayerList[getPlayerIndex(winner)].kills * 50)
+                local identifier = Misc.GetPlayerSteamId(players[i])
+                local xp = (PlayerList[getPlayerIndex(players[i])].kills * 50)
                 TriggerClientEvent("Gamemode:End:4", -1, winner, xp)
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = user.money + xp/10, xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.") end)
