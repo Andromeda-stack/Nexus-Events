@@ -33,7 +33,7 @@ AddEventHandler("Gamemode:End:4", function(winner, xp)
                 DrawGameEndScreen(false, winnername)
             end
         end ]]
-        if winner == PlayerServerId then Scaleform.DrawEndScreen(xp, xp/10, true) else Scaleform.DrawEndScreen(xp, xp/10, false) end
+        if winner == PlayerServerId then Scaleform.RenderEndScreen(xp, xp/10, true) else Scaleform.RenderEndScreen(xp, xp/10, false) end
         SpawnManager.forceRespawn()
         
     end) 
