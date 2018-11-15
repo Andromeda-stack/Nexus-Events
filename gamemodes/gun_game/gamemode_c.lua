@@ -239,18 +239,15 @@ end)
 
 RegisterNetEvent("gun_game:UpdateLevels")
 AddEventHandler("gun_game:UpdateLevels", function(GunData, PlayersList)
-    print("Received GunData: "..json.encode(GunData))
-    function getPlayerIndex(id)
-        for i,v in ipairs(PlayerList) do
-            if v.serverId == id then
-                return i
-            end
+    print("Received GunData: "..json.encode(GunData).." And PlayersList "..json.encode(PlayersList))
+    for i,v in ipairs(PlayersList) do
+        if v.serverId == PlayerServerId then
+            CurrentKills = v.kills
+            print("Current Kills set to "..tostring(v.kills))
         end
-    end    
+    end   
     local top3 = {}
     GunLevels = GunData
-    CurrentKills = PlayersList[getPlayerIndex(PlayerServerId)].kills
-
     table.sort(GunLevels)
     
     for k, v in pairs(GunLevels) do

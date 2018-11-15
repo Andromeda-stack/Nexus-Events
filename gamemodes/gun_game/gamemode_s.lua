@@ -38,7 +38,8 @@ RegisterNetEvent("GetGunGameState")
 AddEventHandler("Gamemode:Leave:4", function(s)
     if SessionActive then
         GunLevels[s] = nil
-        TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
+        PlayerList[getPlayerIndex(s)] = nil
+        TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels, PlayerList)
     end
 end)
 
@@ -47,8 +48,13 @@ end)
 end) ]]
 
 AddEventHandler("Gamemode:Start:4", function(g)
-    InitPlayers()
-    TriggerClientEvent("PrepareGamemode", -1, g)
+    CreateThread(function()
+        InitPlayers()
+        TriggerClientEvent("PrepareGamemode", -1, g)
+        Wait(1000)
+        TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels, PlayerList)
+    end)
+
     SessionActive = true
     --[[ Citizen.CreateThread(function()
         while SessionActive do
@@ -77,7 +83,7 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
         end
         GunLevels[tostring(killerid)] = GunLevels[tostring(killerid)] + 1
         TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[tostring(killerid)])
-        TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
+        TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels,PlayerList)
         PlayerList[getPlayerIndex(killerid)].kills = PlayerList[getPlayerIndex(killerid)].kills + 1
     end
 end)
@@ -94,7 +100,7 @@ AddEventHandler("baseevents:onPlayerDied", function(_,__,s)
             print(json.encode(GunLevels))
             GunLevels[tostring(source)] = GunLevels[tostring(source)] - 1
             TriggerClientEvent("gun_game:DownGunLevel", source, GunLevels[tostring(source)])
-            TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
+            TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels,PlayerList)
             --PlayerList[getPlayerIndex(source)].level = PlayerList[getPlayerIndex(source)].level - 1
         end
     end
@@ -111,6 +117,7 @@ AddEventHandler("Gamemode:UpdatePlayers:4", function(Operation, Player)
             end
         end
         PlayerList[#PlayerList + 1] = Player
+        print("added player")
     end
 end)
 
@@ -155,9 +162,8 @@ function InitPlayers()
         print("initializing player "..GetPlayerName(player) .. " id: ".. player)
         GunLevels[player] = 1
         print(json.encode(GunLevels))
-        PlayerList[getPlayerIndex(player)].kills = 1
+        --PlayerList[getPlayerIndex(player)].kills = 1
     end
-    TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels)
 end
 
 function EndGame(winner) 
