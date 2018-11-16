@@ -166,24 +166,30 @@ function InitPlayers()
     end
 end
 
-function EndGame(winner) 
+function EndGame(winner)
+    local winner = winner 
     Citizen.CreateThread(function()
-        local players = GetPlayers()
-        for i=1, #players do
-            print(players[i])
-            if players[i] == winner then
+        --local players = GetPlayers()
+        print(json.encode(PlayerList))
+        for i,v in ipairs(PlayerList) do
+            --print(players[i])
+            if v.serverId == winner then
                 local identifier = Misc.GetPlayerSteamId(winner)
-                local xp = 1.5 * (PlayerList[getPlayerIndex(winner)].kills * 50)
-                TriggerClientEvent("Gamemode:End:4", -1, winner, xp)
+                --print("winner, ".. getPlayerIndex(winner))
+                local xp = 1.5 * (v.kills * 50)
+                TriggerClientEvent("Gamemode:End:4", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
-                    db:UpdateUser(identifier, {money = user.money + xp/10, xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.") end)
+                    db:UpdateUser(identifier, {money = user.money + xp/10, xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, user.money + xp/10)
                 end)
             else
-                local identifier = Misc.GetPlayerSteamId(players[i])
-                local xp = (PlayerList[getPlayerIndex(players[i])].kills * 50)
-                TriggerClientEvent("Gamemode:End:4", -1, winner, xp)
+                local identifier = Misc.GetPlayerSteamId(v.serverId)
+                --print("not winner, ".. getPlayerIndex(winner))
+                local xp = (v.kills * 50)
+                TriggerClientEvent("Gamemode:End:4", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = user.money + xp/10, xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.") end)
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, user.money + xp/10)
                 end)
             end
         end
