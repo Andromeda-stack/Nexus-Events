@@ -176,7 +176,7 @@ function EndGame(winner)
             if v.serverId == winner then
                 local identifier = Misc.GetPlayerSteamId(winner)
                 --print("winner, ".. getPlayerIndex(winner))
-                local xp = 1.5 * (v.kills * 50)
+                local xp = 2 * (v.kills * 50)
                 TriggerClientEvent("Gamemode:End:4", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = user.money + xp/10, xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
