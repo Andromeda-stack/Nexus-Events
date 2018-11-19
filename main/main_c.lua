@@ -22,6 +22,7 @@ AddEventHandler("playerSpawned", function()
 		for k,v in pairs(Gamemodes) do
 			TriggerEvent("Gamemode:Join:"..v.id)
 		end
+		TriggerServerEvent("Freeroam:Join")
 		Citizen.CreateThread(function()
 			local lastmoney
 			TriggerServerEvent("PollMoney")

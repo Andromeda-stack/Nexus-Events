@@ -87,3 +87,15 @@ function Misc.DoCountdown(from)
 			Citizen.Wait(100)
 		end
 end
+
+function Misc.DoForXSeconds(sec, func)
+	local start = GetGameTimer()
+
+	while GetGameTimer() - start < sec*1000 do func() end
+end
+
+function Misc.TableLength(T)
+    local count = 0
+    for _ in pairs(T) do count = count + 1 end
+    return count
+end

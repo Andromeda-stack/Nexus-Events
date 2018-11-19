@@ -5,6 +5,7 @@ RegisterNetEvent("PollMoney")
 AddEventHandler("playerDropped", function() 
 	for k,v in pairs(Gamemodes) do
 		TriggerEvent("Gamemode:Leave:"..v.id,source)
+		TriggerEvent("Freeroam:Leave",source)
 	end
 end)
 

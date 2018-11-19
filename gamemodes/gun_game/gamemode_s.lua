@@ -33,7 +33,7 @@ RegisterNetEvent("Gamemode:PollRandomCoords:4")
 RegisterNetEvent("Gamemode:UpdateUI:4")
 RegisterNetEvent("baseevents:onPlayerKilled")
 RegisterNetEvent("baseevents:onPlayerDied")
-RegisterNetEvent("GetGunGameState")
+--RegisterNetEvent("Gamemode:Join:4")
 
 AddEventHandler("Gamemode:Leave:4", function(s)
     if SessionActive then
@@ -126,7 +126,7 @@ AddEventHandler("Gamemode:PollRandomCoords:4", function()
         math.randomseed(os.time())
         print("Creating CurrentCoords")
 
-        local ChosenIndex = math.random(1, tablelength(AvailableCoords))
+        local ChosenIndex = math.random(1, Misc.TableLength(AvailableCoords))
         --local _ChosenIndex = math.random(1, #AvailableCoords[ChosenIndex].coords)
         print(ChosenIndex)
         print(json.encode(AvailableCoords))
@@ -148,12 +148,6 @@ function getPlayerIndex(id)
             return i
         end
     end
-end
-
-function tablelength(T)
-    local count = 0
-    for _ in pairs(T) do count = count + 1 end
-    return count
 end
 
 function InitPlayers()
@@ -199,8 +193,8 @@ function EndGame(winner)
         SessionActive = false
         SessionRunnable = true
         Citizen.Wait(16000)
-        print("voting again!")
-        TriggerEvent("StartVoting")
+        print("Start Freeroam!")
+        TriggerEvent("Freeroam:Start")
         --CancelEvent()
         --return
     end)
