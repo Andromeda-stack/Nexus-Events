@@ -2,10 +2,10 @@ local ready = false
 local Sessionised = false
 RegisterNetEvent("Freeroam:Start")
 
-AddEventHandler("Freeroam:Start", function()
+AddEventHandler("Freeroam:Start", function(msec)
     ready = false
     Sessionised = true
-    Main()
+    Main(msec)
 end)
 
 RegisterNetEvent("Freeroam:End")
@@ -15,7 +15,8 @@ AddEventHandler("Freeroam:End", function()
     Sessionised = false
 end)
 
-function Main()
+function Main(msec)
+    local msec = msec or 1200000
     -- add blips and stuff once shayan pushes his commits
     Citizen.CreateThread(function()
         local start = GetGameTimer()

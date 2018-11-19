@@ -11,7 +11,7 @@ AddEventHandler("Freeroam:Start", function()
     SessionRunning = true
     TriggerClientEvent("Freeroam:Start", -1)
     Citizen.CreateThread(function()
-        local start = GetGameTimer()
+        start = GetGameTimer()
         while GetGameTimer() - start < 1200000 and SessionRunning and  Misc.TableLength(ready) < GetNumPlayerIndices()  do
             Wait(0)
         end
@@ -22,4 +22,10 @@ end)
 
 AddEventHandler("Freeroam:Leave", function(s)
     ready[s] = nil
+end)
+
+RegisterNetEvent("Freeroam:Join")
+
+AddEventHandler("Freeroam:Join", function()
+    TriggerClientEvent("Freeroam:Start", source, 1200000 - (GetGameTimer()-start))
 end)
