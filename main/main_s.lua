@@ -1,6 +1,8 @@
 db = exports[GetCurrentResourceName()]
 
 RegisterNetEvent("PollMoney")
+RegisterNetEvent("baseevents:onPlayerKilled")
+RegisterNetEvent("baseevents:onPlayerDied")
 
 AddEventHandler("playerDropped", function() 
 	for k,v in pairs(Gamemodes) do
@@ -33,6 +35,18 @@ AddEventHandler("playerConnecting", function(name, setKickReason, deferrals)
 		end)
 	else
 		deferrals.done("Steam needs to be running to join this server.")
+	end
+end)
+
+AddEventHandler("baseevents:onPlayerDied", function()
+	for k,v in pairs(Gamemodes) do
+		TriggerEvent("Gamemode:Suicide:"..v.id, source)
+	end
+end)
+
+AddEventHandler("baseevents:onPlayerKilled", function(killerid)
+	for k,v in pairs(Gamemodes) do
+		TriggerEvent("Gamemode:Kill:"..v.id, killerid, source)
 	end
 end)
 

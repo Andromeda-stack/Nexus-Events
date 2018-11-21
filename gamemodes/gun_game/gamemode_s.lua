@@ -31,8 +31,6 @@ RegisterNetEvent("Gamemode:UpdatePlayers:4")
 RegisterNetEvent("Gamemode:Heartbeat:4")
 RegisterNetEvent("Gamemode:PollRandomCoords:4")
 RegisterNetEvent("Gamemode:UpdateUI:4")
-RegisterNetEvent("baseevents:onPlayerKilled")
-RegisterNetEvent("baseevents:onPlayerDied")
 --RegisterNetEvent("Gamemode:Join:4")
 
 AddEventHandler("Gamemode:Leave:4", function(s)
@@ -64,7 +62,7 @@ AddEventHandler("Gamemode:Start:4", function(g)
     end) ]]
 end)
 
-AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
+AddEventHandler("Gamemode:Kill:4", function(source, killerid)
     -- this will be subject to lua injection exploits unfortunately, but there's not much that can be done.
     if SessionActive then
         local source = source
@@ -88,7 +86,7 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
     end
 end)
 
-AddEventHandler("baseevents:onPlayerDied", function(_,__,s)
+AddEventHandler("Gamemode:Suicide:4", function(s)
     -- this will be subject to lua injection exploits unfortunately, but there's not much that can be done.
     if SessionActive then
         local source = s or source
