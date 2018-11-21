@@ -62,7 +62,7 @@ AddEventHandler("Gamemode:Start:4", function(g)
     end) ]]
 end)
 
-AddEventHandler("Gamemode:Kill:4", function(source, killerid)
+AddEventHandler("Gamemode:Kill:4", function(killerid, source)
     -- this will be subject to lua injection exploits unfortunately, but there's not much that can be done.
     if SessionActive then
         local source = source
@@ -171,8 +171,8 @@ function EndGame(winner)
                 local xp = 2 * (v.kills * 50)
                 TriggerClientEvent("Gamemode:End:4", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
-                    db:UpdateUser(identifier, {money = user.money + xp/10, xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
-                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, user.money + xp/10)
+                    db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
                 end)
             else
                 local identifier = Misc.GetPlayerSteamId(v.serverId)
@@ -180,8 +180,8 @@ function EndGame(winner)
                 local xp = (v.kills * 50)
                 TriggerClientEvent("Gamemode:End:4", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
-                    db:UpdateUser(identifier, {money = user.money + xp/10, xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.") end)
-                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, user.money + xp/10)
+                    db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.") end)
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
                 end)
             end
         end

@@ -20,8 +20,8 @@ function Main(msec)
     -- add blips and stuff once shayan pushes his commits
     Citizen.CreateThread(function()
         local start = GetGameTimer()
-        local end_time = GetNetworkTime() + 1200000
-        while GetGameTimer() - start < 1200000 and Sessionised do 
+        local end_time = GetNetworkTime() + msec
+        while GetGameTimer() - start < msec and Sessionised do 
             Wait(0)
             if (end_time - GetNetworkTime()) > 0 then
                 local readystr = ready and "~g~READY" or "~r~NOT READY"
