@@ -31,9 +31,7 @@ RegisterNetEvent("Gamemode:UpdatePlayers:4")
 RegisterNetEvent("Gamemode:Heartbeat:4")
 RegisterNetEvent("Gamemode:PollRandomCoords:4")
 RegisterNetEvent("Gamemode:UpdateUI:4")
-RegisterNetEvent("baseevents:onPlayerKilled")
-RegisterNetEvent("baseevents:onPlayerDied")
-RegisterNetEvent("GetGunGameState")
+--RegisterNetEvent("Gamemode:Join:4")
 
 AddEventHandler("Gamemode:Leave:4", function(s)
     if SessionActive then
@@ -64,7 +62,7 @@ AddEventHandler("Gamemode:Start:4", function(g)
     end) ]]
 end)
 
-AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
+AddEventHandler("Gamemode:Kill:4", function(killerid, source)
     -- this will be subject to lua injection exploits unfortunately, but there's not much that can be done.
     if SessionActive then
         local source = source
@@ -88,7 +86,7 @@ AddEventHandler("baseevents:onPlayerKilled", function(killerid, data)
     end
 end)
 
-AddEventHandler("baseevents:onPlayerDied", function(_,__,s)
+AddEventHandler("Gamemode:Suicide:4", function(s)
     -- this will be subject to lua injection exploits unfortunately, but there's not much that can be done.
     if SessionActive then
         local source = s or source
@@ -126,7 +124,7 @@ AddEventHandler("Gamemode:PollRandomCoords:4", function()
         math.randomseed(os.time())
         print("Creating CurrentCoords")
 
-        local ChosenIndex = math.random(1, tablelength(AvailableCoords))
+        local ChosenIndex = math.random(1, Misc.TableLength(AvailableCoords))
         --local _ChosenIndex = math.random(1, #AvailableCoords[ChosenIndex].coords)
         print(ChosenIndex)
         print(json.encode(AvailableCoords))
@@ -150,12 +148,6 @@ function getPlayerIndex(id)
     end
 end
 
-function tablelength(T)
-    local count = 0
-    for _ in pairs(T) do count = count + 1 end
-    return count
-end
-
 function InitPlayers()
     for i=0, GetNumPlayerIndices() - 1 do
         local player = GetPlayerFromIndex(i)
@@ -176,11 +168,11 @@ function EndGame(winner)
             if v.serverId == winner then
                 local identifier = Misc.GetPlayerSteamId(winner)
                 --print("winner, ".. getPlayerIndex(winner))
-                local xp = 1.5 * (v.kills * 50)
+                local xp = 2 * (v.kills * 50)
                 TriggerClientEvent("Gamemode:End:4", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
-                    db:UpdateUser(identifier, {money = user.money + xp/10, xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
-                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, user.money + xp/10)
+                    db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
                 end)
             else
                 local identifier = Misc.GetPlayerSteamId(v.serverId)
@@ -188,8 +180,8 @@ function EndGame(winner)
                 local xp = (v.kills * 50)
                 TriggerClientEvent("Gamemode:End:4", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
-                    db:UpdateUser(identifier, {money = user.money + xp/10, xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.") end)
-                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, user.money + xp/10)
+                    db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.") end)
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
                 end)
             end
         end
@@ -199,8 +191,8 @@ function EndGame(winner)
         SessionActive = false
         SessionRunnable = true
         Citizen.Wait(16000)
-        print("voting again!")
-        TriggerEvent("StartVoting")
+        print("Start Freeroam!")
+        TriggerEvent("Freeroam:Start")
         --CancelEvent()
         --return
     end)

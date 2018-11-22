@@ -1,15 +1,19 @@
 db = exports[GetCurrentResourceName()]
 
 RegisterNetEvent("PollMoney")
+RegisterNetEvent("baseevents:onPlayerKilled")
+RegisterNetEvent("baseevents:onPlayerDied")
 
 AddEventHandler("playerDropped", function() 
 	for k,v in pairs(Gamemodes) do
 		TriggerEvent("Gamemode:Leave:"..v.id,source)
+		TriggerEvent("Freeroam:Leave",source)
 	end
 end)
 
 db:OpenDB("users",function()
 	print("^5[INFO]^7 Nexus-Events: DB connection estabilished!")
+	TriggerEvent("Freeroam:Start")
 end)
 
 AddEventHandler("playerConnecting", function(name, setKickReason, deferrals)
@@ -32,6 +36,18 @@ AddEventHandler("playerConnecting", function(name, setKickReason, deferrals)
 		end)
 	else
 		deferrals.done("Steam needs to be running to join this server.")
+	end
+end)
+
+AddEventHandler("baseevents:onPlayerDied", function()
+	for k,v in pairs(Gamemodes) do
+		TriggerEvent("Gamemode:Suicide:"..v.id, source)
+	end
+end)
+
+AddEventHandler("baseevents:onPlayerKilled", function(killerid)
+	for k,v in pairs(Gamemodes) do
+		TriggerEvent("Gamemode:Kill:"..v.id, killerid, source)
 	end
 end)
 

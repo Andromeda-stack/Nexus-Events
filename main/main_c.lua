@@ -22,6 +22,7 @@ AddEventHandler("playerSpawned", function()
 		for k,v in pairs(Gamemodes) do
 			TriggerEvent("Gamemode:Join:"..v.id)
 		end
+		TriggerServerEvent("Freeroam:Join")
 		Citizen.CreateThread(function()
 			local lastmoney
 			TriggerServerEvent("PollMoney")
@@ -34,6 +35,7 @@ AddEventHandler("playerSpawned", function()
 				end
 				if Money ~= lastmoney then
 					StatSetInt("MP0_WALLET_BALANCE", Money, -1)
+					print(Money)
 				end
 				lastmoney = Money
 			end
