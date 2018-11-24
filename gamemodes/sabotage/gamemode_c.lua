@@ -3,15 +3,20 @@ local PlayerServerId = GetPlayerServerId(PlayerId())
 local CurrentCenter
 local CurrentKills
 local Sessionised = false
+local team = 0
+local Base0 = {}
+local Base1 = {}
+local Bomb = false
+local BombPlanted = false
 
-RegisterNetEvent("Gamemode:Start:4")
-RegisterNetEvent("Gamemode:Session:4")
-RegisterNetEvent("Gamemode:FetchCoords:4")
-RegisterNetEvent("Gamemode:End:4")
-RegisterNetEvent("Gamemode:Init:4")
-RegisterNetEvent("Gamemode:Join:4")
+RegisterNetEvent("Gamemode:Start:6")
+RegisterNetEvent("Gamemode:Session:6")
+RegisterNetEvent("Gamemode:FetchCoords:6")
+RegisterNetEvent("Gamemode:End:6")
+RegisterNetEvent("Gamemode:Init:6")
+RegisterNetEvent("Gamemode:Join:6")
 
-AddEventHandler("Gamemode:End:4", function(winner, xp) 
+AddEventHandler("Gamemode:End:6", function(winner, xp) 
     Citizen.CreateThread(function()
         Sessionised = false
         print(winner, winnername)
@@ -40,26 +45,26 @@ AddEventHandler("Gamemode:End:4", function(winner, xp)
     end) 
 end)
 
-AddEventHandler("Gamemode:FetchCoords:4", function(Coords, Center)
+AddEventHandler("Gamemode:FetchCoords:6", function(Coords, Center, Base0, Base1)
     --CoordsX, CoordsY, CoordsZ = table.unpack(Misc.SplitString(Coords, ","))
     print(Center)
     CenterX, CenterY, CenterZ = table.unpack(Misc.SplitString(Center, ","))
+    Base0X, Base0Y, Base0Z = table.unpack(Misc.SplitString(Base0, ","))
+    Base1X, Base1Y, Base1Z = table.unpack(Misc.SplitString(Base1, ","))
     for i,spawnpoint in pairs(Coords) do
         print(table.unpack(Misc.SplitString(spawnpoint, ",")))
         local spawnx,spawny,spawnz = table.unpack(Misc.SplitString(spawnpoint, ","))
         --print(tonumber(spawnx),tonumber(spawny),tonumber(spawnz))
         SpawnManager.addSpawnPoint({x=tonumber(spawnx), y=tonumber(spawny), z=tonumber(spawnz), heading = 0.0, model=1657546978})
     end
-    --print("Spawnpoints: "..json.encode(Coords))
-    --print(CoordsX, CoordsY, CoordsZ)
-    --print(CenterX, CenterY, CenterZ)
-
+    Base0 = vector3(Base0X,Base0Y,Base0Z)
+    Base1 = vector3(Base1X,Base1Y,Base1Z)
     CurrentCenter = vector3(tonumber(CenterX),tonumber(CenterY),tonumber(CenterZ))
     --SetEntityCoords(PlayerPedId(), tonumber(CoordsX), tonumber(CoordsY), tonumber(CoordsZ), 0.0, 0.0, 0.0, 0)
     SpawnManager.forceRespawn()
 end)
 
-AddEventHandler("Gamemode:Init:4", function()
+AddEventHandler("Gamemode:Init:6", function()
     -- this removes the initial spawn, no matter what.
     SpawnManager.removeSpawnPointByCoords({x=3615.9, y=3789.83, z=29.2})
     --print("removing: " .. SpawnIDX[1])
@@ -68,7 +73,7 @@ AddEventHandler("Gamemode:Init:4", function()
     Sessionised = true
     VotingVisible = false
 
-    TriggerServerEvent("Gamemode:PollRandomCoords:4")
+    TriggerServerEvent("Gamemode:PollRandomCoords:6")
 
     N_0xd8295af639fd9cb8(PlayerPedId())
 
@@ -117,25 +122,15 @@ AddEventHandler("Gamemode:Init:4", function()
     end
     FreezeEntityPosition(PlayerPedId(), false)
     --Wait(10000)
-    TriggerEvent("gun_game:UpGunLevel", 1)
+    --TriggerEvent("sabotage:UpGunLevel", 1)
     StartMain()
 end)
 
-AddEventHandler("Gamemode:Join:4", function()
+AddEventHandler("Gamemode:Join:6", function()
     if Sessionised then
         --spectator mode:TODO
     end
 end)
-
-local GunLevels = {}
-
-local WeaponLevels = {
-    "WEAPON_PISTOL",
-    "WEAPON_SMG",
-    "WEAPON_RPG",
-    "WEAPON_COMBATMG"
-    -- needs more guns here, also normally a gun game should have progressively worse guns instead of the opposite as done here :D
-}
 
 function StartMain()
     --Wait(2500)
@@ -175,7 +170,7 @@ function StartMain()
         while Sessionised do
             --print(json.encode(GunLevels))
             Citizen.Wait(0)
-            GUI.DrawBar(0.13, "LEVEL", GunLevels[tostring(GetPlayerServerId(PlayerId()))], nil, 3)
+            --GUI.DrawBar(0.13, "LEVEL", GunLevels[tostring(GetPlayerServerId(PlayerId()))], nil, 3)
             GUI.DrawBar(0.13, "KILLS", CurrentKills, nil, 4)
         end
     end)
@@ -193,9 +188,30 @@ function StartMain()
         end
     end)
     Citizen.CreateThread(function()
+        if team == 0 then
+            while Sessionised do
+                DrawMarker(1, Base0.x, Base0.y, Base0.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 0, 153, 51, 200, 0, 0, 0, 0)
+                GUI.DrawText3D(Base0.x, Base0.y, Base0.z, "Defend")
+                DrawMarker(1, Base1.x, Base1.y, Base1.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 204, 102, 0, 200, 0, 0, 0, 0)
+                GUI.DrawText3D(Base1.x, Base1.y, Base1.z, "Attack")
+            end
+        else
+            while Sessionised do
+                DrawMarker(1, Base1.x, Base1.y, Base1.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 0, 153, 51, 200, 0, 0, 0, 0)
+                GUI.DrawText3D(Base1.x, Base1.y, Base1.z, "~g~Defend")
+                DrawMarker(1, Base0.x, Base0.y, Base0.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 204, 102, 0, 200, 0, 0, 0, 0)
+                GUI.DrawText3D(Base0.x, Base0.y, Base0.z, "~r~Attack")
+                if Bomb then
+                    DrawMarker(1, Bomb.x, Bomb.y, Bomb.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 255, 255, 102, 200, 0, 0, 0, 0)
+                    GUI.DrawText3D(Base0.x, Base0.y, Base0.z, "~y~Pick Up")
+                end
+            end
+        end
+    end)
+    --[[ Citizen.CreateThread(function()
         while Sessionised do
             Citizen.Wait(0)
-            local CurrentWeapon = WeaponLevels[GunLevels[tostring(PlayerServerId)]]
+            local CurrentWeapon = WeaponLevels[GunLevels[tostring(PlayerServerId)
             if CurrentWeapon then
                 if GetBestPedWeapon(PlayerPedId(),0) ~= GetHashKey(CurrentWeapon) then
                     print("Giving weapon: "..CurrentWeapon)
@@ -204,15 +220,9 @@ function StartMain()
                 end
             end
         end
-    end)
+    end) ]]
 end
 
-function UpdateGunLevel(GunLevel)
-    local NewWeapon = WeaponLevels[GunLevel]
-    local ped = PlayerPedId()
-    RemoveAllPedWeapons(ped, true)
-    GiveWeaponToPed(ped, GetHashKey(NewWeapon), 1000, false, true)
-end
 
 --[[ function DrawGameEndScreen(win, winner)
     print(win, winner)
@@ -225,21 +235,8 @@ end
     Scaleform.Render2D(ShardS)
 end ]]
 
-RegisterNetEvent("gun_game:UpGunLevel")
-AddEventHandler("gun_game:UpGunLevel", function(GunLevel)
-    GUI.DrawGameNotification("~g~Level up!~s~ Your gun level is now: ~g~"..GunLevel, true)
-    UpdateGunLevel(GunLevel)
-end)
-
-RegisterNetEvent("gun_game:DownGunLevel")
-AddEventHandler("gun_game:DownGunLevel", function(GunLevel)
-    print("gun_game:DownGunLevel")
-    GUI.DrawGameNotification("~r~Suicide!~s~ Your gun level is now: ~r~"..GunLevel, true)
-    UpdateGunLevel(GunLevel)
-end)
-
-RegisterNetEvent("gun_game:UpdateLevels")
-AddEventHandler("gun_game:UpdateLevels", function(GunData, PlayersList)
+RegisterNetEvent("sabotage:UpdateLevels")
+AddEventHandler("sabotage:UpdateLevels", function(PlayersList)
     print("Received GunData: "..json.encode(GunData).." And PlayersList "..json.encode(PlayersList))
     for i,v in ipairs(PlayersList) do
         if v.serverId == PlayerServerId then
@@ -247,12 +244,9 @@ AddEventHandler("gun_game:UpdateLevels", function(GunData, PlayersList)
             print("Current Kills set to "..tostring(v.kills))
         end
     end   
-    local top3 = {}
-    GunLevels = GunData
-    table.sort(GunLevels)
+end)
+
+RegisterNetEvent("sabotage:UpdateBombState")
+AddEventHandler("sabotage:UpdateBombState", function(ours)
     
-    for k, v in pairs(GunLevels) do
-        print(k, v)
-        table.insert(top3, {sid = k, score = v})
-    end
 end)
