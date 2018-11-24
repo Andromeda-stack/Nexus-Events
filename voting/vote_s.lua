@@ -1,5 +1,6 @@
 local Voted = {}
 VotingGamemodes = {}
+local voting = false
 
 function GetTotalVotes()
     local TotalVoted = {
@@ -76,12 +77,14 @@ end
 
 function StartVoteCounter()
     Citizen.CreateThread(function()
+        voting = true
         print(GetNumPlayerIndices())
         while GetNumPlayerIndices() ~= #Voted do Wait(0) end
         local TargetGamemode = GetWinner()
         print("Attempting to start "..TargetGamemode)
         TriggerEvent("Gamemode:Start:"..TargetGamemode,Gamemodes[TargetGamemode])
         Voted = {}
+        voting = false
 
         --CurrentGamemode = VotingGamemodes
     end)
@@ -105,4 +108,11 @@ AddEventHandler("StartVoting", function()
         VotingGamemodes = RandomGamemodes()
 	    TriggerClientEvent("StartVoteScreen", -1, VotingGamemodes)
     end)
+end)
+
+RegisterNetEvent("Voting:Join")
+AddEventHandler("Voting:Join", function()
+    if voting then
+        TriggerClientEvent("StartVoteScreen", source, VotingGamemodes)
+    end
 end)

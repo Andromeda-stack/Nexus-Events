@@ -135,7 +135,7 @@ function Scaleform.RenderEndScreen(xp, money, win)
             Scaleform.CallFunction(scaleforms.celeb, false, "ADD_BACKGROUND_TO_WALL", "ch")
             Scaleform.CallFunction(scaleforms.celeb, false, "SHOW_STAT_WALL", "ch")
 			local starttime = GetNetworkTime()
-            while GetNetworkTime() - starttime < 15000 and not canceled do
+            while GetNetworkTime() - starttime < 10000 and not canceled do
 				Scaleform.Render2DMasked(scaleforms.mp_celeb_bg, scaleforms.mp_celeb_fg, 255, 255, 255, 255)
 				Scaleform.Render2D(scaleforms.mp_celeb)
                 HideHudAndRadarThisFrame()
@@ -155,4 +155,11 @@ function Scaleform.RenderEndScreen(xp, money, win)
             return -- end thread
 		end
 	end)
+end
+
+function Scaleform.ShowXPGain(xp, lowlimit, uplimit, levelup)
+-- TODO
+-- https://github.com/IllusiveTea/FiveM-Scaleforms/blob/master/Lua.md#hud-rankup-bar
+-- https://scaleform.devtesting.pizza/#mp_rank_bar
+
 end

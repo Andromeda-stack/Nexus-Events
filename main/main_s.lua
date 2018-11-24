@@ -10,10 +10,12 @@ AddEventHandler("playerDropped", function()
 		TriggerEvent("Freeroam:Leave",source)
 	end
 end)
-
-db:OpenDB("users",function()
-	print("^5[INFO]^7 Nexus-Events: DB connection estabilished!")
-	TriggerEvent("Freeroam:Start")
+CreateThread(function()
+	Wait(1000)
+	db:OpenDB("users",function()
+		print("^5[INFO]^7 Nexus-Events: DB connection estabilished!")
+		TriggerEvent("Freeroam:Start")
+	end)
 end)
 
 AddEventHandler("playerConnecting", function(name, setKickReason, deferrals)

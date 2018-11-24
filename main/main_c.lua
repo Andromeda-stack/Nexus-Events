@@ -23,6 +23,7 @@ AddEventHandler("playerSpawned", function()
 			TriggerEvent("Gamemode:Join:"..v.id)
 		end
 		TriggerServerEvent("Freeroam:Join")
+		TriggerServerEvent("Voting:Join")
 		Citizen.CreateThread(function()
 			local lastmoney
 			TriggerServerEvent("PollMoney")
