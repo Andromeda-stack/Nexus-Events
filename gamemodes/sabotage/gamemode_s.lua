@@ -29,8 +29,7 @@ local AvailableCoords = {
 }
 local CurrentCoords = {}
 local BomberMan
-local Team0 = {}
-local Team1 = {}
+
 
 RegisterNetEvent("Gamemode:UpdatePlayers:6")
 RegisterNetEvent("Gamemode:Heartbeat:6")
@@ -79,6 +78,18 @@ AddEventHandler("Gamemode:Kill:6", function(killerid, source)
         print(GetPlayerName(killerid).." killed ".. GetPlayerName(source))
         PlayerList[getPlayerIndex(killerid)].kills = PlayerList[getPlayerIndex(killerid)].kills + 1
         TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
+        if source == BomberMan then
+            local otherteam = {}
+            for i,v in pairs(PlayerList) do
+                if v.team ~= PlayerList[getPlayerIndex(BomberMan)] then
+                    table.insert(otherteam, v.serverId)
+                end
+            end
+            local r = math.random(1,#otherteam)
+            TriggerClientEvent("sabotage:UpdateBombStatus", otherteam[r], true)
+            TriggerClientEvent("sabotage:UpdateBombStatus", BomberMan, false)
+            BomberMan = otherteam[r]
+        end
     end
 end)
 
@@ -90,6 +101,18 @@ AddEventHandler("Gamemode:Suicide:6", function(s)
         print(GetPlayerName(source).." died.")
         PlayerList[getPlayerIndex(source)].level = PlayerList[getPlayerIndex(source)].level - 1
         TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
+        if source == BomberMan then
+            local otherteam = {}
+            for i,v in pairs(PlayerList) do
+                if v.team ~= PlayerList[getPlayerIndex(BomberMan)] then
+                    table.insert(otherteam, v.serverId)
+                end
+            end
+            local r = math.random(1,#otherteam)
+            TriggerClientEvent("sabotage:UpdateBombStatus", otherteam[r], true)
+            TriggerClientEvent("sabotage:UpdateBombStatus", BomberMan, false)
+            BomberMan = otherteam[r]
+        end
     end
 end)
 
@@ -139,17 +162,22 @@ end
 
 function InitPlayers()
     local teamswitch = false
+    local randomindex = math.random(0, GetNumPlayerIndices() - 1)
     for i=0, GetNumPlayerIndices() - 1 do
         local player = GetPlayerFromIndex(i)
         print("initializing player "..GetPlayerName(player) .. " id: ".. player)
         --PlayerList[getPlayerIndex(player)].kills = 1
         if teamswitch then
-            Team1[player] = "ok"
+            PlayerList[getPlayerIndex(player)].team = 1
         else
-            Team0[player] = "ok"
+            PlayerList[getPlayerIndex(player)].team = 0
+        end
+        if randomindex == i then
+            TriggerClientEvent("sabotage:UpdateBombStatus", player, true)
         end
         teamswitch = not teamswitch
     end
+    TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
 end
 
 function EndGame(winner)
@@ -191,3 +219,5 @@ function EndGame(winner)
         --return
     end)
 end
+
+RegisterNetEvent("sabotage:BombPlanted")

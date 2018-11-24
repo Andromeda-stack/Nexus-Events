@@ -4,8 +4,8 @@ local CurrentCenter
 local CurrentKills
 local Sessionised = false
 local team = 0
-local Base0 = {}
-local Base1 = {}
+Base0 = {}
+Base1 = {}
 local Bomb = false
 local BombPlanted = false
 
@@ -19,6 +19,8 @@ RegisterNetEvent("Gamemode:Join:6")
 AddEventHandler("Gamemode:End:6", function(winner, xp) 
     Citizen.CreateThread(function()
         Sessionised = false
+        --KABOOM
+        --btw remember to wait for the explosion to end :^)
         print(winner, winnername)
         CurrentCenter = {}
         SpawnManager.removeAllSpawnPoints()
@@ -201,9 +203,22 @@ function StartMain()
                 GUI.DrawText3D(Base1.x, Base1.y, Base1.z, "~g~Defend")
                 DrawMarker(1, Base0.x, Base0.y, Base0.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 204, 102, 0, 200, 0, 0, 0, 0)
                 GUI.DrawText3D(Base0.x, Base0.y, Base0.z, "~r~Attack")
-                if Bomb then
-                    DrawMarker(1, Bomb.x, Bomb.y, Bomb.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 255, 255, 102, 200, 0, 0, 0, 0)
-                    GUI.DrawText3D(Base0.x, Base0.y, Base0.z, "~y~Pick Up")
+                if BombPlanted then
+                    if not end_time then end_time = GetNetworkTime() + 40000 end
+
+                    if (end_time - GetNetworkTime()) > 0 then
+                        GUI.DrawTimerBar(0.13, "LEAVING AREA", ((end_time - GetNetworkTime()) / 1000), 1)
+                    end
+                end
+                local otherteam = (team+1)==1 and 1 or 0
+                if vDist(GetEntityCoords(PlayerPedId()),_G["Base"..otherteam]) < 2.5 and not BombPlanted then
+                    GUI.MissionText("Plant the bomb using  ~INPUT_REPLAY_START_STOP_RECORDING~.", 1, 1)
+                end
+                if IsControlJustPressed(0, 288) and Bomb and not BombPlanted and vDist(GetEntityCoords(PlayerPedId()),_G["Base"..team]) < 2.5 then
+                    TaskPlayAnim(PlayerPedId(), "missfbi_s4mop", "plant_bomb_a", 4.0, 1.0, 0.2, 0, 1.0, true, true, true)
+                    -- add some more checks in the future
+                    TriggerServerEvent("sabotage:BombPlanted")
+                    BombPlanted = true
                 end
             end
         end
@@ -242,11 +257,25 @@ AddEventHandler("sabotage:UpdateLevels", function(PlayersList)
         if v.serverId == PlayerServerId then
             CurrentKills = v.kills
             print("Current Kills set to "..tostring(v.kills))
+            team = v.team
+            print("Current Team set to "..tostring(v.team))
         end
     end   
 end)
 
-RegisterNetEvent("sabotage:UpdateBombState")
-AddEventHandler("sabotage:UpdateBombState", function(ours)
-    
+RegisterNetEvent("sabotage:UpdateBombStatus")
+AddEventHandler("sabotage:UpdateBombStatus", function(ours, planted)
+    if ours and not Bomb then
+        GUI.DrawGameNotification("~g~You now have the bomb!~s~ Go plant it ASAP! ~g~"..GunLevel, true)
+        Bomb = true
+    elseif not ours and Bomb then
+        GUI.DrawGameNotification("~r~You lost the bomb!~s~ Defend your team's base! ~g~"..GunLevel, true)
+        Bomb = false
+    elseif ours == nil and planted == team then
+        GUI.DrawGameNotification("~r~The bomb has been planted!~s~ Defend it! ~g~"..GunLevel, true)
+        BombPlanted = true
+    elseif ours == nil and planted ~= team then
+        GUI.DrawGameNotification("~r~The bomb has been planted!~s~ Defuse it! ~g~"..GunLevel, true)
+        BombPlanted = true
+    end
 end)
