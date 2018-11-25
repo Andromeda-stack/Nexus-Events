@@ -136,7 +136,7 @@ AddEventHandler("Gamemode:PollRandomCoords:6", function()
     end
 end)
 
-local function getSabotagePlayerIndex(id)
+function getSabotagePlayerIndex(id)
     print("getSabotagePlayerIndex: "..id)
     print(json.encode(PlayerList))
     for i,v in ipairs(PlayerList) do
@@ -148,7 +148,7 @@ local function getSabotagePlayerIndex(id)
     end
 end
 
-local function InitSabotagePlayers()
+function InitSabotagePlayers()
     local teamswitch = false
     local randomindex = math.random(0, GetNumPlayerIndices() - 1)
     print("bomberman index is: "..randomindex)
@@ -174,7 +174,7 @@ local function InitSabotagePlayers()
     TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
 end
 
-local function EndSabotage(winner)
+function EndSabotage(winner)
     local winner = winner 
     Citizen.CreateThread(function()
         --local players = GetPlayers()

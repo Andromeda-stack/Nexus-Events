@@ -139,7 +139,7 @@ AddEventHandler("Gamemode:Join:6", function()
     end
 end)
 
-local function StartSabotage()
+function StartSabotage()
     --Wait(2500)
     RenderScriptCams(false, 1, 500,  true,  true)
 
