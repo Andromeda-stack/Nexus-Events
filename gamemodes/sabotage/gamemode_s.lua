@@ -148,7 +148,7 @@ function getPlayerIndex(id)
     end
 end
 
-function InitPlayers()
+local function InitPlayers()
     local teamswitch = false
     local randomindex = math.random(0, GetNumPlayerIndices() - 1)
     print("bomberman index is: "..randomindex)
