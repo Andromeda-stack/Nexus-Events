@@ -5,26 +5,9 @@ local SessionActive = false
 local SessionRunnable = true
 local AvailableCoords = {
     {
-        ['coords'] = {
-            "-2313.08, 437.1, 173.98",
-            "-2343.12, 280.96, 168.98",
-            "-2270.01, 201.15, 169.12",
-            "-2334.46, 243.23, 169.12",
-            "-2315.62, 261.93, 174.12",
-            "-2299.49, 286.95, 184.12",
-            "-2278.35, 286.57, 184.12",
-            "-2249.55, 307.79, 184.12",
-            "-2224.06, 233.01, 174.12",
-            "-2262.93, 205.72, 174.12",
-            "-2326.4, 379.96, 173.98",
-            "-2212.23, 215.88, 174.12",
-            "-2235.71, 265.97, 174.13",
-            "-2259.48, 271.73, 174.6",
-            "-2187.77, 287.58, 169.12"
-        },
         ['center'] = "-2237.00, 249.719, 176.147",
-        ['base0'] = "0.0, 0.0, 0.0",
-        ['base1'] = "0.0, 0.0, 0.0"
+        ['base0'] = "-2294.2, 449.735, 174.601",
+        ['base1'] = "-2205.25, 191.805, 174.602"
     }
 }
 local CurrentCoords = {}
@@ -51,8 +34,9 @@ end) ]]
 
 AddEventHandler("Gamemode:Start:6", function(g)
     CreateThread(function()
-        InitPlayers()
         TriggerClientEvent("PrepareGamemode", -1, g)
+        Wait(1000)
+        InitPlayers()
         Wait(1000)
         TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
     end)
@@ -121,7 +105,7 @@ AddEventHandler("Gamemode:UpdatePlayers:6", function(Operation, Player)
         -- adding some checks to prevent cheating.
         for i,v in ipairs(PlayerList) do
             if v == Player then
-                -- player is cheating.
+                print("cheats detected")
                 CancelEvent()
                 return
             end
@@ -142,19 +126,23 @@ AddEventHandler("Gamemode:PollRandomCoords:6", function()
         print(json.encode(AvailableCoords))
         CurrentCoords = AvailableCoords[ChosenIndex]
         print(json.encode(CurrentCoords))
-        TriggerClientEvent("Gamemode:FetchCoords:6", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords.base0, CurrentCoords.base1)
+        TriggerClientEvent("Gamemode:FetchCoords:6", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords.base0, CurrentCoords.base1, PlayerList[getPlayerIndex(source)].team)
     else
         math.randomseed(os.time())
         
         --local _ChosenIndex = math.random(1, #AvailableCoords[ChosenIndex].coords)
         print(json.encode(CurrentCoords))
-        TriggerClientEvent("Gamemode:FetchCoords:6", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords.base0, CurrentCoords.base1)
+        TriggerClientEvent("Gamemode:FetchCoords:6", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords.base0, CurrentCoords.base1, PlayerList[getPlayerIndex(source)].team)
     end
 end)
 
 function getPlayerIndex(id)
+    print("getplayerindex: "..id)
+    print(json.encode(PlayerList))
     for i,v in ipairs(PlayerList) do
-        if v.serverId == id then
+        print(json.encode(v))
+        if v.serverId == tonumber(id) then
+            print("found index "..i)
             return i
         end
     end
@@ -163,16 +151,22 @@ end
 function InitPlayers()
     local teamswitch = false
     local randomindex = math.random(0, GetNumPlayerIndices() - 1)
+    print("bomberman index is: "..randomindex)
+    print(json.encode(PlayerList))
     for i=0, GetNumPlayerIndices() - 1 do
         local player = GetPlayerFromIndex(i)
         print("initializing player "..GetPlayerName(player) .. " id: ".. player)
+        print(json.encode(PlayerList))
         --PlayerList[getPlayerIndex(player)].kills = 1
         if teamswitch then
             PlayerList[getPlayerIndex(player)].team = 1
         else
+            --print("initializing player ".. player.." index: "..getPlayerIndex(player))
             PlayerList[getPlayerIndex(player)].team = 0
         end
         if randomindex == i then
+            print("setting bomberman up")
+            BomberMan = player
             TriggerClientEvent("sabotage:UpdateBombStatus", player, true)
         end
         teamswitch = not teamswitch
@@ -187,7 +181,7 @@ function EndGame(winner)
         print(json.encode(PlayerList))
         for i,v in ipairs(PlayerList) do
             --print(players[i])
-            if v.serverId == winner then
+            if v.team == winner then
                 local identifier = Misc.GetPlayerSteamId(winner)
                 --print("winner, ".. getPlayerIndex(winner))
                 local xp = 2 * (v.kills * 50)
@@ -221,3 +215,12 @@ function EndGame(winner)
 end
 
 RegisterNetEvent("sabotage:BombPlanted")
+AddEventHandler("sabotage:BombPlanted", function(team)
+    if source == BomberMan then
+        Citizen.CreateThread(function()
+            TriggerClientEvent("sabotage:UpdateBombStatus", -1, nil, true)
+            Wait(40000)
+            EndGame(team)
+        end)
+    end
+end)

@@ -47,22 +47,27 @@ AddEventHandler("Gamemode:End:6", function(winner, xp)
     end) 
 end)
 
-AddEventHandler("Gamemode:FetchCoords:6", function(Coords, Center, Base0, Base1)
+AddEventHandler("Gamemode:FetchCoords:6", function(Coords, Center, Base0, Base1, CurrentTeam)
     --CoordsX, CoordsY, CoordsZ = table.unpack(Misc.SplitString(Coords, ","))
     print(Center)
     CenterX, CenterY, CenterZ = table.unpack(Misc.SplitString(Center, ","))
     Base0X, Base0Y, Base0Z = table.unpack(Misc.SplitString(Base0, ","))
     Base1X, Base1Y, Base1Z = table.unpack(Misc.SplitString(Base1, ","))
-    for i,spawnpoint in pairs(Coords) do
+    --[[ for i,spawnpoint in pairs(Coords) do
         print(table.unpack(Misc.SplitString(spawnpoint, ",")))
         local spawnx,spawny,spawnz = table.unpack(Misc.SplitString(spawnpoint, ","))
         --print(tonumber(spawnx),tonumber(spawny),tonumber(spawnz))
         SpawnManager.addSpawnPoint({x=tonumber(spawnx), y=tonumber(spawny), z=tonumber(spawnz), heading = 0.0, model=1657546978})
-    end
-    Base0 = vector3(Base0X,Base0Y,Base0Z)
-    Base1 = vector3(Base1X,Base1Y,Base1Z)
+    end ]]
+    _G["Base0"] = vector3(tonumber(Base0X),tonumber(Base0Y),tonumber(Base0Z))
+    _G["Base1"] = vector3(tonumber(Base1X),tonumber(Base1Y),tonumber(Base1Z))
     CurrentCenter = vector3(tonumber(CenterX),tonumber(CenterY),tonumber(CenterZ))
     --SetEntityCoords(PlayerPedId(), tonumber(CoordsX), tonumber(CoordsY), tonumber(CoordsZ), 0.0, 0.0, 0.0, 0)
+    team = CurrentTeam
+    print("MY TEAM: "..CurrentTeam)
+    print(Base0)
+    print(Base1)
+    SpawnManager.addSpawnPoint({x=tonumber(_G["Base"..team].x), y=tonumber(_G["Base"..team].y), z=tonumber(_G["Base"..team].z), heading = 0.0, model=1657546978})
     SpawnManager.forceRespawn()
 end)
 
@@ -192,6 +197,7 @@ function StartMain()
     Citizen.CreateThread(function()
         if team == 0 then
             while Sessionised do
+                Wait(0)
                 DrawMarker(1, Base0.x, Base0.y, Base0.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 0, 153, 51, 200, 0, 0, 0, 0)
                 GUI.DrawText3D(Base0.x, Base0.y, Base0.z, "Defend")
                 DrawMarker(1, Base1.x, Base1.y, Base1.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 204, 102, 0, 200, 0, 0, 0, 0)
@@ -199,6 +205,7 @@ function StartMain()
             end
         else
             while Sessionised do
+                Wait(0)
                 DrawMarker(1, Base1.x, Base1.y, Base1.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 0, 153, 51, 200, 0, 0, 0, 0)
                 GUI.DrawText3D(Base1.x, Base1.y, Base1.z, "~g~Defend")
                 DrawMarker(1, Base0.x, Base0.y, Base0.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 204, 102, 0, 200, 0, 0, 0, 0)
