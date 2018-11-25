@@ -137,7 +137,7 @@ local WeaponLevels = {
     -- needs more guns here, also normally a gun game should have progressively worse guns instead of the opposite as done here :D
 }
 
-function StartMain()
+local function StartMain()
     --Wait(2500)
     RenderScriptCams(false, 1, 500,  true,  true)
 
@@ -207,7 +207,7 @@ function StartMain()
     end)
 end
 
-function UpdateGunLevel(GunLevel)
+local function UpdateGunLevel(GunLevel)
     local NewWeapon = WeaponLevels[GunLevel]
     local ped = PlayerPedId()
     RemoveAllPedWeapons(ped, true)

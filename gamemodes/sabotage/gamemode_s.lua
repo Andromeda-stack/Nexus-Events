@@ -136,7 +136,7 @@ AddEventHandler("Gamemode:PollRandomCoords:6", function()
     end
 end)
 
-function getPlayerIndex(id)
+local function getPlayerIndex(id)
     print("getplayerindex: "..id)
     print(json.encode(PlayerList))
     for i,v in ipairs(PlayerList) do
@@ -174,7 +174,7 @@ local function InitPlayers()
     TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
 end
 
-function EndGame(winner)
+local function EndGame(winner)
     local winner = winner 
     Citizen.CreateThread(function()
         --local players = GetPlayers()

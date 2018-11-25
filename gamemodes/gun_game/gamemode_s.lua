@@ -140,7 +140,7 @@ AddEventHandler("Gamemode:PollRandomCoords:4", function()
     end
 end)
 
-function getPlayerIndex(id)
+local function getPlayerIndex(id)
     for i,v in ipairs(PlayerList) do
         if v.serverId == id then
             return i
@@ -148,7 +148,7 @@ function getPlayerIndex(id)
     end
 end
 
-function InitPlayers()
+local function InitPlayers()
     for i=0, GetNumPlayerIndices() - 1 do
         local player = GetPlayerFromIndex(i)
         print("initializing player "..GetPlayerName(player) .. " id: ".. player)
@@ -158,7 +158,7 @@ function InitPlayers()
     end
 end
 
-function EndGame(winner)
+local function EndGame(winner)
     local winner = winner 
     Citizen.CreateThread(function()
         --local players = GetPlayers()

@@ -139,7 +139,7 @@ AddEventHandler("Gamemode:Join:6", function()
     end
 end)
 
-function StartMain()
+local function StartMain()
     --Wait(2500)
     RenderScriptCams(false, 1, 500,  true,  true)
 
