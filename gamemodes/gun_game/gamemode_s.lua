@@ -36,7 +36,7 @@ RegisterNetEvent("Gamemode:UpdateUI:4")
 AddEventHandler("Gamemode:Leave:4", function(s)
     if SessionActive then
         GunLevels[s] = nil
-        PlayerList[getPlayerIndex(s)] = nil
+        PlayerList[getGunGamePlayerIndex(s)] = nil
         TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels, PlayerList)
     end
 end)
@@ -47,7 +47,7 @@ end) ]]
 
 AddEventHandler("Gamemode:Start:4", function(g)
     CreateThread(function()
-        InitPlayers()
+        InitGunGamePlayers()
         TriggerClientEvent("PrepareGamemode", -1, g)
         Wait(1000)
         TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels, PlayerList)
@@ -77,10 +77,10 @@ AddEventHandler("Gamemode:Kill:4", function(killerid, source)
             GunLevels[tostring(killerid)] = 1
         elseif GunLevels[tostring(killerid)] == 4 then
             print("Game end, winner: ".. GetPlayerName(killerid))
-            EndGame(killerid)
+            EndGunGame(killerid)
         end
         GunLevels[tostring(killerid)] = GunLevels[tostring(killerid)] + 1
-        PlayerList[getPlayerIndex(killerid)].kills = PlayerList[getPlayerIndex(killerid)].kills + 1
+        PlayerList[getGunGamePlayerIndex(killerid)].kills = PlayerList[getGunGamePlayerIndex(killerid)].kills + 1
         TriggerClientEvent("gun_game:UpGunLevel", killerid, GunLevels[tostring(killerid)])
         TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels,PlayerList)
     end
@@ -99,7 +99,7 @@ AddEventHandler("Gamemode:Suicide:4", function(s)
             GunLevels[tostring(source)] = GunLevels[tostring(source)] - 1
             TriggerClientEvent("gun_game:DownGunLevel", source, GunLevels[tostring(source)])
             TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels,PlayerList)
-            --PlayerList[getPlayerIndex(source)].level = PlayerList[getPlayerIndex(source)].level - 1
+            --PlayerList[getGunGamePlayerIndex(source)].level = PlayerList[getGunGamePlayerIndex(source)].level - 1
         end
     end
 end)
@@ -140,7 +140,7 @@ AddEventHandler("Gamemode:PollRandomCoords:4", function()
     end
 end)
 
-local function getPlayerIndex(id)
+function getGunGamePlayerIndex(id)
     for i,v in ipairs(PlayerList) do
         if v.serverId == id then
             return i
@@ -148,17 +148,17 @@ local function getPlayerIndex(id)
     end
 end
 
-local function InitPlayers()
+function InitGunGamePlayers()
     for i=0, GetNumPlayerIndices() - 1 do
         local player = GetPlayerFromIndex(i)
         print("initializing player "..GetPlayerName(player) .. " id: ".. player)
         GunLevels[player] = 1
         print(json.encode(GunLevels))
-        --PlayerList[getPlayerIndex(player)].kills = 1
+        --PlayerList[getGunGamePlayerIndex(player)].kills = 1
     end
 end
 
-local function EndGame(winner)
+function EndGunGame(winner)
     local winner = winner 
     Citizen.CreateThread(function()
         --local players = GetPlayers()
@@ -167,7 +167,7 @@ local function EndGame(winner)
             --print(players[i])
             if v.serverId == winner then
                 local identifier = Misc.GetPlayerSteamId(winner)
-                --print("winner, ".. getPlayerIndex(winner))
+                --print("winner, ".. getGunGamePlayerIndex(winner))
                 local xp = 2 * (v.kills * 50)
                 TriggerClientEvent("Gamemode:End:4", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
@@ -176,7 +176,7 @@ local function EndGame(winner)
                 end)
             else
                 local identifier = Misc.GetPlayerSteamId(v.serverId)
-                --print("not winner, ".. getPlayerIndex(winner))
+                --print("not winner, ".. getGunGamePlayerIndex(winner))
                 local xp = (v.kills * 50)
                 TriggerClientEvent("Gamemode:End:4", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)

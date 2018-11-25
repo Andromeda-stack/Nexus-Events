@@ -23,7 +23,7 @@ RegisterNetEvent("Gamemode:UpdateUI:6")
 AddEventHandler("Gamemode:Leave:6", function(s)
     if SessionActive then
         --GunLevels[s] = nil
-        PlayerList[getPlayerIndex(s)] = nil
+        PlayerList[getSabotagePlayerIndex(s)] = nil
         TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
     end
 end)
@@ -36,7 +36,7 @@ AddEventHandler("Gamemode:Start:6", function(g)
     CreateThread(function()
         TriggerClientEvent("PrepareGamemode", -1, g)
         Wait(1000)
-        InitPlayers()
+        InitSabotagePlayers()
         Wait(1000)
         TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
     end)
@@ -45,7 +45,7 @@ AddEventHandler("Gamemode:Start:6", function(g)
     --[[ Citizen.CreateThread(function()
         while SessionActive do
             Wait(100)
-            InitPlayers()
+            InitSabotagePlayers()
         end
     end) ]]
 end)
@@ -60,12 +60,12 @@ AddEventHandler("Gamemode:Kill:6", function(killerid, source)
             CancelEvent()
         end
         print(GetPlayerName(killerid).." killed ".. GetPlayerName(source))
-        PlayerList[getPlayerIndex(killerid)].kills = PlayerList[getPlayerIndex(killerid)].kills + 1
+        PlayerList[getSabotagePlayerIndex(killerid)].kills = PlayerList[getSabotagePlayerIndex(killerid)].kills + 1
         TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
         if source == BomberMan then
             local otherteam = {}
             for i,v in pairs(PlayerList) do
-                if v.team ~= PlayerList[getPlayerIndex(BomberMan)] then
+                if v.team ~= PlayerList[getSabotagePlayerIndex(BomberMan)] then
                     table.insert(otherteam, v.serverId)
                 end
             end
@@ -83,12 +83,12 @@ AddEventHandler("Gamemode:Suicide:6", function(s)
         local source = s or source
         print(source)
         print(GetPlayerName(source).." died.")
-        PlayerList[getPlayerIndex(source)].level = PlayerList[getPlayerIndex(source)].level - 1
+        PlayerList[getSabotagePlayerIndex(source)].level = PlayerList[getSabotagePlayerIndex(source)].level - 1
         TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
         if source == BomberMan then
             local otherteam = {}
             for i,v in pairs(PlayerList) do
-                if v.team ~= PlayerList[getPlayerIndex(BomberMan)] then
+                if v.team ~= PlayerList[getSabotagePlayerIndex(BomberMan)] then
                     table.insert(otherteam, v.serverId)
                 end
             end
@@ -126,18 +126,18 @@ AddEventHandler("Gamemode:PollRandomCoords:6", function()
         print(json.encode(AvailableCoords))
         CurrentCoords = AvailableCoords[ChosenIndex]
         print(json.encode(CurrentCoords))
-        TriggerClientEvent("Gamemode:FetchCoords:6", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords.base0, CurrentCoords.base1, PlayerList[getPlayerIndex(source)].team)
+        TriggerClientEvent("Gamemode:FetchCoords:6", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords.base0, CurrentCoords.base1, PlayerList[getSabotagePlayerIndex(source)].team)
     else
         math.randomseed(os.time())
         
         --local _ChosenIndex = math.random(1, #AvailableCoords[ChosenIndex].coords)
         print(json.encode(CurrentCoords))
-        TriggerClientEvent("Gamemode:FetchCoords:6", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords.base0, CurrentCoords.base1, PlayerList[getPlayerIndex(source)].team)
+        TriggerClientEvent("Gamemode:FetchCoords:6", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords.base0, CurrentCoords.base1, PlayerList[getSabotagePlayerIndex(source)].team)
     end
 end)
 
-local function getPlayerIndex(id)
-    print("getplayerindex: "..id)
+local function getSabotagePlayerIndex(id)
+    print("getSabotagePlayerIndex: "..id)
     print(json.encode(PlayerList))
     for i,v in ipairs(PlayerList) do
         print(json.encode(v))
@@ -148,7 +148,7 @@ local function getPlayerIndex(id)
     end
 end
 
-local function InitPlayers()
+local function InitSabotagePlayers()
     local teamswitch = false
     local randomindex = math.random(0, GetNumPlayerIndices() - 1)
     print("bomberman index is: "..randomindex)
@@ -157,12 +157,12 @@ local function InitPlayers()
         local player = GetPlayerFromIndex(i)
         print("initializing player "..GetPlayerName(player) .. " id: ".. player)
         print(json.encode(PlayerList))
-        --PlayerList[getPlayerIndex(player)].kills = 1
+        --PlayerList[getSabotagePlayerIndex(player)].kills = 1
         if teamswitch then
-            PlayerList[getPlayerIndex(player)].team = 1
+            PlayerList[getSabotagePlayerIndex(player)].team = 1
         else
-            --print("initializing player ".. player.." index: "..getPlayerIndex(player))
-            PlayerList[getPlayerIndex(player)].team = 0
+            --print("initializing player ".. player.." index: "..getSabotagePlayerIndex(player))
+            PlayerList[getSabotagePlayerIndex(player)].team = 0
         end
         if randomindex == i then
             print("setting bomberman up")
@@ -174,7 +174,7 @@ local function InitPlayers()
     TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
 end
 
-local function EndGame(winner)
+local function EndSabotage(winner)
     local winner = winner 
     Citizen.CreateThread(function()
         --local players = GetPlayers()
@@ -183,7 +183,7 @@ local function EndGame(winner)
             --print(players[i])
             if v.team == winner then
                 local identifier = Misc.GetPlayerSteamId(winner)
-                --print("winner, ".. getPlayerIndex(winner))
+                --print("winner, ".. getSabotagePlayerIndex(winner))
                 local xp = 2 * (v.kills * 50)
                 TriggerClientEvent("Gamemode:End:6", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
@@ -192,7 +192,7 @@ local function EndGame(winner)
                 end)
             else
                 local identifier = Misc.GetPlayerSteamId(v.serverId)
-                --print("not winner, ".. getPlayerIndex(winner))
+                --print("not winner, ".. getSabotagePlayerIndex(winner))
                 local xp = (v.kills * 50)
                 TriggerClientEvent("Gamemode:End:6", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
@@ -220,7 +220,7 @@ AddEventHandler("sabotage:BombPlanted", function(team)
         Citizen.CreateThread(function()
             TriggerClientEvent("sabotage:UpdateBombStatus", -1, nil, true)
             Wait(40000)
-            EndGame(team)
+            EndSabotage(team)
         end)
     end
 end)

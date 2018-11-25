@@ -130,7 +130,7 @@ AddEventHandler("Gamemode:Init:6", function()
     FreezeEntityPosition(PlayerPedId(), false)
     --Wait(10000)
     --TriggerEvent("sabotage:UpGunLevel", 1)
-    StartMain()
+    StartSabotage()
 end)
 
 AddEventHandler("Gamemode:Join:6", function()
@@ -139,7 +139,7 @@ AddEventHandler("Gamemode:Join:6", function()
     end
 end)
 
-local function StartMain()
+local function StartSabotage()
     --Wait(2500)
     RenderScriptCams(false, 1, 500,  true,  true)
 

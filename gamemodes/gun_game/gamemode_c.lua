@@ -118,7 +118,7 @@ AddEventHandler("Gamemode:Init:4", function()
     FreezeEntityPosition(PlayerPedId(), false)
     --Wait(10000)
     TriggerEvent("gun_game:UpGunLevel", 1)
-    StartMain()
+    StartGunGame()
 end)
 
 AddEventHandler("Gamemode:Join:4", function()
@@ -137,7 +137,7 @@ local WeaponLevels = {
     -- needs more guns here, also normally a gun game should have progressively worse guns instead of the opposite as done here :D
 }
 
-local function StartMain()
+function StartGunGame()
     --Wait(2500)
     RenderScriptCams(false, 1, 500,  true,  true)
 
@@ -207,7 +207,7 @@ local function StartMain()
     end)
 end
 
-local function UpdateGunLevel(GunLevel)
+function UpdateGunLevel(GunLevel)
     local NewWeapon = WeaponLevels[GunLevel]
     local ped = PlayerPedId()
     RemoveAllPedWeapons(ped, true)
