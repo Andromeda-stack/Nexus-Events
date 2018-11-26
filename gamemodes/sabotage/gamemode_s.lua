@@ -182,7 +182,7 @@ function EndSabotage(winner)
         for i,v in ipairs(PlayerList) do
             --print(players[i])
             if v.team == winner then
-                local identifier = Misc.GetPlayerSteamId(winner)
+                local identifier = Misc.GetPlayerSteamId(v.serverId)
                 --print("winner, ".. getSabotagePlayerIndex(winner))
                 local xp = 2 * (v.kills * 50)
                 TriggerClientEvent("Gamemode:End:6", v.serverId, winner, xp)
@@ -216,9 +216,15 @@ end
 
 RegisterNetEvent("sabotage:BombPlanted")
 AddEventHandler("sabotage:BombPlanted", function(team)
-    if source == BomberMan then
+    print(source, BomberMan)
+    print(source == BomberMan)
+    print(tostring(source) == tostring(BomberMan))
+    if tostring(source) == tostring(BomberMan) then
+        print("Bomb has been Planted.")
+        local team = team
         Citizen.CreateThread(function()
-            TriggerClientEvent("sabotage:UpdateBombStatus", -1, nil, true)
+            print(team)
+            TriggerClientEvent("sabotage:UpdateBombStatus", -1, -99, team)
             Wait(40000)
             EndSabotage(team)
         end)

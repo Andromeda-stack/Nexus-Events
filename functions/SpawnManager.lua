@@ -27,7 +27,7 @@ end
 
 function SpawnManager.removeSpawnPointByCoords(coords)
     for k,v in pairs(SpawnIDX) do
-        --print("v.x: "..v.x.." coords.x: "..coords.x.."v.y: "..v.y.." coords.y: "..coords.y.."v.z: "..v.z.." coords.z: "..coords.z)
+        print("v.x: "..v.x.." coords.x: "..coords.x.."v.y: "..v.y.." coords.y: "..coords.y.."v.z: "..v.z.." coords.z: "..coords.z)
         if v.x == coords.x and v.y == coords.y and v.z == coords.z then
             s:removeSpawnPoint(tonumber(k))
             SpawnIDX[k] = nil

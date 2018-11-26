@@ -23,7 +23,7 @@ AddEventHandler("Gamemode:End:6", function(winner, xp)
         --btw remember to wait for the explosion to end :^)
         print(winner, winnername)
         CurrentCenter = {}
-        SpawnManager.removeAllSpawnPoints()
+        SpawnManager.removeSpawnPointByCoords({x=tonumber(_G["Base"..team].x), y=tonumber(_G["Base"..team].y), z=tonumber(_G["Base"..team].z)})
         SpawnManager.addSpawnPoint({x=3615.9, y=3789.83, z=29.2, heading=0.0, model=1657546978})
         SpawnManager.forceRespawn()
         --[[ if winner == PlayerServerId then
@@ -147,8 +147,8 @@ function StartSabotage()
         local ShardS = Scaleform.Request("MP_BIG_MESSAGE_FREEMODE")
 
         Scaleform.CallFunction(ShardS, false, "SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "~r~LEAVING AREA", "Head back to the battle!")
-        UpdateGunLevel(1)
-
+        --UpdateGunLevel(1)
+        local end_time
         while Sessionised do
             Citizen.Wait(0)
             local pCoords = GetEntityCoords(PlayerPedId(), true)
@@ -202,6 +202,26 @@ function StartSabotage()
                 GUI.DrawText3D(Base0.x, Base0.y, Base0.z, "Defend")
                 DrawMarker(1, Base1.x, Base1.y, Base1.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 204, 102, 0, 200, 0, 0, 0, 0)
                 GUI.DrawText3D(Base1.x, Base1.y, Base1.z, "Attack")
+                if BombPlanted then
+                    if not end_time then print(end_time) end_time = GetNetworkTime() + 40000 print("setting endtime")end
+
+                    if (end_time - GetNetworkTime()) > 0 then
+                        GUI.DrawTimerBar(0.13, "DETONATION", ((end_time - GetNetworkTime()) / 1000), 1)
+                    end
+                end
+                local pCoords = GetEntityCoords(PlayerPedId(), true)
+                if  Misc.Distance(pCoords.x, _G["Base1"].x,pCoords.y, _G["Base1"].y) < 2.5 and not BombPlanted then
+                    --print(Bomb, BombPlanted)
+                    if IsControlJustPressed(0, 288) and Bomb and not BombPlanted then
+                        TaskPlayAnim(PlayerPedId(), "missfbi_s4mop", "plant_bomb_a", 4.0, 1.0, 0.2, 0, 1.0, true, true, true)
+                        -- add some more checks in the future
+                        TriggerServerEvent("sabotage:BombPlanted",team)
+                        --BombPlanted = true
+                    end
+                elseif Bomb and not BombPlanted then
+                    --print("missiontext no plant")
+                    GUI.MissionText("Plant the bomb using F1.", 1, 1)
+                end
             end
         else
             while Sessionised do
@@ -211,21 +231,24 @@ function StartSabotage()
                 DrawMarker(1, Base0.x, Base0.y, Base0.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 204, 102, 0, 200, 0, 0, 0, 0)
                 GUI.DrawText3D(Base0.x, Base0.y, Base0.z, "~r~Attack")
                 if BombPlanted then
-                    if not end_time then end_time = GetNetworkTime() + 40000 end
+                    if not end_time then print("setting endtime") end_time = GetNetworkTime() + 40000 print("setting endtime")end
 
                     if (end_time - GetNetworkTime()) > 0 then
-                        GUI.DrawTimerBar(0.13, "LEAVING AREA", ((end_time - GetNetworkTime()) / 1000), 1)
+                        GUI.DrawTimerBar(0.13, "DETONATION", ((end_time - GetNetworkTime()) / 1000), 1)
                     end
                 end
-                local otherteam = (team+1)==1 and 1 or 0
-                if vDist(GetEntityCoords(PlayerPedId()),_G["Base"..otherteam]) < 2.5 and not BombPlanted then
+                local pCoords = GetEntityCoords(PlayerPedId(), true)
+                if  Misc.Distance(pCoords.x, _G["Base0"].x,pCoords.y, _G["Base0"].y) < 2.5 and not BombPlanted then
+                    --print(IsControlJustPressed(0, 288), Bomb, BombPlanted)
+                    if IsControlJustPressed(0, 288) and Bomb and not BombPlanted then
+                        TaskPlayAnim(PlayerPedId(), "missfbi_s4mop", "plant_bomb_a", 4.0, 1.0, 0.2, 0, 1.0, true, true, true)
+                        -- add some more checks in the future
+                        TriggerServerEvent("sabotage:BombPlanted")
+                        --BombPlanted = true
+                    end
+                elseif Bomb and not BombPlanted then
+                    --print("missiontext no plant")
                     GUI.MissionText("Plant the bomb using  ~INPUT_REPLAY_START_STOP_RECORDING~.", 1, 1)
-                end
-                if IsControlJustPressed(0, 288) and Bomb and not BombPlanted and vDist(GetEntityCoords(PlayerPedId()),_G["Base"..team]) < 2.5 then
-                    TaskPlayAnim(PlayerPedId(), "missfbi_s4mop", "plant_bomb_a", 4.0, 1.0, 0.2, 0, 1.0, true, true, true)
-                    -- add some more checks in the future
-                    TriggerServerEvent("sabotage:BombPlanted")
-                    BombPlanted = true
                 end
             end
         end
@@ -272,17 +295,18 @@ end)
 
 RegisterNetEvent("sabotage:UpdateBombStatus")
 AddEventHandler("sabotage:UpdateBombStatus", function(ours, planted)
-    if ours and not Bomb then
-        GUI.DrawGameNotification("~g~You now have the bomb!~s~ Go plant it ASAP! ~g~"..GunLevel, true)
+    print(ours, planted)
+    if ours==true and not Bomb and planted == nil then
+        GUI.DrawGameNotification("~g~You now have the bomb!~s~ Go plant it ASAP! ~g~", true)
         Bomb = true
-    elseif not ours and Bomb then
-        GUI.DrawGameNotification("~r~You lost the bomb!~s~ Defend your team's base! ~g~"..GunLevel, true)
+    elseif not ours==true and Bomb and planted == nil then
+        GUI.DrawGameNotification("~r~You lost the bomb!~s~ Defend your team's base! ~g~", true)
         Bomb = false
-    elseif ours == nil and planted == team then
-        GUI.DrawGameNotification("~r~The bomb has been planted!~s~ Defend it! ~g~"..GunLevel, true)
+    elseif ours == -99 and planted == team then
+        GUI.DrawGameNotification("~r~The bomb has been planted!~s~ Defend it! ~g~", true)
         BombPlanted = true
-    elseif ours == nil and planted ~= team then
-        GUI.DrawGameNotification("~r~The bomb has been planted!~s~ Defuse it! ~g~"..GunLevel, true)
+    elseif ours == -99 and planted ~= team then
+        GUI.DrawGameNotification("~r~The bomb has been planted!~s~ Defuse it! ~g~", true)
         BombPlanted = true
     end
 end)

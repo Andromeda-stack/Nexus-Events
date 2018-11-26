@@ -150,7 +150,7 @@ function StartGunGame()
         while Sessionised do
             Citizen.Wait(0)
             local pCoords = GetEntityCoords(PlayerPedId(), true)
-            if math.sqrt((CurrentCenter.x - pCoords.x)^2 + (CurrentCenter.y - pCoords.y)^2) > 300.0  then
+            if Misc.Distance(pCoords.x,CurrentCenter.x,pCoords.y,CurrentCenter.y) > 300.0  then
                 if not end_time then end_time = GetNetworkTime() + 30000 end
 
                 if (end_time - GetNetworkTime()) > 0 then
