@@ -44,6 +44,7 @@ AddEventHandler("Gamemode:FetchCoords:4", function(Coords, Center)
     --CoordsX, CoordsY, CoordsZ = table.unpack(Misc.SplitString(Coords, ","))
     print(Center)
     CenterX, CenterY, CenterZ = table.unpack(Misc.SplitString(Center, ","))
+    SpawnManager.removeAllSpawnPoints()
     for i,spawnpoint in pairs(Coords) do
         print(table.unpack(Misc.SplitString(spawnpoint, ",")))
         local spawnx,spawny,spawnz = table.unpack(Misc.SplitString(spawnpoint, ","))

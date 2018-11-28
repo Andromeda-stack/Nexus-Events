@@ -67,6 +67,7 @@ AddEventHandler("Gamemode:FetchCoords:6", function(Coords, Center, Base0, Base1,
     print("MY TEAM: "..CurrentTeam)
     print(Base0)
     print(Base1)
+    SpawnManager.removeAllSpawnPoints()
     SpawnManager.addSpawnPoint({x=tonumber(_G["Base"..team].x), y=tonumber(_G["Base"..team].y), z=tonumber(_G["Base"..team].z), heading = 0.0, model=1657546978})
     SpawnManager.forceRespawn()
 end)

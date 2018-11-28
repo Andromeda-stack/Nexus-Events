@@ -83,7 +83,7 @@ AddEventHandler("Gamemode:Suicide:6", function(s)
         local source = s or source
         print(source)
         print(GetPlayerName(source).." died.")
-        PlayerList[getSabotagePlayerIndex(source)].level = PlayerList[getSabotagePlayerIndex(source)].level - 1
+        PlayerList[getSabotagePlayerIndex(source)].kills = PlayerList[getSabotagePlayerIndex(source)].kills - 1
         TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
         if source == BomberMan then
             local otherteam = {}

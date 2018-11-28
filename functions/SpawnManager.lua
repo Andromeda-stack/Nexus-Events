@@ -22,7 +22,7 @@ function SpawnManager.removeAllSpawnPoints()
         s:removeSpawnPoint(tonumber(k))
         SpawnIDX[k] = nil
     end
-    --print("removed all spawnpoints")
+    print("removed all spawnpoints")
 end
 
 function SpawnManager.removeSpawnPointByCoords(coords)
