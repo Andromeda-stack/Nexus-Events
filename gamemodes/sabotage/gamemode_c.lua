@@ -41,7 +41,7 @@ AddEventHandler("Gamemode:End:6", function(winner, xp)
                 DrawGameEndScreen(false, winnername)
             end
         end ]]
-        if winner == PlayerServerId then Scaleform.RenderEndScreen(xp, xp/10, true) else Scaleform.RenderEndScreen(xp, xp/10, false) end
+        if winner == team then Scaleform.RenderEndScreen(xp, xp/10, true) else Scaleform.RenderEndScreen(xp, xp/10, false) end
         SpawnManager.forceRespawn()
         
     end) 
@@ -295,7 +295,7 @@ AddEventHandler("sabotage:UpdateLevels", function(PlayersList)
 end)
 
 RegisterNetEvent("sabotage:UpdateBombStatus")
-AddEventHandler("sabotage:UpdateBombStatus", function(ours, planted)
+AddEventHandler("sabotage:UpdateBombStatus", function(ours, planted, todefuse)
     print(ours, planted)
     if ours==true and not Bomb and planted == nil then
         GUI.DrawGameNotification("~g~You now have the bomb!~s~ Go plant it ASAP! ~g~", true)
@@ -303,10 +303,10 @@ AddEventHandler("sabotage:UpdateBombStatus", function(ours, planted)
     elseif not ours==true and Bomb and planted == nil then
         GUI.DrawGameNotification("~r~You lost the bomb!~s~ Defend your team's base! ~g~", true)
         Bomb = false
-    elseif ours == -99 and planted == team then
+    elseif ours == -99 and planted == team and not todefuse then
         GUI.DrawGameNotification("~r~The bomb has been planted!~s~ Defend it! ~g~", true)
         BombPlanted = true
-    elseif ours == -99 and planted ~= team then
+    elseif ours == -99 and planted ~= team and todefuse then
         GUI.DrawGameNotification("~r~The bomb has been planted!~s~ Defuse it! ~g~", true)
         BombPlanted = true
     end

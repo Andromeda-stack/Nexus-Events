@@ -188,7 +188,7 @@ function EndSabotage(winner)
                 TriggerClientEvent("Gamemode:End:6", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
-                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, winner, math.floor(user.money + xp/10))
                 end)
             else
                 local identifier = Misc.GetPlayerSteamId(v.serverId)
@@ -197,7 +197,7 @@ function EndSabotage(winner)
                 TriggerClientEvent("Gamemode:End:6", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.") end)
-                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, winner, math.floor(user.money + xp/10))
                 end)
             end
         end
@@ -224,7 +224,9 @@ AddEventHandler("sabotage:BombPlanted", function(team)
         local team = team
         Citizen.CreateThread(function()
             print(team)
-            TriggerClientEvent("sabotage:UpdateBombStatus", -1, -99, team)
+            for i,v in ipairs(PlayerList) do
+                TriggerClientEvent("sabotage:UpdateBombStatus", v.serverId, -99, team, team ~= v.team)
+            end
             Wait(40000)
             EndSabotage(team)
         end)
