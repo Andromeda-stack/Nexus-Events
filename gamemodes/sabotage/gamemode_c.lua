@@ -8,6 +8,7 @@ Base0 = {}
 Base1 = {}
 local Bomb = false
 local BombPlanted = false
+local ToDefuse = false
 
 RegisterNetEvent("Gamemode:Start:6")
 RegisterNetEvent("Gamemode:Session:6")
@@ -222,6 +223,14 @@ function StartSabotage()
                 elseif Bomb and not BombPlanted then
                     --print("missiontext no plant")
                     GUI.MissionText("Plant the bomb using F1.", 1, 1)
+                elseif ToDefuse  and  Misc.Distance(pCoords.x, _G["Base0"].x,pCoords.y, _G["Base0"].y) < 2.5 then
+                    GUI.MissionText("Defuse the bomb using F1.", 1, 1)
+                    if IsControlJustPressed(0, 288) then
+                        TaskPlayAnim(PlayerPedId(), "missfbi_s4mop", "plant_bomb_a", 4.0, 1.0, 0.2, 0, 1.0, true, true, true)
+                        -- add some more checks in the future
+                        TriggerServerEvent("sabotage:BombDefused")
+                        --BombPlanted = true
+                    end
                 end
             end
         else
@@ -231,6 +240,7 @@ function StartSabotage()
                 GUI.DrawText3D(Base1.x, Base1.y, Base1.z, "~g~Defend")
                 DrawMarker(1, Base0.x, Base0.y, Base0.z, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 0.5, 204, 102, 0, 200, 0, 0, 0, 0)
                 GUI.DrawText3D(Base0.x, Base0.y, Base0.z, "~r~Attack")
+                local otherteam = (team==0) and 0 or 1
                 if BombPlanted then
                     if not end_time then print("setting endtime") end_time = GetNetworkTime() + 40000 print("setting endtime")end
 
@@ -250,6 +260,14 @@ function StartSabotage()
                 elseif Bomb and not BombPlanted then
                     --print("missiontext no plant")
                     GUI.MissionText("Plant the bomb using  ~INPUT_REPLAY_START_STOP_RECORDING~.", 1, 1)
+                elseif ToDefuse  and  Misc.Distance(pCoords.x, _G["Base1"].x,pCoords.y, _G["Base1"].y) < 2.5 then
+                    GUI.MissionText("Defuse the bomb using F1.", 1, 1)
+                    if IsControlJustPressed(0, 288) then
+                        TaskPlayAnim(PlayerPedId(), "missfbi_s4mop", "plant_bomb_a", 4.0, 1.0, 0.2, 0, 1.0, true, true, true)
+                        -- add some more checks in the future
+                        TriggerServerEvent("sabotage:BombDefused")
+                        --BombPlanted = true
+                    end
                 end
             end
         end
@@ -295,19 +313,27 @@ AddEventHandler("sabotage:UpdateLevels", function(PlayersList)
 end)
 
 RegisterNetEvent("sabotage:UpdateBombStatus")
-AddEventHandler("sabotage:UpdateBombStatus", function(ours, planted, todefuse)
+AddEventHandler("sabotage:UpdateBombStatus", function(ours, planted, todefuse, defused)
     print(ours, planted)
-    if ours==true and not Bomb and planted == nil then
+    if ours == true and not Bomb then
         GUI.DrawGameNotification("~g~You now have the bomb!~s~ Go plant it ASAP! ~g~", true)
         Bomb = true
-    elseif not ours==true and Bomb and planted == nil then
+        ToDefuse = false
+    elseif ours == false and Bomb then
         GUI.DrawGameNotification("~r~You lost the bomb!~s~ Defend your team's base! ~g~", true)
         Bomb = false
-    elseif ours == -99 and planted == team and not todefuse then
+        ToDefuse = false
+    elseif ours == -99 and planted == team and todefuse and not defused then
         GUI.DrawGameNotification("~r~The bomb has been planted!~s~ Defend it! ~g~", true)
         BombPlanted = true
-    elseif ours == -99 and planted ~= team and todefuse then
+        ToDefuse = false
+    elseif ours == -99 and planted ~= team and todefuse and not defused then
         GUI.DrawGameNotification("~r~The bomb has been planted!~s~ Defuse it! ~g~", true)
         BombPlanted = true
+        ToDefuse = true
+    elseif defused then
+        GUI.DrawGameNotification("~r~The bomb has been defused!~s~ A new bomberman has been selected! ~g~", true)
+        BombPlanted = false
+        ToDefuse = false
     end
 end)

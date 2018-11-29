@@ -12,6 +12,8 @@ local AvailableCoords = {
 }
 local CurrentCoords = {}
 local BomberMan
+local planted = false
+local defused = false
 
 
 RegisterNetEvent("Gamemode:UpdatePlayers:6")
@@ -62,10 +64,10 @@ AddEventHandler("Gamemode:Kill:6", function(killerid, source)
         print(GetPlayerName(killerid).." killed ".. GetPlayerName(source))
         PlayerList[getSabotagePlayerIndex(killerid)].kills = PlayerList[getSabotagePlayerIndex(killerid)].kills + 1
         TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
-        if source == BomberMan then
+        if source == BomberMan and not planted then
             local otherteam = {}
             for i,v in pairs(PlayerList) do
-                if v.team ~= PlayerList[getSabotagePlayerIndex(BomberMan)] then
+                if v.team ~= PlayerList[getSabotagePlayerIndex(BomberMan)].team then
                     table.insert(otherteam, v.serverId)
                 end
             end
@@ -85,10 +87,10 @@ AddEventHandler("Gamemode:Suicide:6", function(s)
         print(GetPlayerName(source).." died.")
         PlayerList[getSabotagePlayerIndex(source)].kills = PlayerList[getSabotagePlayerIndex(source)].kills - 1
         TriggerClientEvent("sabotage:UpdateLevels", -1, PlayerList)
-        if source == BomberMan then
+        if source == BomberMan and not planted then
             local otherteam = {}
             for i,v in pairs(PlayerList) do
-                if v.team ~= PlayerList[getSabotagePlayerIndex(BomberMan)] then
+                if v.team ~= PlayerList[getSabotagePlayerIndex(BomberMan)].team then
                     table.insert(otherteam, v.serverId)
                 end
             end
@@ -221,13 +223,33 @@ AddEventHandler("sabotage:BombPlanted", function(team)
     print(tostring(source) == tostring(BomberMan))
     if tostring(source) == tostring(BomberMan) then
         print("Bomb has been Planted.")
+        planted=true
         local team = team
         Citizen.CreateThread(function()
             print(team)
             for i,v in ipairs(PlayerList) do
                 TriggerClientEvent("sabotage:UpdateBombStatus", v.serverId, -99, team, team ~= v.team)
             end
-            Wait(40000)
+            local start = GetGameTimer()
+
+            while GetGameTimer() - start < 40000 do 
+                if defused then
+                    defused = false
+                    planted = false
+                    local otherteam = {}
+                    for i,v in pairs(PlayerList) do
+                        if v.team ~= PlayerList[getSabotagePlayerIndex(BomberMan)].team then
+                            table.insert(otherteam, v.serverId)
+                        end
+                    end
+                    local r = math.random(1,#otherteam)
+                    TriggerClientEvent("sabotage:UpdateBombStatus", otherteam[r], true)
+                    TriggerClientEvent("sabotage:UpdateBombStatus", BomberMan, false)
+                    BomberMan = otherteam[r]
+                    TriggerClientEvent("sabotage:UpdateBombStatus", -1, -99, team, -99, true)
+                    return
+                end 
+            end
             EndSabotage(team)
         end)
     end
