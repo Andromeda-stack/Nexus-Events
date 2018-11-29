@@ -259,7 +259,7 @@ function StartSabotage()
                     end
                 elseif Bomb and not BombPlanted then
                     --print("missiontext no plant")
-                    GUI.MissionText("Plant the bomb using  ~INPUT_REPLAY_START_STOP_RECORDING~.", 1, 1)
+                    GUI.MissionText("Plant the bomb using  F1.", 1, 1)
                 elseif ToDefuse  and  Misc.Distance(pCoords.x, _G["Base1"].x,pCoords.y, _G["Base1"].y) < 2.5 then
                     GUI.MissionText("Defuse the bomb using F1.", 1, 1)
                     if IsControlJustPressed(0, 288) then
