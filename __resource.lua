@@ -17,6 +17,7 @@ client_scripts {
 	"gamemodes/gun_game/gamemode_c.lua",
 	"gamemodes/freeroam/gamemode_c.lua",
 	"gamemodes/sabotage/gamemode_c.lua",
+	"gamemodes/demolition/gamemode_c.lua",
 	--VOTING
 	"voting/vote_c.lua",
 	--MAIN
@@ -32,6 +33,7 @@ server_scripts {
 	"gamemodes/gun_game/gamemode_s.lua",
 	"gamemodes/freeroam/gamemode_s.lua",
 	"gamemodes/sabotage/gamemode_s.lua",
+	"gamemodes/demolition/gamemode_s.lua",
 	--FUNCTIONS
 	"functions/misc.lua",
 	--SQLITE
