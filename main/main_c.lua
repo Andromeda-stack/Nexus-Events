@@ -47,3 +47,16 @@ AddEventHandler("playerSpawned", function()
 end)
 
 AddEventHandler("Nexus:UpdateMoney", function(money) Money=money end)
+
+AddEventHandler('gameEventTriggered', function (name, args)
+	print('game event ' .. name .. ' (' .. json.encode(args) .. ')')
+	if name == "CEventNetworkVehicleUndrivable" then
+		print(GetDisplayNameFromVehicleModel(GetEntityModel(args[1])))
+		print(NetToObj(args[2]))
+		print(GetDisplayNameFromVehicleModel(args[3]))
+		print(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsIn(PlayerPedId(), false))))
+		print(GetVehiclePedIsIn(PlayerPedId(), false))
+		print(NetworkGetDestroyerOfNetworkId(VehToNet(args[1])))
+
+	end
+end)
