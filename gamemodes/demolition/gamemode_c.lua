@@ -95,9 +95,9 @@ end)
 
 AddEventHandler("demolition:UpdateKills", function(kills, timer) CurrentKills = kills if timer then end_time = GetNetworkTime()+timer end end)
 
-function StartDemolition() 
+function StartDemolition()
+    SetPlayerVehicleDamageModifier(PlayerId(), 1000.0)
     Citizen.CreateThread(function()
-        local toggle = false
         while Sessionised do 
             Wait(0)
             --GUI.DrawBar(0.13, "LEVEL", GunLevels[tostring(GetPlayerServerId(PlayerId()))], nil, 3)
@@ -108,10 +108,42 @@ function StartDemolition()
                 GUI.DrawBar(0.13, "KILLS", CurrentKills, nil, 2)
                 GUI.DrawTimerBar(0.13, "GAME END", ((end_time - GetNetworkTime()) / 1000), 1)
             end
-            if IsPedInAnyVehicle(PlayerPedId(), false) and not toggle then
-                print("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
-                StartParticleFxLoopedOnEntityBone("ent_amb_torch_fire_trail", GetVehiclePedIsIn(PlayerPedId(), false), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, GetEntityBoneIndexByName(GetVehiclePedIsIn(PlayerPedId(), false), "exhaust"), 10.0, false, true, false)
-                toggle = true
+            if IsPedInAnyVehicle(PlayerPedId(), false) and IsControlPressed(0, 60) then
+                local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+                SetVehicleBoostActive(vehicle, 1, 0)
+			    SetVehicleForwardSpeed(vehicle, 140.0)
+			    StartScreenEffect("RaceTurbo", 0, 0)
+			    SetVehicleBoostActive(vehicle, 0, 0)
+                RequestNamedPtfxAsset("core")
+                while not HasNamedPtfxAssetLoaded("core") do
+                    Citizen.Wait(0)
+                end
+                for i=1, 16 do
+                    Citizen.CreateThread(function()
+                        local bone = "exhaust_"..i
+                        if i == 1 then
+                            bone = "exhaust"
+                        end
+                        if GetEntityBoneIndexByName(vehicle, bone) == -1 then
+                            return
+                        end
+                        local coords = GetWorldPositionOfEntityBone(vehicle, bone)
+                        local loopAmount = 25
+                        local particleEffects = {}
+
+                        for x=0,loopAmount do
+                            UseParticleFxAssetNextCall("core")
+                            local particle = StartParticleFxLoopedOnEntityBone("ent_dst_elec_fire_sp", vehicle, coords.x, coords.y, coords.z, 0.0, 0.0, 0.0, GetEntityBoneIndexByName(vehicle, bone), 2.0, false, false, false)
+                            SetParticleFxLoopedEvolution(particle, "ent_dst_elec_fire_sp", RPM, 0)
+                            table.insert(particleEffects, 1, particle)
+                            Citizen.Wait(0)
+                        end
+                        Citizen.Wait(10)
+                        for _,particle in pairs(particleEffects) do
+                            StopParticleFxLooped(particle, true)
+                        end
+                    end)
+                end
             end
         end
     end)

@@ -81,6 +81,7 @@ AddEventHandler("Gamemode:PollRandomCoords:7", function()
 end)
 
 AddEventHandler("Gamemode:VehicleDestroyed:7", function()
+    print(GetPlayerName(source).." destroyed a vehicle")
     PlayerList[getDemolitionPlayerIndex(source)].kills = PlayerList[getDemolitionPlayerIndex(source)].kills + 1
     TriggerClientEvent("demolition:UpdateKills", source, PlayerList[getDemolitionPlayerIndex(source)].kills)
 end)
