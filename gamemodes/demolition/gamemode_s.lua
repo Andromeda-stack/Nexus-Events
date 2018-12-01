@@ -58,12 +58,23 @@ AddEventHandler("Gamemode:Start:7", function(g)
         for i,v in ipairs(PlayerList) do
             if v.serverId == winner then
                 TriggerClientEvent("Gamemode:End:7", winner, winner, math.floor(2 * v.kills * 50))
+                db:GetUser(identifier, function(user)
+                    db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
+                end)
             else
                 TriggerClientEvent("Gamemode:End:7", v.serverId, winner, math.floor(v.kills * 50))
+                db:GetUser(identifier, function(user)
+                    db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
+                end)
             end
         end
         SessionActive = false
         PlayerList = {}
+        Citizen.Wait(16000)
+        print("Start Freeroam!")
+        TriggerEvent("Freeroam:Start")
     end)
 end)
 
