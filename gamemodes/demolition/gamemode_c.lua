@@ -97,10 +97,35 @@ AddEventHandler("demolition:UpdateKills", function(kills, timer) CurrentKills = 
 
 function StartDemolition()
     SetPlayerVehicleDamageModifier(PlayerId(), 1000.0)
+    for i=0,255 do
+        local ped = GetPlayerPed(i)
+        local vehicle = GetVehiclePedIsIn(ped, false)
+        if DoesEntityExist(ped) and DoesEntityExist(vehicle) then
+            SetEntityNoCollisionEntity(PlayerPedId(), ped, true)
+            SetEntityNoCollisionEntity(PlayerPedId(), vehicle, true)
+            SetEntityNoCollisionEntity(GetVehiclePedIsIn(PlayerPedId(), false), vehicle, true)
+            SetEntityNoCollisionEntity(GetVehiclePedIsIn(PlayerPedId(), false), ped, true)
+        end
+    end
     Citizen.CreateThread(function()
+        local lastvehicle = GetVehiclePedIsIn(PlayerPedId(),false)
         while Sessionised do 
             Wait(0)
             --GUI.DrawBar(0.13, "LEVEL", GunLevels[tostring(GetPlayerServerId(PlayerId()))], nil, 3)
+
+            if lastvehicle ~= GetVehiclePedIsIn(PlayerPedId(),false) then
+                for i=0,255 do
+                    local ped = GetPlayerPed(i)
+                    local vehicle = GetVehiclePedIsIn(ped, false)
+                    if DoesEntityExist(ped) and DoesEntityExist(vehicle) then
+                        SetEntityNoCollisionEntity(PlayerPedId(), ped, true)
+                        SetEntityNoCollisionEntity(PlayerPedId(), vehicle, true)
+                        SetEntityNoCollisionEntity(GetVehiclePedIsIn(PlayerPedId(), false), vehicle, true)
+                        SetEntityNoCollisionEntity(GetVehiclePedIsIn(PlayerPedId(), false), ped, true)
+                    end
+                end
+            end
+
             if not end_time then end_time = GetNetworkTime() + 600000 end
 
             if (end_time - GetNetworkTime()) > 0 then
@@ -111,7 +136,7 @@ function StartDemolition()
             if IsPedInAnyVehicle(PlayerPedId(), false) and IsControlPressed(0, 60) then
                 local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
                 SetVehicleBoostActive(vehicle, 1, 0)
-			    SetVehicleForwardSpeed(vehicle, 140.0)
+			    SetVehicleForwardSpeed(vehicle, 80.0)
 			    StartScreenEffect("RaceTurbo", 0, 0)
 			    SetVehicleBoostActive(vehicle, 0, 0)
                 RequestNamedPtfxAsset("core")
