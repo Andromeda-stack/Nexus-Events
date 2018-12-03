@@ -79,7 +79,7 @@ function StartVoteCounter()
     Citizen.CreateThread(function()
         voting = true
         print(GetNumPlayerIndices())
-        while GetNumPlayerIndices() ~= #Voted do Wait(0) end
+        while GetNumPlayerIndices() ~= #Voted or GetNumPlayerIndices() == 0 do Wait(0) end
         local TargetGamemode = GetWinner()
         print("Attempting to start "..TargetGamemode)
         TriggerEvent("Gamemode:Start:"..TargetGamemode,Gamemodes[TargetGamemode])
