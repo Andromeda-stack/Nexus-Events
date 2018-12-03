@@ -19,6 +19,8 @@ client_scripts {
 	"gamemodes/sabotage/gamemode_c.lua",
 	"gamemodes/demolition/gamemode_c.lua",
 	"gamemodes/demolition/vehicleselection.lua",
+	"gamemodes/dogfight/gamemode_c.lua",
+	"gamemodes/dogfight/vehicleselection.lua",
 	--VOTING
 	"voting/vote_c.lua",
 	--MAIN
@@ -37,6 +39,7 @@ server_scripts {
 	"gamemodes/freeroam/gamemode_s.lua",
 	"gamemodes/sabotage/gamemode_s.lua",
 	"gamemodes/demolition/gamemode_s.lua",
+	"gamemodes/dogfight/gamemode_s.lua",
 	--FUNCTIONS
 	"functions/misc.lua",
 	--SQLITE

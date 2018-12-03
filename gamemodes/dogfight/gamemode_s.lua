@@ -26,25 +26,25 @@ local CurrentCoords = {}
 local timer
 local vehiclechosen = {}
 
-RegisterNetEvent("Gamemode:UpdatePlayers:7")
-RegisterNetEvent("Gamemode:PollRandomCoords:7")
-RegisterNetEvent("Gamemode:VehicleDestroyed:7")
-RegisterNetEvent("Gamemode:Join:7")
---RegisterNetEvent("Gamemode:Join:7")
+RegisterNetEvent("Gamemode:UpdatePlayers:8")
+RegisterNetEvent("Gamemode:PollRandomCoords:8")
+RegisterNetEvent("Gamemode:VehicleDestroyed:8")
+RegisterNetEvent("Gamemode:Join:8")
+--RegisterNetEvent("Gamemode:Join:8")
 
-AddEventHandler("Gamemode:Leave:7", function(s)
+AddEventHandler("Gamemode:Leave:8", function(s)
     if SessionActive then
-        PlayerList[getDemolitionPlayerIndex(s)] = nil
+        PlayerList[getDogfightPlayerIndex(s)] = nil
     end
 end)
 
-AddEventHandler("Gamemode:Join:7", function(s)
+AddEventHandler("Gamemode:Join:8", function(s)
     TriggerClientEvent("PrepareGamemode", -1, g)
     Wait(1000)
-    TriggerClientEvent("demolition:UpdateKills", -1, 0, 600000 - (GetGameTimer() - timer))
+    TriggerClientEvent("dogfight:UpdateKills", -1, 0, 600000 - (GetGameTimer() - timer))
 end)
 
-AddEventHandler("Gamemode:Start:7", function(g)
+AddEventHandler("Gamemode:Start:8", function(g)
     Citizen.CreateThread(function()
         CurrentCoords = {}
         TriggerClientEvent("PrepareGamemode", -1, g, false)
@@ -52,26 +52,26 @@ AddEventHandler("Gamemode:Start:7", function(g)
         for i,v in ipairs(PlayerList) do
             local id = Misc.GetPlayerSteamId(v.serverId)
             db:GetUser(id, function(result)
-                TriggerClientEvent("demolition:ChooseVehicle", v.serverId, result.vehicles)
+                TriggerClientEvent("dogfight:ChooseVehicle", v.serverId, result.planes)
             end)
         end
         print("^5[INFO]^7 Waiting for players to select vehicle")
         while #vehiclechosen ~= #PlayerList do Wait(0) end
         print("^5[INFO]^7 Vehicle selection is over")
-        TriggerClientEvent("Gamemode:Init:7", -1)
+        TriggerClientEvent("Gamemode:Init:8", -1)
         Wait(1000)
-        TriggerClientEvent("demolition:UpdateKills", -1, 0)
+        TriggerClientEvent("dogfight:UpdateKills", -1, 0)
         SessionActive = true
         timer = GetGameTimer()
         while GetGameTimer() - timer < 600000 and SessionActive do
             Wait(0)
         end
-        local winner = getDemolitionWinner()
+        local winner = getDogfightWinner()
         for i,v in ipairs(PlayerList) do
             if v.serverId == winner then
                 local identifier = Misc.GetPlayerSteamId(winner)
                 local xp = 2 * v.kills * 50
-                TriggerClientEvent("Gamemode:End:7", winner, winner, math.floor(xp))
+                TriggerClientEvent("Gamemode:End:8", winner, winner, math.floor(xp))
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
                     TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
@@ -79,7 +79,7 @@ AddEventHandler("Gamemode:Start:7", function(g)
             else
                 local xp = v.kills * 50
                 local identifier = Misc.GetPlayerSteamId(v.serverId)
-                TriggerClientEvent("Gamemode:End:7", v.serverId, winner, math.floor(xp))
+                TriggerClientEvent("Gamemode:End:8", v.serverId, winner, math.floor(xp))
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
                     TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
@@ -95,27 +95,27 @@ AddEventHandler("Gamemode:Start:7", function(g)
     end)
 end)
 
-AddEventHandler("Gamemode:PollRandomCoords:7", function()
+AddEventHandler("Gamemode:PollRandomCoords:8", function()
     if not (#CurrentCoords == 0) then
         print("coords were available")
-        TriggerClientEvent("Gamemode:FetchCoords:7", source, CurrentCoords)
+        TriggerClientEvent("Gamemode:FetchCoords:8", source, CurrentCoords)
     else
         print("coords were NOT available")
         local r = math.random(1,#AvailableCoords)
         CurrentCoords = AvailableCoords[tonumber(r)]
-        TriggerClientEvent("Gamemode:FetchCoords:7", source, CurrentCoords)
+        TriggerClientEvent("Gamemode:FetchCoords:8", source, CurrentCoords)
     end
     print(json.encode(CurrentCoords))
 end)
 
-AddEventHandler("Gamemode:VehicleDestroyed:7", function()
+AddEventHandler("Gamemode:Kill:8", function()
     print(GetPlayerName(source).." destroyed a vehicle")
-    PlayerList[tonumber(getDemolitionPlayerIndex(source))].kills = PlayerList[tonumber(getDemolitionPlayerIndex(source))].kills + 1
-    TriggerClientEvent("demolition:UpdateKills", source, PlayerList[tonumber(getDemolitionPlayerIndex(source))].kills)
+    PlayerList[tonumber(getDogfightPlayerIndex(source))].kills = PlayerList[tonumber(getDogfightPlayerIndex(source))].kills + 1
+    TriggerClientEvent("dogfight:UpdateKills", source, PlayerList[tonumber(getDogfightPlayerIndex(source))].kills)
 end)
 
-RegisterNetEvent("Gamemode:UpdatePlayers:7")
-AddEventHandler("Gamemode:UpdatePlayers:7", function(Operation, Player)
+RegisterNetEvent("Gamemode:UpdatePlayers:8")
+AddEventHandler("Gamemode:UpdatePlayers:8", function(Operation, Player)
     if Operation == "Append" then
         -- adding some checks to prevent cheating.
         for i,v in ipairs(PlayerList) do
@@ -130,12 +130,12 @@ AddEventHandler("Gamemode:UpdatePlayers:7", function(Operation, Player)
     end
 end)
 
-RegisterNetEvent("demolition:VehicleChosen")
-AddEventHandler("demolition:VehicleChosen", function()
+RegisterNetEvent("dogfight:VehicleChosen")
+AddEventHandler("dogfight:VehicleChosen", function()
     table.insert(vehiclechosen, source)
 end)
 
-function getDemolitionPlayerIndex(id)
+function getDogfightPlayerIndex(id)
     for i,v in ipairs(PlayerList) do
         if v.serverId == id then
             return i
@@ -143,12 +143,12 @@ function getDemolitionPlayerIndex(id)
     end
 end
 
-function getDemolitionWinner()
+function getDogfightWinner()
     local winner
     for i,v in ipairs(PlayerList) do
         if not winner then
             winner = v.serverId
-        elseif PlayerList[getDemolitionPlayerIndex(winner)].kills < v.kills then
+        elseif PlayerList[getDogfightPlayerIndex(winner)].kills < v.kills then
             winner = v.serverId
         end
     end

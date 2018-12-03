@@ -122,6 +122,7 @@ function StartDemolition()
     end
     Citizen.CreateThread(function()
         local lastvehicle = GetVehiclePedIsIn(PlayerPedId(),false)
+        local end_time
         while Sessionised do 
             Wait(0)
             --GUI.DrawBar(0.13, "LEVEL", GunLevels[tostring(GetPlayerServerId(PlayerId()))], nil, 3)
@@ -145,6 +146,8 @@ function StartDemolition()
                 GUI.MissionText("Destroy as many vehicles as possible!", 1, 1)
                 GUI.DrawBar(0.13, "KILLS", CurrentKills, nil, 2)
                 GUI.DrawTimerBar(0.13, "GAME END", ((end_time - GetNetworkTime()) / 1000), 1)
+            else
+                end_time = nil
             end
             if IsPedInAnyVehicle(PlayerPedId(), false) and IsControlPressed(0, 60) then
                 local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)

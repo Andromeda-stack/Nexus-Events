@@ -5,8 +5,8 @@ Gamemodes = {
 	{id = 4, title="Gun Game", desc="Kill People to progress through weapons! Who will reign victorius?", txd="mpweaponscommon", txn="w_sg_assaultshotgun"},
 	{id = 5, title="Demo Derby", desc="Many Pantos, one winner. Bash each other off the edge to leave one final winner!", txd="mpcarhud", txn="bf"},
 	{id = 6, title="Sabotage", desc="Destroy the Objectives.", txd="mpweaponscommon", txn="w_ex_pe"},
-	{id = 7, title="Demolition", desc="Didn't you have anything better to do than smash into cars at extraordinarily high speeds?", txd="mpweaponscommon", txn="w_lr_rpg"},
-	{id = 8, title="Coming soon™", desc="", txd="digitaloverlay", txn="signal2"},
+	{id = 7, title="Demolition", desc="Don't you have anything better to do other than smash into cars at extraordinarily high speeds?", txd="mpweaponscommon", txn="w_lr_rpg"},
+	{id = 8, title="Dogfight", desc="a Free For All with a little twist: planes!", txd="pilotschool", txn="flightschool_logo_256"},
 	{id = 9, title="Coming soon™", desc="", txd="mpweaponsgang0", txn="signal2"},
 	{id = 10, title="Coming soon™", desc="", txd="mpweaponsgang0", txn="signal2"},
 }

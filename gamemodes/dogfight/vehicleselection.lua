@@ -3,7 +3,7 @@ local Vehicles = {}
 local CurrentVehicle = 1
 local Selecting = false
 
-ChosenDemolitionModel = nil
+ChosenDogfightModel = nil
 
 function setupCamera()
 	view1=CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
@@ -45,7 +45,7 @@ function VehicleSelection(vehName, speed, handling, damage, armour)
 
     PushScaleformMovieFunction(scaleform, "SET_VEHICLE_INFOR_AND_STATS") -- vehicleInfo
     PushScaleformMovieFunctionParameterString(vehName) --vehicleInfo
-    PushScaleformMovieFunctionParameterString("Vehicle ("..CurrentVehicle.."/"..#Vehicles..")") --vehicleDetails
+    PushScaleformMovieFunctionParameterString("Jet ("..CurrentVehicle.."/"..#Vehicles..")") --vehicleDetails
     PushScaleformMovieFunctionParameterString("MPCarHUD") --logoTXD
     PushScaleformMovieFunctionParameterString("hvy") --logoTexture
     PushScaleformMovieFunctionParameterString("Top Speed") --statStr1
@@ -105,11 +105,11 @@ function VehSelection(type)
 end
 
 RegisterCommand("startvehicleselection", function()
-    TriggerEvent("demolition:ChooseVehicle")
+    TriggerEvent("dogfight:ChooseVehicle")
 end, false)
 
-RegisterNetEvent("demolition:ChooseVehicle")
-AddEventHandler("demolition:ChooseVehicle", function(v)
+RegisterNetEvent("dogfight:ChooseVehicle")
+AddEventHandler("dogfight:ChooseVehicle", function(v)
     Vehicles = v
     VehSelection("begin")
 end)
@@ -124,7 +124,7 @@ Citizen.CreateThread(function()
             SetGameplayCamRelativeHeading(5.0)
             SetGameplayCamRawPitch(10.77)
             ClampGameplayCamPitch(0.0, 0.0)
-            local Buttons = GUI.InstructionalButtons(176, "Select", 175, "Next Vehicle", 174, "Previous Vehicle")
+            local Buttons = GUI.InstructionalButtons(176, "Select", 175, "Next Jet", 174, "Previous Jet")
             DrawScaleformMovieFullscreen(Buttons, 255, 255, 255, 255)
             if IsControlJustPressed(0, 174) and CurrentVehicle ~= 1 then
                 PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
@@ -136,8 +136,8 @@ Citizen.CreateThread(function()
                 NewVehicle()
             elseif IsControlJustPressed(0, 176) then
                 PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
-                TriggerServerEvent("demolition:VehicleChosen", Vehicles[CurrentVehicle])
-                ChosenDemolitionModel = Vehicles[CurrentVehicle].spawnName
+                TriggerServerEvent("dogfight:VehicleChosen", Vehicles[CurrentVehicle])
+                ChosenDogfightModel = Vehicles[CurrentVehicle].spawnName
                 SetEntityAsMissionEntity(veh, 1, 1)
                 DeleteVehicle(veh)
                 VehSelection("stop")
