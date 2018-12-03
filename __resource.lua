@@ -18,12 +18,15 @@ client_scripts {
 	"gamemodes/freeroam/gamemode_c.lua",
 	"gamemodes/sabotage/gamemode_c.lua",
 	"gamemodes/demolition/gamemode_c.lua",
+	"gamemodes/demolition/vehicleselection.lua",
 	--VOTING
 	"voting/vote_c.lua",
 	--MAIN
 	"main/main_c.lua",
 	--ANTICHEAT
 	--"ac/ac_c.lua"
+	-- OTHER
+	"ipls.lua"
 }
 
 server_scripts {

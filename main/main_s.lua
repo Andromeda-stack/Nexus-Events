@@ -26,7 +26,7 @@ AddEventHandler("playerConnecting", function(name, setKickReason, deferrals)
 	if identifier then
 		db:GetUser(identifier, function(result)
 			if not result then
-				db:InsertUser({id=identifier, money=500, inventory = {}, banned = false, notes = "", xp = 0, level = 1, neededxp = 1000}, function()
+				db:InsertUser({id=identifier, money=500, weapons = {}, vehicles = {{spawnName = "regina", Name = "Regina", speed = 5, handling = 15, damage = 10, armour = 100}, {spawnName = "baller2", Name = "RangeRover Evoque", speed = 35, handling = 15, damage = 25, armour = 100}}, banned = false, notes = "", xp = 0, level = 1, neededxp = 1000}, function()
 					print("^5[INFO]^7 Added new user to database: "..name)
 					deferrals.done()
 				end)

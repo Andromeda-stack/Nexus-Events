@@ -24,6 +24,7 @@ local AvailableCoords = {
 }
 local CurrentCoords = {}
 local timer
+local vehiclechosen = {}
 
 RegisterNetEvent("Gamemode:UpdatePlayers:7")
 RegisterNetEvent("Gamemode:PollRandomCoords:7")
@@ -40,18 +41,29 @@ end)
 AddEventHandler("Gamemode:Join:7", function(s)
     TriggerClientEvent("PrepareGamemode", -1, g)
     Wait(1000)
-    TriggerClientEvent("demolition:UpdateKills", -1, 0, 600000 - (GetGameTimer() - start))
+    TriggerClientEvent("demolition:UpdateKills", -1, 0, 600000 - (GetGameTimer() - timer))
 end)
 
 AddEventHandler("Gamemode:Start:7", function(g)
     Citizen.CreateThread(function()
         CurrentCoords = {}
-        TriggerClientEvent("PrepareGamemode", -1, g)
+        TriggerClientEvent("PrepareGamemode", -1, g, false)
+        Wait(2500)
+        for i,v in ipairs(PlayerList) do
+            local id = Misc.GetPlayerSteamId(v.serverId)
+            db:GetUser(id, function(result)
+                TriggerClientEvent("demolition:ChooseVehicle", v.serverId, result.vehicles)
+            end)
+        end
+        print("^5[INFO]^7 Waiting for players to select vehicle")
+        while #vehiclechosen ~= #PlayerList do Wait(0) end
+        print("^5[INFO]^7 Vehicle selection is over")
+        TriggerClientEvent("Gamemode:Init:7", -1)
         Wait(1000)
         TriggerClientEvent("demolition:UpdateKills", -1, 0)
         SessionActive = true
         timer = GetGameTimer()
-        while GetGameTimer() - start < 600000 and SessionActive do
+        while GetGameTimer() - timer < 600000 and SessionActive do
             Wait(0)
         end
         local winner = getDemolitionWinner()
@@ -97,8 +109,8 @@ end)
 
 AddEventHandler("Gamemode:VehicleDestroyed:7", function()
     print(GetPlayerName(source).." destroyed a vehicle")
-    PlayerList[getDemolitionPlayerIndex(source)].kills = PlayerList[getDemolitionPlayerIndex(source)].kills + 1
-    TriggerClientEvent("demolition:UpdateKills", source, PlayerList[getDemolitionPlayerIndex(source)].kills)
+    PlayerList[tonumber(getDemolitionPlayerIndex(source))].kills = PlayerList[tonumber(getDemolitionPlayerIndex(source))].kills + 1
+    TriggerClientEvent("demolition:UpdateKills", source, PlayerList[tonumber(getDemolitionPlayerIndex(source))].kills)
 end)
 
 RegisterNetEvent("Gamemode:UpdatePlayers:7")
@@ -115,6 +127,11 @@ AddEventHandler("Gamemode:UpdatePlayers:7", function(Operation, Player)
         PlayerList[#PlayerList + 1] = Player
         print("added player")
     end
+end)
+
+RegisterNetEvent("demolition:VehicleChosen")
+AddEventHandler("demolition:VehicleChosen", function()
+    table.insert(vehiclechosen, source)
 end)
 
 function getDemolitionPlayerIndex(id)

@@ -32,14 +32,15 @@ AddEventHandler("Gamemode:Init:7", function()
 
     TriggerServerEvent("Gamemode:PollRandomCoords:7")
 
-    N_0xd8295af639fd9cb8(PlayerPedId())
+    --[[ N_0xd8295af639fd9cb8(PlayerPedId())
 
     while Citizen.InvokeNative(0x470555300D10B2A5) ~= 8 and Citizen.InvokeNative(0x470555300D10B2A5) ~= 10 do
         Citizen.Wait(0)
     end
 
-    N_0xd8295af639fd9cb8(PlayerPedId())
-
+    N_0xd8295af639fd9cb8(PlayerPedId()) ]]
+    Wait(1000)
+    print("CREATING CAMERA")
     view1 = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
     SetCamCoord(view1, tonumber(CurrentCenter.x), tonumber(CurrentCenter.y), tonumber(CurrentCenter.z) + 20)
     SetCamRot(view1, -20.0, 0.0, 180.0)
@@ -54,6 +55,7 @@ AddEventHandler("Gamemode:Init:7", function()
     FreezeEntityPosition(PlayerPedId(), true)
     local start = GetGameTimer()
     -- we could play a sound or smth on the countdown as well
+    print("DRAWING COUNTDOWN")
     while (GetGameTimer() - start) < 10000 do 
         Wait(0)
         HideHudAndRadarThisFrame()
@@ -77,6 +79,7 @@ AddEventHandler("Gamemode:Init:7", function()
             GUI.DrawText("1", {x=0.5,y=0.5}, 2, {r=57,g=255,b=20,a=255}, 1.0, false, true, true, false, 0.1)
         end
     end
+    print("STARTING GAMEMODE")
     FreezeEntityPosition(PlayerPedId(), false)
     StartDemolition()
 end)
@@ -96,6 +99,16 @@ end)
 AddEventHandler("demolition:UpdateKills", function(kills, timer) CurrentKills = kills if timer then end_time = GetNetworkTime()+timer end end)
 
 function StartDemolition()
+    RequestModel(GetHashKey(ChosenDemolitionModel))
+    while not HasModelLoaded(GetHashKey(ChosenDemolitionModel)) do
+        RequestModel(GetHashKey(ChosenDemolitionModel))
+        Citizen.Wait(0)
+    end
+    local veh = CreateVehicle(GetHashKey(ChosenDemolitionModel), GetEntityCoords(PlayerPedId(), true), 0.0, true, true)
+    SetPedIntoVehicle(PlayerPedId(), veh, -1)
+    SetPlayerInvincible(PlayerId(), true)
+    SetEntityInvincible(veh, true)
+    SetVehicleDoorsLocked(veh, 4)
     SetPlayerVehicleDamageModifier(PlayerId(), 1000.0)
     for i=0,255 do
         local ped = GetPlayerPed(i)
@@ -176,5 +189,7 @@ end
 
 function EndDemolition(winner, xp)
    Scaleform.RenderEndScreen(xp, xp/10, winner == PlayerServerId)
+   SetPlayerInvincible(PlayerId(), false)
+   DeleteVehicle(GetVehiclePedIsIn(PlayerPedId(), false))
    Sessionised = false
 end
