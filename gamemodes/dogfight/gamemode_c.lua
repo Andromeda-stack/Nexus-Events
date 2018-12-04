@@ -78,6 +78,9 @@ AddEventHandler("Gamemode:Init:8", function()
             --print("1")
             GUI.DrawText("1", {x=0.5,y=0.5}, 2, {r=57,g=255,b=20,a=255}, 1.0, false, true, true, false, 0.1)
         end
+        if IsPedInAnyVehicle(PlayerPedId(), false) then
+            DeleteVehicle(GetVehiclePedIsIn(PlayerPedId(), false))
+        end
     end
     print("STARTING GAMEMODE")
     FreezeEntityPosition(PlayerPedId(), false)
@@ -85,6 +88,7 @@ AddEventHandler("Gamemode:Init:8", function()
 end)
 
 AddEventHandler("Gamemode:FetchCoords:8", function(Coords)
+    print(json.encode(Coords))
     for i,v in ipairs(Coords) do
         local Coord = {}
          Coord.x, Coord.y, Coord.z = table.unpack(Misc.SplitString(v, ","))
@@ -92,11 +96,25 @@ AddEventHandler("Gamemode:FetchCoords:8", function(Coords)
         SpawnManager.addSpawnPoint({x = tonumber(Coord.x), y = tonumber(Coord.y), z = tonumber(Coord.z), heading = 0.0, model=1657546978})
     end
     local r = math.random(1, #Coords)
-    CurrentCenter.x, CurrentCenter.y, CurrentCenter.z = table.unpack(Misc.SplitString(Coords[r], ","))
+    CurrentCenter["x"], CurrentCenter["y"], CurrentCenter["z"] = table.unpack(Misc.SplitString(Coords[r], ","))
     SpawnManager.forceRespawn()
 end)
 
 AddEventHandler("dogfight:UpdateKills", function(kills, timer) CurrentKills = kills if timer then end_time = GetNetworkTime()+timer end end)
+
+AddEventHandler("Gamemode:Spawn:8", function()
+    if Sessionised then
+        RequestModel(GetHashKey(ChosenDogfightModel))
+        while not HasModelLoaded(GetHashKey(ChosenDogfightModel)) do
+            RequestModel(GetHashKey(ChosenDogfightModel))
+            Citizen.Wait(0)
+        end
+        local veh = CreateVehicle(GetHashKey(ChosenDogfightModel), GetEntityCoords(PlayerPedId(), true), 0.0, true, true)
+        SetModelAsNoLongerNeeded(GetHashKey(ChosenDogfightModel))
+        SetPedIntoVehicle(PlayerPedId(), veh, -1)
+        SetVehicleDoorsLocked(veh, 4)
+    end
+end)
 
 function StartDogfight()
     RequestModel(GetHashKey(ChosenDogfightModel))
@@ -117,8 +135,7 @@ function StartDogfight()
         local end_time
         while Sessionised do 
             Wait(0)
-            print(end_time)
-            if not end_time then print("reset") end_time = GetNetworkTime() + 600000 end
+            if not end_time then end_time = GetNetworkTime() + 600000 end
 
             if (end_time - GetNetworkTime()) > 0 then
                 GUI.MissionText("Kill the ~r~Enemy~s~!", 1, 1)

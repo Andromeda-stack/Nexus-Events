@@ -32,7 +32,7 @@ function Main(msec)
                 Sessionised = false
                 break
             end
-            if IsControlJustReleased(0, 288) and not ready then
+            if IsControlJustReleased(0, 57) and not ready then
                 ready = true
                 TriggerServerEvent("Freeroam:ReadyUp")
             end

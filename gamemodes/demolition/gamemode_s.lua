@@ -109,9 +109,11 @@ AddEventHandler("Gamemode:PollRandomCoords:7", function()
 end)
 
 AddEventHandler("Gamemode:VehicleDestroyed:7", function()
-    print(GetPlayerName(source).." destroyed a vehicle")
-    PlayerList[tonumber(getDemolitionPlayerIndex(source))].kills = PlayerList[tonumber(getDemolitionPlayerIndex(source))].kills + 1
-    TriggerClientEvent("demolition:UpdateKills", source, PlayerList[tonumber(getDemolitionPlayerIndex(source))].kills)
+    if SessionActive then
+        print(GetPlayerName(source).." destroyed a vehicle")
+        PlayerList[tonumber(getDemolitionPlayerIndex(source))].kills = PlayerList[tonumber(getDemolitionPlayerIndex(source))].kills + 1
+        TriggerClientEvent("demolition:UpdateKills", source, PlayerList[tonumber(getDemolitionPlayerIndex(source))].kills)
+    end
 end)
 
 RegisterNetEvent("Gamemode:UpdatePlayers:7")

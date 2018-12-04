@@ -45,6 +45,7 @@ AddEventHandler("playerSpawned", function()
 		firstspawn = false
 	else
 		TriggerEvent("Gamemode:Spawn:7")
+		TriggerEvent("Gamemode:Spawn:8")
 	end
 end)
 

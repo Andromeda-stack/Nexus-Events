@@ -109,9 +109,10 @@ AddEventHandler("Gamemode:PollRandomCoords:8", function()
 end)
 
 AddEventHandler("Gamemode:Kill:8", function()
-    print(GetPlayerName(source).." destroyed a vehicle")
-    PlayerList[tonumber(getDogfightPlayerIndex(source))].kills = PlayerList[tonumber(getDogfightPlayerIndex(source))].kills + 1
-    TriggerClientEvent("dogfight:UpdateKills", source, PlayerList[tonumber(getDogfightPlayerIndex(source))].kills)
+    if SessionActive then
+        PlayerList[tonumber(getDogfightPlayerIndex(source))].kills = PlayerList[tonumber(getDogfightPlayerIndex(source))].kills + 1
+        TriggerClientEvent("dogfight:UpdateKills", source, PlayerList[tonumber(getDogfightPlayerIndex(source))].kills)
+    end
 end)
 
 RegisterNetEvent("Gamemode:UpdatePlayers:8")

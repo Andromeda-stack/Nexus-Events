@@ -5,14 +5,14 @@ local Selecting = false
 
 ChosenDogfightModel = nil
 
-function setupCamera()
+function DogfightsetupCamera()
 	view1=CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
 	SetCamCoord(view1, -1267.93, -2995.89, -47.49)
 	SetCamRot(view1, 0.0, 0.0, 183.3)
 	SetCamFov(view1, 45.0)
 end
 
-local function RequestAllVehicles()
+function DogfightRequestAllVehicles()
     for i=1, #Vehicles do
         RequestModel(Vehicles[i].spawnName)
         while not HasModelLoaded(Vehicles[i].spawnName) do
@@ -22,7 +22,7 @@ local function RequestAllVehicles()
     end
 end
 
-function NewVehicle()
+function DogfightNewVehicle()
     if not IsAnyVehicleNearPoint(-1267.04, -3013.16, -48.49, 50.0) then
         veh = CreateVehicle(GetHashKey(Vehicles[CurrentVehicle].spawnName), -1267.04, -3013.16, -48.49, 321.9, false, true)
     else
@@ -34,10 +34,10 @@ function NewVehicle()
     SetEntityHeading(veh, heading)
     FreezeEntityPosition(veh, true)
     print("vehicle: "..Vehicles[CurrentVehicle].Name)
-    scaleform = VehicleSelection(Vehicles[CurrentVehicle].Name, Vehicles[CurrentVehicle].speed, Vehicles[CurrentVehicle].handling, Vehicles[CurrentVehicle].damage, Vehicles[CurrentVehicle].armour)
+    scaleform = DogfightVehicleSelection(Vehicles[CurrentVehicle].Name, Vehicles[CurrentVehicle].speed, Vehicles[CurrentVehicle].handling, Vehicles[CurrentVehicle].damage, Vehicles[CurrentVehicle].armour)
 end
 
-function VehicleSelection(vehName, speed, handling, damage, armour)
+function DogfightVehicleSelection(vehName, speed, handling, damage, armour)
     scaleform = RequestScaleformMovie("mp_car_stats_20")
     while not HasScaleformMovieLoaded(scaleform) do
         Citizen.Wait(0)
@@ -61,13 +61,13 @@ function VehicleSelection(vehName, speed, handling, damage, armour)
     return scaleform
 end
 
-function showHelpNotification(text)
+function DogfightshowHelpNotification(text)
     BeginTextCommandDisplayHelp("STRING")
     AddTextComponentSubstringPlayerName(text)
     EndTextCommandDisplayHelp(0, 0, 1, -1)
 end
 
-function VehSelection(type)
+function DogfightVehSelection(type)
     if type == "begin" then
         DoScreenFadeOut(2500)
         N_0xd8295af639fd9cb8(PlayerPedId())
@@ -75,7 +75,7 @@ function VehSelection(type)
             Citizen.Wait(0)
         end
         N_0xd8295af639fd9cb8(PlayerPedId())
-        setupCamera()
+        DogfightsetupCamera()
         Wait(2500)
         SetEntityCoords(PlayerPedId(), -1267.04, -3013.16, -48.49, 0.0, 0.0, 0.0, false) 
         Wait(2500)
@@ -92,8 +92,8 @@ function VehSelection(type)
         RenderScriptCams(true, 1, 5000,  true,  true)
         SetEntityAlpha(PlayerPedId(), 0, true)
         ShakeCam(view1,"HAND_SHAKE", 0.25)
-        RequestAllVehicles()
-        NewVehicle()
+        DogfightRequestAllVehicles()
+        DogfightNewVehicle()
     else
         RenderScriptCams(false, 1, 2500,  true,  true)
         FreezeEntityPosition(PlayerPedId(), false)
@@ -111,7 +111,7 @@ end, false)
 RegisterNetEvent("dogfight:ChooseVehicle")
 AddEventHandler("dogfight:ChooseVehicle", function(v)
     Vehicles = v
-    VehSelection("begin")
+    DogfightVehSelection("begin")
 end)
 
 Citizen.CreateThread(function()
@@ -129,18 +129,18 @@ Citizen.CreateThread(function()
             if IsControlJustPressed(0, 174) and CurrentVehicle ~= 1 then
                 PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
                 CurrentVehicle = CurrentVehicle - 1
-                NewVehicle()
+                DogfightNewVehicle()
             elseif IsControlJustPressed(0, 175) and CurrentVehicle ~= #Vehicles then
                 PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
                 CurrentVehicle = CurrentVehicle + 1
-                NewVehicle()
+                DogfightNewVehicle()
             elseif IsControlJustPressed(0, 176) then
                 PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
                 TriggerServerEvent("dogfight:VehicleChosen", Vehicles[CurrentVehicle])
                 ChosenDogfightModel = Vehicles[CurrentVehicle].spawnName
                 SetEntityAsMissionEntity(veh, 1, 1)
                 DeleteVehicle(veh)
-                VehSelection("stop")
+                DogfightVehSelection("stop")
             end
             --SetEntityCoords(veh, -1267.04, -3013.16, -47.49, 0.0, 0, 0, false)
             SetEntityHeading(veh, GetEntityHeading(veh)+0.25)

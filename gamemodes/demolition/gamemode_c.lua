@@ -78,6 +78,9 @@ AddEventHandler("Gamemode:Init:7", function()
             --print("1")
             GUI.DrawText("1", {x=0.5,y=0.5}, 2, {r=57,g=255,b=20,a=255}, 1.0, false, true, true, false, 0.1)
         end
+        if IsPedInAnyVehicle(PlayerPedId(), false) then
+            DeleteVehicle(GetVehiclePedIsIn(PlayerPedId(), false))
+        end
     end
     print("STARTING GAMEMODE")
     FreezeEntityPosition(PlayerPedId(), false)
@@ -98,6 +101,22 @@ end)
 
 AddEventHandler("demolition:UpdateKills", function(kills, timer) CurrentKills = kills if timer then end_time = GetNetworkTime()+timer end end)
 
+AddEventHandler("Gamemode:Spawn:7", function()
+    if Sessionised then
+        RequestModel(GetHashKey(ChosenDemolitionModel))
+        while not HasModelLoaded(GetHashKey(ChosenDemolitionModel)) do
+            RequestModel(GetHashKey(ChosenDemolitionModel))
+            Citizen.Wait(0)
+        end
+        local veh = CreateVehicle(GetHashKey(ChosenDemolitionModel), GetEntityCoords(PlayerPedId(), true), 0.0, true, true)
+        SetModelAsNoLongerNeeded(GetHashKey(ChosenDemolitionModel))
+        SetPedIntoVehicle(PlayerPedId(), veh, -1)
+        SetPlayerInvincible(PlayerId(), true)
+        SetEntityInvincible(veh, true)
+        SetVehicleDoorsLocked(veh, 4)
+    end
+end)
+
 function StartDemolition()
     RequestModel(GetHashKey(ChosenDemolitionModel))
     while not HasModelLoaded(GetHashKey(ChosenDemolitionModel)) do
@@ -105,6 +124,7 @@ function StartDemolition()
         Citizen.Wait(0)
     end
     local veh = CreateVehicle(GetHashKey(ChosenDemolitionModel), GetEntityCoords(PlayerPedId(), true), 0.0, true, true)
+    SetModelAsNoLongerNeeded(GetHashKey(ChosenDemolitionModel))
     SetPedIntoVehicle(PlayerPedId(), veh, -1)
     SetPlayerInvincible(PlayerId(), true)
     SetEntityInvincible(veh, true)
