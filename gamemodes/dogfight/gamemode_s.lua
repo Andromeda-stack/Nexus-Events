@@ -108,10 +108,10 @@ AddEventHandler("Gamemode:PollRandomCoords:8", function()
     print(json.encode(CurrentCoords))
 end)
 
-AddEventHandler("Gamemode:Kill:8", function()
+AddEventHandler("Gamemode:Kill:8", function(killerid)
     if SessionActive then
-        PlayerList[tonumber(getDogfightPlayerIndex(source))].kills = PlayerList[tonumber(getDogfightPlayerIndex(source))].kills + 1
-        TriggerClientEvent("dogfight:UpdateKills", source, PlayerList[tonumber(getDogfightPlayerIndex(source))].kills)
+        PlayerList[tonumber(getDogfightPlayerIndex(killerid))].kills = PlayerList[tonumber(getDogfightPlayerIndex(killerid))].kills + 1
+        TriggerClientEvent("dogfight:UpdateKills", killerid, PlayerList[tonumber(getDogfightPlayerIndex(killerid))].kills)
     end
 end)
 
