@@ -157,9 +157,8 @@ function Scaleform.RenderEndScreen(xp, money, win)
 	end)
 end
 
-function Scaleform.ShowXPGain(xp, lowlimit, uplimit, levelup)
--- TODO
--- https://github.com/IllusiveTea/FiveM-Scaleforms/blob/master/Lua.md#hud-rankup-bar
--- https://scaleform.devtesting.pizza/#mp_rank_bar
-
+function Scaleform.InitializeXP(xp, lowlimit, uplimit, gain)
+    SCALEFORM_RANKBAR = RequestHudScaleform(19)
+    Scaleform.CallHudFunction(SCALEFORM_RANKBAR, false, "SET_RANK_SCORES", lowlimit, uplimit, xp, xp + gain, math.floor(xp/1000))
+    Scaleform.CallHudFunction(SCALEFORM_RANKBAR, false, "SET_COLOUR", 116)
 end

@@ -1,5 +1,6 @@
 local firstspawn = true
 Money = 0
+XP = 0
 
 RegisterNetEvent("Nexus:UpdateMoney")
 
@@ -27,6 +28,7 @@ AddEventHandler("playerSpawned", function()
 		TriggerServerEvent("Voting:Join")
 		Citizen.CreateThread(function()
 			local lastmoney
+			local lastxp
 			TriggerServerEvent("PollMoney")
 			while true do
 				Wait(0)
@@ -39,6 +41,11 @@ AddEventHandler("playerSpawned", function()
 					StatSetInt("MP0_WALLET_BALANCE", Money, -1)
 					print(Money)
 				end
+				if XP ~= lastxp then
+					Scaleform.InitializeXP(lastxp, math.floor(xp/1000)*1000, math.floor((xp+1000)/1000)*1000, XP-lastxp)
+					print(XP)
+				end
+				lastxp = XP
 				lastmoney = Money
 			end
 		end)
@@ -49,7 +56,7 @@ AddEventHandler("playerSpawned", function()
 	end
 end)
 
-AddEventHandler("Nexus:UpdateMoney", function(money) Money=money end)
+AddEventHandler("Nexus:UpdateMoney", function(money, xp) Money=money XP=xp end)
 
 AddEventHandler('gameEventTriggered', function (name, args)
 	print('game event ' .. name .. ' (' .. json.encode(args) .. ')')
