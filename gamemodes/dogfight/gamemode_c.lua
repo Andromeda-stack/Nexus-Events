@@ -110,9 +110,12 @@ AddEventHandler("Gamemode:Spawn:8", function()
             Citizen.Wait(0)
         end
         local veh = CreateVehicle(GetHashKey(ChosenDogfightModel), GetEntityCoords(PlayerPedId(), true), 0.0, true, true)
+        SetEntityCollision(veh, false, false)
         SetModelAsNoLongerNeeded(GetHashKey(ChosenDogfightModel))
         SetPedIntoVehicle(PlayerPedId(), veh, -1)
         SetVehicleDoorsLocked(veh, 4)
+        SetVehicleForwardSpeed(veh, 300.0)
+        SetEntityCollision(veh, true, true)
     end
 end)
 
@@ -123,8 +126,12 @@ function StartDogfight()
         Citizen.Wait(0)
     end
     local veh = CreateVehicle(GetHashKey(ChosenDogfightModel), GetEntityCoords(PlayerPedId(), true), 0.0, true, true)
+    SetEntityCollision(veh, false, false)
+    SetModelAsNoLongerNeeded(GetHashKey(ChosenDogfightModel))
     SetPedIntoVehicle(PlayerPedId(), veh, -1)
     SetVehicleDoorsLocked(veh, 4)
+    SetVehicleForwardSpeed(veh, 300.0)
+    SetEntityCollision(veh, true, true)
     Citizen.CreateThread(function()
         for i = 0, 255 do
             local entity = GetPlayerPed(i)
