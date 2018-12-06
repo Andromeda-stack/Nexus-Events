@@ -159,6 +159,7 @@ end
 
 function Scaleform.InitializeXP(xp, lowlimit, uplimit, gain)
     SCALEFORM_RANKBAR = RequestHudScaleform(19)
+    while not HasHudScaleformLoaded(19) do Wait(0) end
     Scaleform.CallHudFunction(SCALEFORM_RANKBAR, false, "SET_RANK_SCORES", lowlimit, uplimit, xp, xp + gain, math.floor(xp/1000))
     Scaleform.CallHudFunction(SCALEFORM_RANKBAR, false, "SET_COLOUR", 116)
 end
