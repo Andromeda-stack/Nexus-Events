@@ -13,9 +13,6 @@ Citizen.CreateThread(function()
 
 	while true do
 		Citizen.Wait(0)
-		--GUI.DrawBar(0.13, "SHAYAN'S KILLED", "5", nil, 2)
-		--GUI.DrawBar(0.13, "CHEESE EATEN", "200", nil, 3)
-		--Scaleform.Render2D(Instructional)
 	end
 end)
 AddEventHandler("playerSpawned", function()
@@ -27,14 +24,15 @@ AddEventHandler("playerSpawned", function()
 		TriggerServerEvent("Freeroam:Join")
 		TriggerServerEvent("Voting:Join")
 		Citizen.CreateThread(function()
-			local lastmoney
-			local lastxp
+			local lastmoney = 0
+			local lastxp = 0
 			TriggerServerEvent("PollMoney")
 			while true do
 				Wait(0)
 				if IsControlJustPressed(0, 48) then
 					ShowHudComponentThisFrame(4) 
 					DisplayCash(false) --we don't need bank stuff
+					Scaleform.InitializeXP(XP, math.floor(XP/1000)*1000, math.floor((XP+1000)/1000)*1000, 0)
 					Misc.DoCountdown(5190)
 				end
 				if Money ~= lastmoney then
@@ -42,7 +40,7 @@ AddEventHandler("playerSpawned", function()
 					print(Money)
 				end
 				if XP ~= lastxp then
-					Scaleform.InitializeXP(lastxp, math.floor(xp/1000)*1000, math.floor((xp+1000)/1000)*1000, XP-lastxp)
+					Scaleform.InitializeXP(lastxp, math.floor(lastxp/1000)*1000, math.floor((lastxp+1000)/1000)*1000, XP-lastxp)
 					print(XP)
 				end
 				lastxp = XP

@@ -80,7 +80,7 @@ AddEventHandler("Gamemode:Start:8", function(g)
                 TriggerClientEvent("Gamemode:End:8", winner, winner, math.floor(xp))
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
-                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10), user.xp + xp)
                 end)
             else
                 local xp = v.kills * 50
@@ -88,7 +88,7 @@ AddEventHandler("Gamemode:Start:8", function(g)
                 TriggerClientEvent("Gamemode:End:8", v.serverId, winner, math.floor(xp))
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
-                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10), user.xp + xp)
                 end)
             end
         end

@@ -172,7 +172,7 @@ function EndGunGame(winner)
                 TriggerClientEvent("Gamemode:End:4", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
-                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10), user.xp + xp)
                 end)
             else
                 local identifier = Misc.GetPlayerSteamId(v.serverId)
@@ -181,7 +181,7 @@ function EndGunGame(winner)
                 TriggerClientEvent("Gamemode:End:4", v.serverId, winner, xp)
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.") end)
-                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10))
+                    TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10), user.xp + xp)
                 end)
             end
         end

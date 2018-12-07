@@ -62,7 +62,7 @@ AddEventHandler("PollMoney", function()
 			if not result then
 				print("^1[ERROR]^7 user not found.")
 			else
-				TriggerClientEvent("Nexus:UpdateMoney", source, result.money)
+				TriggerClientEvent("Nexus:UpdateMoney", source, result.money, result.xp)
 			end
 		end)
 	else
