@@ -7,7 +7,7 @@ Gamemodes = {
 	{id = 6, title="Sabotage", desc="Destroy the Objectives.", txd="mpweaponscommon", txn="w_ex_pe"},
 	{id = 7, title="Demolition", desc="Don't you have anything better to do other than smash into cars at extraordinarily high speeds?", txd="mpweaponscommon", txn="w_lr_rpg"},
 	{id = 8, title="Dogfight", desc="a Free For All with a little twist: planes!", txd="pilotschool", txn="flightschool_logo_256"},
-	{id = 9, title="Coming soon™", desc="", txd="mpweaponsgang0", txn="signal2"},
+	{id = 9, title="Themed Team Deathmatch", desc="Ever wanted to fight dressed up like a stage actor? Now you can.", txd="mpweaponsgang0", txn="w_ar_advancedrifle"},
 	{id = 10, title="Coming soon™", desc="", txd="mpweaponsgang0", txn="signal2"},
 }
 
