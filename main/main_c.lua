@@ -18,8 +18,7 @@ end)
 AddEventHandler("playerSpawned", function()
 	if firstspawn then
 		for k,v in pairs(Gamemodes) do
-			--needs a fix
-			TriggerEvent("Gamemode:Join:"..v.id)
+			TriggerServerEvent("Gamemode:Join:"..v.id)
 		end
 		TriggerServerEvent("Freeroam:Join")
 		TriggerServerEvent("Voting:Join")

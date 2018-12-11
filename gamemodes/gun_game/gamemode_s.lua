@@ -31,7 +31,11 @@ RegisterNetEvent("Gamemode:UpdatePlayers:4")
 RegisterNetEvent("Gamemode:Heartbeat:4")
 RegisterNetEvent("Gamemode:PollRandomCoords:4")
 RegisterNetEvent("Gamemode:UpdateUI:4")
---RegisterNetEvent("Gamemode:Join:4")
+RegisterNetEvent("Gamemode:Join:4")
+
+AddEventHandler("Gamemode:Join:4", function()
+    TriggerClientEvent("Gamemode:Join:4", source)
+end)
 
 AddEventHandler("Gamemode:Leave:4", function(s)
     if SessionActive then
