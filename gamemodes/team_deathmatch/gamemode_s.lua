@@ -64,7 +64,7 @@ AddEventHandler("Gamemode:Start:9", function(g)
             if v.team == winner then
                 local identifier = Misc.GetPlayerSteamId(winner)
                 local xp = 2 * v.kills * 50
-                TriggerClientEvent("Gamemode:End:9", winner, winner, math.floor(xp))
+                TriggerClientEvent("Gamemode:End:9", v.serverId, true, math.floor(xp))
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
                     TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10), user.xp + xp)
@@ -72,7 +72,7 @@ AddEventHandler("Gamemode:Start:9", function(g)
             else
                 local xp = v.kills * 50
                 local identifier = Misc.GetPlayerSteamId(v.serverId)
-                TriggerClientEvent("Gamemode:End:9", v.serverId, winner, math.floor(xp))
+                TriggerClientEvent("Gamemode:End:9", v.serverId, false, math.floor(xp))
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
                     TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10), user.xp + xp)
@@ -141,7 +141,7 @@ function getTDMPlayerIndex(id)
     end
 end
 
-function getTDMWinner()
+--[[ function getTDMWinner()
     local winner
     for i,v in ipairs(PlayerList) do
         if not winner then
@@ -151,7 +151,7 @@ function getTDMWinner()
         end
     end
     return winner
-end
+end ]]
 
 function InitTDMPlayers()
     local switch = true

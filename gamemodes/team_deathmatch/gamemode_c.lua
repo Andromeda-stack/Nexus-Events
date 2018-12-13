@@ -84,16 +84,16 @@ AddEventHandler("Gamemode:Init:9", function()
     StartTDM()
 end)
 
-AddEventHandler("Gamemode:FetchCoords:9", function(Coords)
+AddEventHandler("Gamemode:FetchCoords:9", function(Coords, Center, Model)
     print(json.encode(Coords))
     for i,v in ipairs(Coords) do
         local Coord = {}
          Coord.x, Coord.y, Coord.z = table.unpack(Misc.SplitString(v, ","))
          print("adding spawnpoint")
-        SpawnManager.addSpawnPoint({x = tonumber(Coord.x), y = tonumber(Coord.y), z = tonumber(Coord.z), heading = 0.0, model=1657546978})
+        SpawnManager.addSpawnPoint({x = tonumber(Coord.x), y = tonumber(Coord.y), z = tonumber(Coord.z), heading = 0.0, model=Model})
     end
     local r = math.random(1, #Coords)
-    CurrentCenter["x"], CurrentCenter["y"], CurrentCenter["z"] = table.unpack(Misc.SplitString(Coords[r], ","))
+    CurrentCenter["x"], CurrentCenter["y"], CurrentCenter["z"] = table.unpack(Misc.SplitString(Center, ","))
     SpawnManager.forceRespawn()
 end)
 
@@ -116,7 +116,35 @@ function StartTDM()
                 GUI.MissionText("Kill the ~r~Enemy~s~!", 1, 1)
                 GUI.DrawBar(0.13, "KILLS", CurrentKills, nil, 2)
                 GUI.DrawTimerBar(0.13, "GAME END", ((end_time - GetNetworkTime()) / 1000), 1)
+                DrawMarker(1, CurrentCenter.x, CurrentCenter.y, CurrentCenter.z - 300, 0, 0, 0, 0, 0, 0, 300.0, 300.0, 500.0, 0, 0, 255, 200, 0, 0, 0, 0)
             else
+                end_time = nil
+            end
+        end
+    end)
+
+    Citizen.CreateThread(function()
+        local ShardS = Scaleform.Request("MP_BIG_MESSAGE_FREEMODE")
+
+        Scaleform.CallFunction(ShardS, false, "SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "~r~LEAVING AREA", "Head back to the battle!")        
+        local end_time
+        while Sessionised do
+            Citizen.Wait(0)
+            local pCoords = GetEntityCoords(PlayerPedId(), true)
+            if Misc.Distance(pCoords.x,CurrentCenter.x,pCoords.y,CurrentCenter.y) > 150.0  then
+                if not end_time then end_time = GetNetworkTime() + 30000 end
+
+                if (end_time - GetNetworkTime()) > 0 then
+                    GUI.MissionText("Go to the ~b~shootout.", 1, 1)
+                    Scaleform.Render2D(ShardS)
+                    GUI.DrawTimerBar(0.13, "LEAVING AREA", ((end_time - GetNetworkTime()) / 1000), 1)
+                    --SetBlipAlpha(Blip, 255)
+                else
+                    ExplodePedHead(PlayerPedId(), 0x1D073A89)
+                    SpawnManager.forceRespawn()
+                end
+            else
+                SetBlipAlpha(Blip, 0)
                 end_time = nil
             end
         end
@@ -124,7 +152,7 @@ function StartTDM()
 end
 
 function EndTDM(winner, xp)
-    Scaleform.RenderEndScreen(xp, xp/10, winner == PlayerServerId)
+    Scaleform.RenderEndScreen(xp, xp/10, winner)
     SetPlayerInvincible(PlayerId(), false)
     Sessionised = false
     end_time = nil
