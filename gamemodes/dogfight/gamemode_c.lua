@@ -158,6 +158,7 @@ end
 function EndDogfight(winner, xp)
     Scaleform.RenderEndScreen(xp, xp/10, winner == PlayerServerId)
     SetPlayerInvincible(PlayerId(), false)
+    SetEntityAsMissionEntity(GetVehiclePedIsIn(PlayerPedId(), false), 1, 1)
     DeleteVehicle(GetVehiclePedIsIn(PlayerPedId(), false))
     Sessionised = false
     end_time = nil
