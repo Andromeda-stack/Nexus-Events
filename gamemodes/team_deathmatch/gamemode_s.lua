@@ -4,28 +4,26 @@ local SessionActive = false
 local SessionRunnable = true
 local AvailableCoords = {
     {
-        "-2259.422, 721.9238, 485.9566",
-        "-1101.947, 1134.098, 486.0484",
-        "532.4417, 1333.049, 439.3664",
-        "487.2827, 5566.592, 832.9461",
-        "3008.877, 5547.023, 477.517",
-        "3301.795, 3191.196, 298.5136",
-        "2108.882, 7.452843, 397.9909",
-        "1912.356, -950.2598, 383.5872",
-        "1805.029, -1788.137, 361.1957",
-        "1191.367, -2561.947, 376.3322",
-        "579.3691, -2790.286, 389.3622",
-        "-18.84352, -2980.181, 427.0648",
-        "-693.3309, -3028.971, 412.061",
-        "-1315.261, -2777.871, 419.8076",
-        "-1961.441, -2275.687, 442.3195",
-        "-3158.529, -1558.504, 296.4935",
-        "-3206.011, -811.1179, 453.3958",
-        "-3298.01, 842.9553, 707.7516",
-        "-3239.455, 2383.894, 822.6985",
-        "-3058.0, 3331.139, 876.6508",
-        "-2922.438, 3946.352, 933.5012",
-        "-2442.659, 4529.723, 988.9813",
+        ['coords'] = {
+            "-2313.08, 437.1, 173.98",
+            "-2343.12, 280.96, 168.98",
+            "-2270.01, 201.15, 169.12",
+            "-2334.46, 243.23, 169.12",
+            "-2315.62, 261.93, 174.12",
+            "-2299.49, 286.95, 184.12",
+            "-2278.35, 286.57, 184.12",
+            "-2249.55, 307.79, 184.12",
+            "-2224.06, 233.01, 174.12",
+            "-2262.93, 205.72, 174.12",
+            "-2326.4, 379.96, 173.98",
+            "-2212.23, 215.88, 174.12",
+            "-2235.71, 265.97, 174.13",
+            "-2259.48, 271.73, 174.6",
+            "-2187.77, 287.58, 169.12"
+        },
+        ['center'] = "-2237.00, 249.719, 176.147",
+        ['model0'] = 1846523796,
+        ['model1'] = 946007720
     }
 }
 local CurrentCoords = {}
@@ -52,18 +50,8 @@ end)
 AddEventHandler("Gamemode:Start:9", function(g)
     Citizen.CreateThread(function()
         CurrentCoords = {}
-        TriggerClientEvent("PrepareGamemode", -1, g, false)
-        Wait(2500)
-        for i,v in ipairs(PlayerList) do
-            local id = Misc.GetPlayerSteamId(v.serverId)
-            db:GetUser(id, function(result)
-                TriggerClientEvent("TDM:ChooseVehicle", v.serverId, result.planes)
-            end)
-        end
-        print("^5[INFO]^7 Waiting for players to select vehicle")
-        while #vehiclechosen ~= #PlayerList do Wait(0) end
-        print("^5[INFO]^7 Vehicle selection is over")
-        TriggerClientEvent("Gamemode:Init:9", -1)
+        TriggerClientEvent("PrepareGamemode", -1, g)
+        InitTDMPlayers()
         Wait(1000)
         TriggerClientEvent("TDM:UpdateKills", -1, 0)
         SessionActive = true
@@ -73,7 +61,7 @@ AddEventHandler("Gamemode:Start:9", function(g)
         end
         local winner = getTDMWinner()
         for i,v in ipairs(PlayerList) do
-            if v.serverId == winner then
+            if v.team == winner then
                 local identifier = Misc.GetPlayerSteamId(winner)
                 local xp = 2 * v.kills * 50
                 TriggerClientEvent("Gamemode:End:9", winner, winner, math.floor(xp))
@@ -108,15 +96,24 @@ AddEventHandler("Gamemode:PollRandomCoords:9", function()
         print("coords were NOT available")
         local r = math.random(1,#AvailableCoords)
         CurrentCoords = AvailableCoords[tonumber(r)]
-        TriggerClientEvent("Gamemode:FetchCoords:9", source, CurrentCoords)
+        TriggerClientEvent("Gamemode:FetchCoords:9", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords['model'..PlayerList[getTDMPlayerIndex(source)].team])
     end
-    print(json.encode(CurrentCoords))
 end)
 
 AddEventHandler("Gamemode:Kill:9", function(killerid)
     if SessionActive then
         PlayerList[tonumber(getTDMPlayerIndex(killerid))].kills = PlayerList[tonumber(getTDMPlayerIndex(killerid))].kills + 1
-        TriggerClientEvent("TDM:UpdateKills", killerid, PlayerList[tonumber(getTDMPlayerIndex(killerid))].kills)
+        local teamkills = 0
+        for i,v in ipairs(PlayerList) do
+            if v.team == PlayerList[tonumber(getTDMPlayerIndex(killerid))].team then
+                teamkills = teamkills + v.kills
+            end
+        end
+        for i,v in ipairs(PlayerList) do
+            if v.team == PlayerList[tonumber(getTDMPlayerIndex(killerid))].team then
+                TriggerClientEvent("TDM:UpdateKills", v.serverId, teamkills)
+            end
+        end
     end
 end)
 
@@ -154,4 +151,12 @@ function getTDMWinner()
         end
     end
     return winner
+end
+
+function InitTDMPlayers()
+    local switch = true
+    for i,v in ipairs(PlayerList) do
+        PlayerList[i].kills = switch and 0 or 1
+        switch = not switch
+    end
 end
