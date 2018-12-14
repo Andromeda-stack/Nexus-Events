@@ -104,8 +104,8 @@ AddEventHandler("Gamemode:PollRandomCoords:9", function()
     end
 end)
 
-AddEventHandler("Gamemode:Kill:9", function(killerid)
-    if SessionActive then
+AddEventHandler("Gamemode:Kill:9", function(killerid, source)
+    if SessionActive and PlayerList[tonumber(getTDMPlayerIndex(killerid))].team ~= PlayerList[tonumber(getTDMPlayerIndex(source))].team then
         PlayerList[tonumber(getTDMPlayerIndex(killerid))].kills = PlayerList[tonumber(getTDMPlayerIndex(killerid))].kills + 1
         local teamkills = 0
         for i,v in ipairs(PlayerList) do
@@ -146,22 +146,23 @@ function getTDMPlayerIndex(id)
     end
 end
 
---[[ function getTDMWinner()
-    local winner
+function getTDMWinner()
+    local kills0 = 0
+    local kills1 = 0
     for i,v in ipairs(PlayerList) do
-        if not winner then
-            winner = v.serverId
-        elseif PlayerList[getTDMPlayerIndex(winner)].kills < v.kills then
-            winner = v.serverId
+        if v.team == "0" then
+            kills0 = kills0 + v.kills
+        else
+            kills1 = kills1 + v.kills
         end
     end
-    return winner
-end ]]
+    return (kills0>kills1) and "0" or "1"
+end
 
 function InitTDMPlayers()
     local switch = true
     for i,v in ipairs(PlayerList) do
-        PlayerList[i].kills = switch and 0 or 1
+        if switch then PlayerList[i].team = "0" else PlayerList[i].team = "1" end
         switch = not switch
     end
 end
