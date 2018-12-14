@@ -34,7 +34,9 @@ RegisterNetEvent("Gamemode:UpdateUI:4")
 RegisterNetEvent("Gamemode:Join:4")
 
 AddEventHandler("Gamemode:Join:4", function()
-    TriggerClientEvent("Gamemode:Join:4", source)
+    if SessionActive then
+        TriggerClientEvent("Gamemode:Join:4", source)
+    end
 end)
 
 AddEventHandler("Gamemode:Leave:4", function(s)

@@ -22,7 +22,7 @@ end)
 
 AddEventHandler("Gamemode:Init:9", function()
     -- this removes the initial spawn, no matter what.
-    --SpawnManager.removeAllSpawnPoints()
+    SpawnManager.removeAllSpawnPoints()
     SpawnManager.removeSpawnPointByCoords({x=3615.9, y=3789.83, z=29.2})
     --print("removing: " .. SpawnIDX[1])
     --print(json.encode(SpawnIDX))
@@ -32,13 +32,13 @@ AddEventHandler("Gamemode:Init:9", function()
 
     TriggerServerEvent("Gamemode:PollRandomCoords:9")
 
-    --[[ N_0xd8295af639fd9cb8(PlayerPedId())
+    N_0xd8295af639fd9cb8(PlayerPedId())
 
     while Citizen.InvokeNative(0x470555300D10B2A5) ~= 8 and Citizen.InvokeNative(0x470555300D10B2A5) ~= 10 do
         Citizen.Wait(0)
     end
 
-    N_0xd8295af639fd9cb8(PlayerPedId()) ]]
+    N_0xd8295af639fd9cb8(PlayerPedId())
     Wait(1000)
     print("CREATING CAMERA")
     view1 = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
@@ -85,7 +85,7 @@ AddEventHandler("Gamemode:Init:9", function()
 end)
 
 AddEventHandler("Gamemode:FetchCoords:9", function(Coords, Center, Model)
-    print(json.encode(Coords))
+    print(json.encode(Center))
     for i,v in ipairs(Coords) do
         local Coord = {}
          Coord.x, Coord.y, Coord.z = table.unpack(Misc.SplitString(v, ","))
@@ -114,9 +114,9 @@ function StartTDM()
 
             if (end_time - GetNetworkTime()) > 0 then
                 GUI.MissionText("Kill the ~r~Enemy~s~!", 1, 1)
-                GUI.DrawBar(0.13, "KILLS", CurrentKills, nil, 2)
-                GUI.DrawTimerBar(0.13, "GAME END", ((end_time - GetNetworkTime()) / 1000), 1)
-                DrawMarker(1, CurrentCenter.x, CurrentCenter.y, CurrentCenter.z - 300, 0, 0, 0, 0, 0, 0, 300.0, 300.0, 500.0, 0, 0, 255, 200, 0, 0, 0, 0)
+                GUI.DrawBar(0.13, "KILLS", CurrentKills, nil, 4)
+                GUI.DrawTimerBar(0.13, "GAME END", ((end_time - GetNetworkTime()) / 1000), 3)
+                DrawMarker(1, tonumber(CurrentCenter.x), tonumber(CurrentCenter.y), tonumber(CurrentCenter.z) - 300, 0, 0, 0, 0, 0, 0, 300.0, 300.0, 500.0, 0, 0, 255, 200, 0, 0, 0, 0)
             else
                 end_time = nil
             end

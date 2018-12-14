@@ -28,6 +28,7 @@ local AvailableCoords = {
 }
 local CurrentCoords = {}
 local timer
+local gm
 
 RegisterNetEvent("Gamemode:UpdatePlayers:9")
 RegisterNetEvent("Gamemode:PollRandomCoords:9")
@@ -42,15 +43,17 @@ AddEventHandler("Gamemode:Leave:9", function(s)
 end)
 
 AddEventHandler("Gamemode:Join:9", function(s)
-    TriggerClientEvent("PrepareGamemode", -1, g)
-    Wait(1000)
-    TriggerClientEvent("TDM:UpdateKills", -1, 0, 600000 - (GetGameTimer() - timer))
+    if SessionActive then
+        -- spectator
+    end
 end)
 
 AddEventHandler("Gamemode:Start:9", function(g)
     Citizen.CreateThread(function()
+        gm = g
         CurrentCoords = {}
         TriggerClientEvent("PrepareGamemode", -1, g)
+        Wait(1000)
         InitTDMPlayers()
         Wait(1000)
         TriggerClientEvent("TDM:UpdateKills", -1, 0)
@@ -91,9 +94,10 @@ end)
 AddEventHandler("Gamemode:PollRandomCoords:9", function()
     if not (#CurrentCoords == 0) then
         print("coords were available")
-        TriggerClientEvent("Gamemode:FetchCoords:9", source, CurrentCoords)
+        TriggerClientEvent("Gamemode:FetchCoords:9", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords['model'..PlayerList[getTDMPlayerIndex(source)].team])
     else
         print("coords were NOT available")
+        print(json.encode(PlayerList))
         local r = math.random(1,#AvailableCoords)
         CurrentCoords = AvailableCoords[tonumber(r)]
         TriggerClientEvent("Gamemode:FetchCoords:9", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords['model'..PlayerList[getTDMPlayerIndex(source)].team])
@@ -136,6 +140,7 @@ end)
 function getTDMPlayerIndex(id)
     for i,v in ipairs(PlayerList) do
         if v.serverId == id then
+            print("^4[INFO]^7 Found "..GetPlayerName(id).."'s index.'")
             return i
         end
     end

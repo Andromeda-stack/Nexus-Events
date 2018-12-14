@@ -72,9 +72,9 @@ AddEventHandler("Gamemode:Leave:7", function(s)
 end)
 
 AddEventHandler("Gamemode:Join:7", function(s)
-    TriggerClientEvent("PrepareGamemode", -1, g)
-    Wait(1000)
-    TriggerClientEvent("demolition:UpdateKills", -1, 0, 600000 - (GetGameTimer() - timer))
+    if SessionActive then
+        -- spectator
+    end
 end)
 
 AddEventHandler("Gamemode:Start:7", function(g)

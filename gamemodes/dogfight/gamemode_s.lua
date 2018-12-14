@@ -45,9 +45,9 @@ AddEventHandler("Gamemode:Leave:8", function(s)
 end)
 
 AddEventHandler("Gamemode:Join:8", function(s)
-    TriggerClientEvent("PrepareGamemode", -1, g)
-    Wait(1000)
-    TriggerClientEvent("dogfight:UpdateKills", -1, 0, 600000 - (GetGameTimer() - timer))
+    if SessionActive then
+        -- spectator
+    end
 end)
 
 AddEventHandler("Gamemode:Start:8", function(g)
