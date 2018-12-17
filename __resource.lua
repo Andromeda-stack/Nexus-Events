@@ -22,6 +22,7 @@ client_scripts {
 	"gamemodes/dogfight/gamemode_c.lua",
 	"gamemodes/dogfight/vehicleselection.lua",
 	"gamemodes/team_deathmatch/gamemode_c.lua",
+	"gamemodes/koth/gamemode_c.lua",
 	--VOTING
 	"voting/vote_c.lua",
 	--MAIN
@@ -42,6 +43,7 @@ server_scripts {
 	"gamemodes/demolition/gamemode_s.lua",
 	"gamemodes/dogfight/gamemode_s.lua",
 	"gamemodes/team_deathmatch/gamemode_s.lua",
+	"gamemodes/koth/gamemode_s.lua",
 	--FUNCTIONS
 	"functions/misc.lua",
 	--SQLITE
