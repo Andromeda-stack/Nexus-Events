@@ -69,3 +69,15 @@ AddEventHandler("PollMoney", function()
 		print("^1[ERROR]^7 the user doesn't have an identifier.")
 	end
 end)
+
+Citizen.CreateThread(function()
+	local done = false
+	while true do
+		Wait(0)
+		if GetNumPlayerIndices() == 0 and not done then
+			for i,v in ipairs(Gamemodes) do
+				--TODO: end game
+			end
+		end
+	end
+end)
