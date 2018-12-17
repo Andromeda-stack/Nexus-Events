@@ -3,6 +3,7 @@ local PlayerServerId = GetPlayerServerId(PlayerId())
 local CurrentKills = 0
 local Sessionised = false
 local CurrentCenter = {}
+local end_time
 
 RegisterNetEvent("Gamemode:Start:8")
 RegisterNetEvent("Gamemode:Session:8")
@@ -139,7 +140,6 @@ function StartDogfight()
                 AddBlipForEntity(entity)
             end
         end
-        local end_time
         while Sessionised do 
             Wait(0)
             if not end_time then end_time = GetNetworkTime() + 600000 end

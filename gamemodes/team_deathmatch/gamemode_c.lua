@@ -3,6 +3,7 @@ local PlayerServerId = GetPlayerServerId(PlayerId())
 local CurrentKills = 0
 local Sessionised = false
 local CurrentCenter = {}
+local end_time
 
 RegisterNetEvent("Gamemode:Start:9")
 RegisterNetEvent("Gamemode:Session:9")
@@ -127,7 +128,6 @@ function StartTDM()
         local ShardS = Scaleform.Request("MP_BIG_MESSAGE_FREEMODE")
 
         Scaleform.CallFunction(ShardS, false, "SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "~r~LEAVING AREA", "Head back to the battle!")        
-        local end_time
         while Sessionised do
             Citizen.Wait(0)
             local pCoords = GetEntityCoords(PlayerPedId(), true)

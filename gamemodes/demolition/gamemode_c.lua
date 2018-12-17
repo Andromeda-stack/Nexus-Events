@@ -3,6 +3,7 @@ local PlayerServerId = GetPlayerServerId(PlayerId())
 local CurrentKills = 0
 local Sessionised = false
 local CurrentCenter = {}
+local end_time
 
 RegisterNetEvent("Gamemode:Start:7")
 RegisterNetEvent("Gamemode:Session:7")
@@ -142,7 +143,6 @@ function StartDemolition()
     end
     Citizen.CreateThread(function()
         local lastvehicle = GetVehiclePedIsIn(PlayerPedId(),false)
-        local end_time
         while Sessionised do 
             Wait(0)
             --GUI.DrawBar(0.13, "LEVEL", GunLevels[tostring(GetPlayerServerId(PlayerId()))], nil, 3)
