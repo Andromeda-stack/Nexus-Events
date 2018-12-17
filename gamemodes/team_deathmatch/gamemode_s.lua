@@ -52,9 +52,10 @@ AddEventHandler("Gamemode:Start:9", function(g)
     Citizen.CreateThread(function()
         gm = g
         CurrentCoords = {}
-        TriggerClientEvent("PrepareGamemode", -1, g)
+        TriggerClientEvent("PrepareGamemode", -1, g, false)
         Wait(1000)
         InitTDMPlayers()
+        TriggerClientEvent("Gamemode:Init:9", -1)
         Wait(1000)
         TriggerClientEvent("TDM:UpdateKills", -1, 0)
         SessionActive = true
@@ -162,7 +163,7 @@ end
 function InitTDMPlayers()
     local switch = true
     for i,v in ipairs(PlayerList) do
-        if switch then PlayerList[i].team = "0" else PlayerList[i].team = "1" end
+        if switch then PlayerList[i].team = "1" else PlayerList[i].team = "0" end
         switch = not switch
     end
 end
