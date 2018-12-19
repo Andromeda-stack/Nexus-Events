@@ -43,7 +43,7 @@ AddEventHandler("Gamemode:Init:10", function()
     Wait(1000)
     print("CREATING CAMERA")
     view1 = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
-    SetCamCoord(view1, tonumber(CurrentCenter.x), tonumber(CurrentCenter.y), tonumber(CurrentCenter.z) + 20)
+    SetCamCoord(view1, tonumber(CurrentCastle.x), tonumber(CurrentCastle.y), tonumber(CurrentCastle.z) + 20)
     SetCamRot(view1, -20.0, 0.0, 180.0)
     SetCamFov(view1, 45.0)
     RenderScriptCams(true, 1, 500,  true,  true)
@@ -119,21 +119,25 @@ function StartKOTH()
 
     -- castle UI stuff loop
     Citizen.CreateThread(function()
-        local blip = AddBlipForRadius(tonumber(Castle.x), tonumber(Castle.y), tonumber(Castle.z, 100.0))
-        SetBlipColour(blip, 27)
+        print(tonumber(CurrentCastle.x), tonumber(CurrentCastle.y), tonumber(CurrentCastle.z))
+        local blip = AddBlipForRadius(tonumber(CurrentCastle.x) + 0.0, tonumber(CurrentCastle.y) + 0.0, tonumber(CurrentCastle.z) + 0.0,200.0)
+        local blip2 = AddBlipForCoord(tonumber(CurrentCastle.x) + 0.0, tonumber(CurrentCastle.y) + 0.0, tonumber(CurrentCastle.z) + 0.0)
+        SetBlipColour(blip, 23)
+        SetBlipColour(blip2, 23)
         SetBlipAlpha(blip, 125)
-        SetBlipSprite(blip, blipsprite)
-        SetBlipAsShortRange(blip, false)
+        SetBlipSprite(blip, 9)
+        SetBlipSprite(blip2, 181)
+        SetBlipAsShortRange(blip2, false)
         BeginTextCommandSetBlipName("STRING")
         AddTextComponentString("~p~CASTLE")
-        EndTextCommandSetBlipName(blip)
+        EndTextCommandSetBlipName(blip2)
         while Sessionised do
             Wait(0)
             local pCoords = GetEntityCoords(PlayerPedId(), true)
-            if Misc.Distance(pCoords.x,pCoords.y,tonumber(Castle.x), tonumber(Castle.y)) > 200.0 then
+            if Misc.Distance(pCoords.x,tonumber(CurrentCastle.x), pCoords.y, tonumber(CurrentCastle.y)) > 200.0 then
                 GUI.MissionText("Enter the ~p~castle area~s~ to get points!", 1, 1)
             else
-                while Misc.Distance(pCoords.x,pCoords.y,tonumber(Castle.x), tonumber(Castle.y)) < 200.0 do
+                while Misc.Distance(pCoords.x,tonumber(CurrentCastle.x), pCoords.y, tonumber(CurrentCastle.y)) < 200.0 do
                     Wait(1000)
                     pCoords = GetEntityCoords(PlayerPedId(), true)
                     TriggerServerEvent("Gamemode:Point:10")
@@ -141,6 +145,7 @@ function StartKOTH()
             end
         end
         RemoveBlip(blip)
+        RemoveBlip(blip2)
     end)
 end
 

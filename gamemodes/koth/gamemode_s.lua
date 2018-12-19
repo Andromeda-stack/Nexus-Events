@@ -74,7 +74,7 @@ RegisterNetEvent("Gamemode:UpdatePlayers:10")
 RegisterNetEvent("Gamemode:PollRandomCoords:10")
 RegisterNetEvent("Gamemode:VehicleDestroyed:10")
 RegisterNetEvent("Gamemode:Join:10")
---RegisterNetEvent("Gamemode:Join:10")
+RegisterNetEvent("Gamemode:Point:10")
 
 AddEventHandler("Gamemode:Leave:10", function(s)
     if SessionActive then
