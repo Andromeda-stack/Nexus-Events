@@ -93,7 +93,7 @@ AddEventHandler("Gamemode:Start:9", function(g)
 end)
 
 AddEventHandler("Gamemode:PollRandomCoords:9", function()
-    if not (#CurrentCoords == 0) then
+    if CurrentCoords.coords then
         print("coords were available")
         TriggerClientEvent("Gamemode:FetchCoords:9", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords['model'..PlayerList[getTDMPlayerIndex(source)].team])
     else
@@ -157,7 +157,7 @@ function getTDMWinner()
             kills1 = kills1 + v.kills
         end
     end
-    return (kills0>kills1) and "0" or "1"
+    if(kills0<kills1) then return "1" else return "0" end
 end
 
 function InitTDMPlayers()

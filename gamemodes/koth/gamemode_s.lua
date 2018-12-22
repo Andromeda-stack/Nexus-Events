@@ -129,9 +129,9 @@ AddEventHandler("Gamemode:Start:10", function(g)
 end)
 
 AddEventHandler("Gamemode:PollRandomCoords:10", function()
-    if not (#CurrentCoords == 0) then
+    if CurrentCoords.Coords then
         print("coords were available")
-        TriggerClientEvent("Gamemode:FetchCoords:10", source, CurrentCoords)
+        TriggerClientEvent("Gamemode:FetchCoords:10", source, CurrentCoords.Coords, CurrentCoords.Castle)
     else
         print("coords were NOT available")
         local r = math.random(1,#AvailableCoords)
