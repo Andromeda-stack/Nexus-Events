@@ -68,7 +68,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_BOTTLE",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 10
   },
   ["3218215474"] = {
     ["weaponHash"] = 3218215474,
@@ -90,7 +91,8 @@ Weapons = {
           ["componentDesc"] = "WCD_SNSP_CLIP2"
         }
       }
-    }
+    },
+    ['price'] = 400
   },
   ["3249783761"] = {
     ["weaponHash"] = 3249783761,
@@ -112,7 +114,8 @@ Weapons = {
           ["componentDesc"] = "WCD_REV_VARG"
         }
       }
-    }
+    },
+    ['price'] = 400
   },
   ["3756226112"] = {
     ["weaponHash"] = 3756226112,
@@ -139,7 +142,8 @@ Weapons = {
           ["componentDesc"] = "WCD_VAR_DESC"
         }
       }
-    }
+    },
+    ['price'] = 40
   },
   ["317205821"] = {
     ["weaponHash"] = 317205821,
@@ -150,7 +154,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_AUTOSHGN",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 2000
   },
   ["3441901897"] = {
     ["weaponHash"] = 3441901897,
@@ -161,7 +166,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_BATTLEAXE",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 100
   },
   ["125959754"] = {
     ["weaponHash"] = 125959754,
@@ -172,7 +178,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_CMPGL",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 10000
   },
   ["3173288789"] = {
     ["weaponHash"] = 3173288789,
@@ -194,7 +201,8 @@ Weapons = {
           ["componentDesc"] = "WCD_MIMG_CLIP2"
         }
       }
-    }
+    },
+    ['price'] = 2500
   },
   ["3125143736"] = {
     ["weaponHash"] = 3125143736,
@@ -205,7 +213,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_PIPEBOMB",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 1000
   },
   ["2484171525"] = {
     ["weaponHash"] = 2484171525,
@@ -216,7 +225,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_POOLCUE",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 50
   },
   ["419712736"] = {
     ["weaponHash"] = 419712736,
@@ -227,7 +237,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_WRENCH",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 40
   },
   ["2874559379"] = {
     ["weaponHash"] = 2874559379,
@@ -238,7 +249,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_PRXMINE",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 4000
   },
   ["1672152130"] = {
     ["weaponHash"] = 1672152130,
@@ -249,7 +261,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_HOMLNCH",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 15000
   },
   ["3219281620"] = {
     ["weaponHash"] = 3219281620,
@@ -366,7 +379,8 @@ Weapons = {
           ["componentDesc"] = nil
         }
       }
-    }
+    },
+    ['price'] = 2000
   },
   ["2024373456"] = {
     ["weaponHash"] = 2024373456,
@@ -533,7 +547,8 @@ Weapons = {
           ["componentDesc"] = nil
         }
       }
-    }
+    },
+    ['price'] = 3000
   },
   ["961495388"] = {
     ["weaponHash"] = 961495388,
@@ -705,7 +720,8 @@ Weapons = {
           ["componentDesc"] = nil
         }
       }
-    }
+    },
+    ['price'] = 5000
   },
   ["4208062921"] = {
     ["weaponHash"] = 4208062921,
@@ -877,7 +893,8 @@ Weapons = {
           ["componentDesc"] = nil
         }
       }
-    }
+    },
+    ['price'] = 4000
   },
   ["3686625920"] = {
     ["weaponHash"] = 3686625920,
@@ -1039,7 +1056,8 @@ Weapons = {
           ["componentDesc"] = nil
         }
       }
-    }
+    },
+    ['price'] = 6000
   },
   ["177293209"] = {
     ["weaponHash"] = 177293209,
@@ -1181,7 +1199,8 @@ Weapons = {
           ["componentDesc"] = nil
         }
       }
-    }
+    },
+    ['price'] = 8000
   },
   ["2343591895"] = {
     ["weaponHash"] = 2343591895,
@@ -1192,7 +1211,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_FLASHLIGHT",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 5
   },
   ["1198879012"] = {
     ["weaponHash"] = 1198879012,
@@ -1203,7 +1223,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_FLAREGUN",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 400
   },
   ["3713923289"] = {
     ["weaponHash"] = 3713923289,
@@ -1214,7 +1235,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_MACHETE",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 100
   },
   ["3675956304"] = {
     ["weaponHash"] = 3675956304,
@@ -1246,7 +1268,8 @@ Weapons = {
           ["componentDesc"] = "WCD_PI_SUPP"
         }
       }
-    }
+    },
+    ['price'] = 1200
   },
   ["4019527611"] = {
     ["weaponHash"] = 4019527611,
@@ -1257,7 +1280,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_DBSHGN",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 2000
   },
   ["1649403952"] = {
     ["weaponHash"] = 1649403952,
@@ -1284,7 +1308,8 @@ Weapons = {
           ["componentDesc"] = "WCD_CLIP3"
         }
       }
-    }
+    },
+    ['price'] = 3000
   },
   ["171789620"] = {
     ["weaponHash"] = 171789620,
@@ -1326,7 +1351,8 @@ Weapons = {
           ["componentDesc"] = "WCD_SCOPE_SML"
         }
       }
-    }
+    },
+    ['price'] = 4000
   },
   ["3523564046"] = {
     ["weaponHash"] = 3523564046,
@@ -1358,7 +1384,8 @@ Weapons = {
           ["componentDesc"] = "WCD_PI_SUPP"
         }
       }
-    }
+    },
+    ['price'] = 400
   },
   ["3231910285"] = {
     ["weaponHash"] = 3231910285,
@@ -1400,7 +1427,8 @@ Weapons = {
           ["componentDesc"] = "WCD_GRIP"
         }
       }
-    }
+    },
+    ['price'] = 4000
   },
   ["3638508604"] = {
     ["weaponHash"] = 3638508604,
@@ -1462,7 +1490,8 @@ Weapons = {
           ["componentDesc"] = "WCD_VAR_DESC"
         }
       }
-    }
+    },
+    ['price'] = 30
   },
   ["3696079510"] = {
     ["weaponHash"] = 3696079510,
@@ -1473,7 +1502,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_MKPISTOL",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 200
   },
   ["2132975508"] = {
     ["weaponHash"] = 2132975508,
@@ -1520,7 +1550,8 @@ Weapons = {
           ["componentDesc"] = "WCD_VAR_BPR"
         }
       }
-    }
+    },
+    ['price'] = 5000
   },
   ["2460120199"] = {
     ["weaponHash"] = 2460120199,
@@ -1531,7 +1562,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_DAGGER",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 40
   },
   ["137902532"] = {
     ["weaponHash"] = 137902532,
@@ -1558,7 +1590,8 @@ Weapons = {
           ["componentDesc"] = "WCD_PI_SUPP"
         }
       }
-    }
+    },
+    ['price'] = 200
   },
   ["2138347493"] = {
     ["weaponHash"] = 2138347493,
@@ -1569,7 +1602,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_FIREWRK",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 10000
   },
   ["2828843422"] = {
     ["weaponHash"] = 2828843422,
@@ -1580,7 +1614,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_MUSKET",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 300
   },
   ["984333226"] = {
     ["weaponHash"] = 984333226,
@@ -1622,7 +1657,8 @@ Weapons = {
           ["componentDesc"] = "WCD_GRIP"
         }
       }
-    }
+    },
+    ['price'] = 3000
   },
   ["3342088282"] = {
     ["weaponHash"] = 3342088282,
@@ -1669,7 +1705,8 @@ Weapons = {
           ["componentDesc"] = "WCD_VAR_MKRF"
         }
       }
-    }
+    },
+    ['price'] = 7000
   },
   ["1627465347"] = {
     ["weaponHash"] = 1627465347,
@@ -1691,7 +1728,8 @@ Weapons = {
           ["componentDesc"] = "WCD_GSNB_CLIP2"
         }
       }
-    }
+    },
+    ['price'] = 800
   },
   ["4191993645"] = {
     ["weaponHash"] = 4191993645,
@@ -1702,7 +1740,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_HATCHET",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 250
   },
   ["1834241177"] = {
     ["weaponHash"] = 1834241177,
@@ -1713,7 +1752,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_RAILGUN",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 15000
   },
   ["2285322324"] = {
     ["weaponHash"] = 2285322324,
@@ -1830,7 +1870,8 @@ Weapons = {
           ["componentDesc"] = nil
         }
       }
-    }
+    },
+    ['price'] = 400
   },
   ["3415619887"] = {
     ["weaponHash"] = 3415619887,
@@ -1942,7 +1983,8 @@ Weapons = {
           ["componentDesc"] = nil
         }
       }
-    }
+    },
+    ['price'] = 400
   },
   ["2548703416"] = {
     ["weaponHash"] = 2548703416,
@@ -1953,7 +1995,8 @@ Weapons = {
     ["weaponUppercase"] = "WTU_REV_DA",
     ["weaponComponents"] = {
       ["components"] = {}
-    }
+    },
+    ['price'] = 400
   },
   ["2526821735"] = {
     ["weaponHash"] = 2526821735,
@@ -2125,7 +2168,8 @@ Weapons = {
           ["componentDesc"] = nil
         }
       }
-    }
+    },
+    ['price'] = 4000
   },
   ["2228681469"] = {
     ["weaponHash"] = 2228681469,
@@ -2297,7 +2341,8 @@ Weapons = {
           ["componentDesc"] = nil
         }
       }
-    }
+    },
+    ['price'] = 4000
   },
   ["1432025498"] = {
     ["weaponHash"] = 1432025498,
@@ -2419,7 +2464,8 @@ Weapons = {
           ["componentDesc"] = nil
         }
       }
-    }
+    },
+    ['price'] = 5000
   },
   ["1785463520"] = {
     ["weaponHash"] = 1785463520,
@@ -2591,6 +2637,7 @@ Weapons = {
           ["componentDesc"] = nil
         }
       }
-    }
+    },
+    ['price'] = 9000
   }
 }

@@ -1,11 +1,14 @@
 local ready = false
 local Sessionised = false
 RegisterNetEvent("Freeroam:Start")
+RegisterNetEvent("Freeroam:BoughtGun")
 
 AddEventHandler("Freeroam:Start", function(msec)
-    ready = false
-    Sessionised = true
-    Main(msec)
+    if not Sessionised then
+        ready = false
+        Sessionised = true
+        Main(msec)
+    end
 end)
 
 RegisterNetEvent("Freeroam:End")
@@ -20,20 +23,52 @@ function Main(msec)
 
     local ammunationblips = {}
 
-    for i,v in ipairs(Ammunations) do
-        ammunationblips[#ammunationblips + 1] = AddBlipForCoord(v.x, v.y, v.z)
-        SetBlipSprite(ammunationblips[#ammunationblips], 110)
-        SetBlipColour(ammunationblips[#ammunationblips], 38)
-    end
     Citizen.CreateThread(function()
-        while true do
+        for i,v in ipairs(Ammunations) do
+            ammunationblips[#ammunationblips + 1] = AddBlipForCoord(v.x, v.y, v.z)
+            SetBlipSprite(ammunationblips[#ammunationblips], 110)
+            SetBlipColour(ammunationblips[#ammunationblips], 38)
+        end
+
+        local menuopen = false
+        while Sessionised do
             Wait(0)
             for i,v in ipairs(ammunationblips) do
                 local coords = GetBlipCoords(v)
                 local pcoords = GetEntityCoords(PlayerPedId())
                 DrawMarker(1, coords.x, coords.y, coords.z, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 0.5, 0, 0, 255, 200, 0, 0, 0, 0)
-                if Misc.Distance(coords.x,pcoords.x,coords.y,pcoords.y) then
+                if Misc.Distance(coords.x,pcoords.x,coords.y,pcoords.y) < 1.2 and not menuopen then
+                    print("BLIP: "..coords.." PLAYER: "..pcoords)
+                    print("opening menu")
+                    menuopen = true
+                    Citizen.CreateThread(function()
+                        local v = v
+                        print("BLIP ID: "..v)
+                        Wait(100)
+                        if not JayMenu.IsMenuOpened('ammunation') then
+                            JayMenu.OpenMenu('ammunation')
+                        end
+                        local coords = GetBlipCoords(v)
+                        local pcoords = GetEntityCoords(PlayerPedId())                  
+                        while Misc.Distance(coords.x,pcoords.x,coords.y,pcoords.y) < 1.2 and Sessionised do
+                            coords = GetBlipCoords(v)
+                            pcoords = GetEntityCoords(PlayerPedId())    
+                            if JayMenu.IsMenuOpened('ammunation') then
+                                for k,v in pairs(Weapons) do
+                                    if JayMenu.Button(GetLabelText(v.textLabel).. " - $" .. v.price) then
+                                        print("bought a new gun")
+                                        TriggerServerEvent("Freeroam:BoughtGun", tonumber(k), GetLabelText(v.textLabel))
+                                    end
+                                end
                     
+                                JayMenu.Display()
+                            end
+                    
+                            Citizen.Wait(0)
+                        end
+                        JayMenu.CloseMenu()
+                        menuopen = false
+                    end)
                 end
             end
         end
@@ -64,3 +99,6 @@ function Main(msec)
     end)
 end
 
+AddEventHandler("Freeroam:BoughtGun", function(success, msg)
+    GUI.DrawGameNotification(msg, true)
+end)

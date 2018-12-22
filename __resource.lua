@@ -12,6 +12,7 @@ client_scripts {
 	"functions/gui.lua",
 	"functions/misc.lua",
 	"functions/SpawnManager.lua",
+	"functions/menu.lua",
 	--Gamemodes
 	"gamemodes/gamemode_handler_c.lua",
 	"gamemodes/gun_game/gamemode_c.lua",

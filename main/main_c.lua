@@ -17,6 +17,7 @@ Citizen.CreateThread(function()
 end)
 AddEventHandler("playerSpawned", function()
 	if firstspawn then
+		JayMenu.CreateMenu('ammunation', "Ammunation")
 		for k,v in pairs(Gamemodes) do
 			TriggerServerEvent("Gamemode:Join:"..v.id)
 		end
