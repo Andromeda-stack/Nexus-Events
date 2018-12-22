@@ -89,7 +89,7 @@ AddEventHandler("Gamemode:Start:7", function(g)
             end)
         end
         print("^5[INFO]^7 Waiting for players to select vehicle")
-        while #vehiclechosen ~= #PlayerList do Wait(0) end
+        while #vehiclechosen < #PlayerList do Wait(0) end
         print("^5[INFO]^7 Vehicle selection is over")
         TriggerClientEvent("Gamemode:Init:7", -1)
         Wait(1000)
