@@ -41,8 +41,8 @@ end)
 
 AddEventHandler("Gamemode:Leave:4", function(s)
     if SessionActive then
-        GunLevels[s] = nil
-        PlayerList[getGunGamePlayerIndex(s)] = nil
+        GunLevels[tostring(s)] = nil
+        table.remove(PlayerList, getGunGamePlayerIndex(s))
         TriggerClientEvent("gun_game:UpdateLevels", -1, GunLevels, PlayerList)
     end
 end)

@@ -78,7 +78,7 @@ RegisterNetEvent("Gamemode:Point:10")
 
 AddEventHandler("Gamemode:Leave:10", function(s)
     if SessionActive then
-        PlayerList[getKOTHPlayerIndex(s)] = nil
+        table.remove(PlayerList, getKOTHPlayerIndex(s))
     end
 end)
 

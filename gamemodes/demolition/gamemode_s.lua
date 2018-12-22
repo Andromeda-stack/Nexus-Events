@@ -67,7 +67,7 @@ RegisterNetEvent("Gamemode:Join:7")
 
 AddEventHandler("Gamemode:Leave:7", function(s)
     if SessionActive then
-        PlayerList[getDemolitionPlayerIndex(s)] = nil
+        table.remove(PlayerList, getDemolitionPlayerIndex(s))
     end
 end)
 
