@@ -80,8 +80,10 @@ function Main(msec)
             Wait(0)
             if (end_time - GetNetworkTime()) > 0 then
                 local readystr = ready and "~g~READY" or "~r~NOT READY"
-                GUI.DrawTimerBar(0.13, "NEXT MATCH", ((end_time - GetNetworkTime()) / 1000), 1)
-                GUI.DrawBar(0.13, "STATUS", readystr, nil, 3)
+		local instructional = GUI.InstructionalButtons(57, "Set As Ready")
+                GUI.DrawTimerBar(0.13, "NEXT MATCH", ((end_time - GetNetworkTime()) / 1000), 3)
+                GUI.DrawBar(0.13, "STATUS", readystr, nil, 5)
+		Scaleform.Render2D(instructional)
             else
                 ready = false
                 Sessionised = false
