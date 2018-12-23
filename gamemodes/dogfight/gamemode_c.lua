@@ -136,8 +136,9 @@ function StartDogfight()
     Citizen.CreateThread(function()
         for i = 0, 255 do
             local entity = GetPlayerPed(i)
+            local blips = {}
             if DoesEntityExist(entity) then
-                AddBlipForEntity(entity)
+                blips[#blips + 1] = AddBlipForEntity(entity)
             end
         end
         while Sessionised do 
@@ -151,6 +152,9 @@ function StartDogfight()
             else
                 end_time = nil
             end
+        end
+        for i,v in ipairs(blips) do
+            RemoveBlip(v)
         end
     end)
 end
