@@ -95,13 +95,19 @@ end)
 AddEventHandler("Gamemode:PollRandomCoords:9", function()
     if CurrentCoords.coords then
         print("coords were available")
-        TriggerClientEvent("Gamemode:FetchCoords:9", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords['model'..PlayerList[getTDMPlayerIndex(source)].team])
+        local id = Misc.GetPlayerSteamId(v.serverId)
+        db:GetUser(id, function(result)
+            TriggerClientEvent("Gamemode:FetchCoords:9", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords['model'..PlayerList[getTDMPlayerIndex(source)].team], result.weapons)
+        end)
     else
         print("coords were NOT available")
         print(json.encode(PlayerList))
         local r = math.random(1,#AvailableCoords)
         CurrentCoords = AvailableCoords[tonumber(r)]
-        TriggerClientEvent("Gamemode:FetchCoords:9", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords['model'..PlayerList[getTDMPlayerIndex(source)].team])
+        local id = Misc.GetPlayerSteamId(v.serverId)
+        db:GetUser(id, function(result)
+            TriggerClientEvent("Gamemode:FetchCoords:9", source, CurrentCoords.coords, CurrentCoords.center, CurrentCoords['model'..PlayerList[getTDMPlayerIndex(source)].team], result.weapons)
+        end)
     end
 end)
 

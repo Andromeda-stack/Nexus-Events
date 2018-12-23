@@ -4,6 +4,7 @@ local CurrentKills = 0
 local Sessionised = false
 local CurrentCenter = {}
 local end_time
+local CurrentWeapons = {}
 
 RegisterNetEvent("Gamemode:Start:9")
 RegisterNetEvent("Gamemode:Session:9")
@@ -85,7 +86,7 @@ AddEventHandler("Gamemode:Init:9", function()
     StartTDM()
 end)
 
-AddEventHandler("Gamemode:FetchCoords:9", function(Coords, Center, Model)
+AddEventHandler("Gamemode:FetchCoords:9", function(Coords, Center, Model, Weapons)
     print(json.encode(Center))
     for i,v in ipairs(Coords) do
         local Coord = {}
@@ -93,6 +94,7 @@ AddEventHandler("Gamemode:FetchCoords:9", function(Coords, Center, Model)
          print("adding spawnpoint")
         SpawnManager.addSpawnPoint({x = tonumber(Coord.x), y = tonumber(Coord.y), z = tonumber(Coord.z), heading = 0.0, model=Model})
     end
+    CurrentWeapons = Weapons
     local r = math.random(1, #Coords)
     CurrentCenter["x"], CurrentCenter["y"], CurrentCenter["z"] = table.unpack(Misc.SplitString(Center, ","))
     SpawnManager.forceRespawn()
@@ -107,6 +109,15 @@ AddEventHandler("Gamemode:Spawn:9", function()
 end)
 
 function StartTDM()
+    Citizen.CreateThread(function()
+        while Sessionised do
+            for i,v in ipairs(CurrentWeapons) do
+                if not HasPedGotWeapon(PlayerPedId(), weaponHash, false) or GetSelectedPedWeapon(PlayerPedId()) ~= v then
+                    GiveWeaponToPed(PlayerPedId(), v, 50000, false, true)
+                end
+            end
+        end
+    end)
     Citizen.CreateThread(function()
         local end_time
         while Sessionised do 
