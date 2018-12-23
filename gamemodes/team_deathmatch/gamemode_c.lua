@@ -110,9 +110,17 @@ end)
 
 function StartTDM()
     Citizen.CreateThread(function()
+        print(json.encode(CurrentWeapons))
         while Sessionised do
+            Wait(0)
             for i,v in ipairs(CurrentWeapons) do
-                if not HasPedGotWeapon(PlayerPedId(), weaponHash, false) or GetSelectedPedWeapon(PlayerPedId()) ~= v then
+                v = math.floor(v)
+                if not HasPedGotWeapon(PlayerPedId(), v, false) then
+                    print("GIVING WEAPON: "..v)
+                    RequestWeaponAsset(v, 31, 0)
+                    while not HasWeaponAssetLoaded(v) do
+                        Wait(0)
+                    end
                     GiveWeaponToPed(PlayerPedId(), v, 50000, false, true)
                 end
             end
