@@ -167,6 +167,14 @@ function StartKOTH()
         RemoveBlip(blip)
         RemoveBlip(blip2)
     end)
+
+    Citizen.CreateThread(function()
+        while Sessionised do
+            Citizen.Wait(0)
+            SetCanAttackFriendly(GetPlayerPed(-1), true, false)
+            NetworkSetFriendlyFireOption(true)
+        end
+    end)
 end
 
 function EndKOTH(winner, xp)
