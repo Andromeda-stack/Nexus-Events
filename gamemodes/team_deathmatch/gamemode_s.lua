@@ -83,7 +83,7 @@ AddEventHandler("Gamemode:Start:9", function(g)
                 end)
             end
         end
-        print("^5[INFO]^7 Game ended. Winner: " .. GetPlayerName(winner))
+        print("^5[INFO]^7 Game ended. Winner: " .. winner)
         SessionActive = false
         PlayerList = {}
         Citizen.Wait(16000)

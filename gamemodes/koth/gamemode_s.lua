@@ -131,12 +131,18 @@ end)
 AddEventHandler("Gamemode:PollRandomCoords:10", function()
     if CurrentCoords.Coords then
         print("coords were available")
-        TriggerClientEvent("Gamemode:FetchCoords:10", source, CurrentCoords.Coords, CurrentCoords.Castle)
+        local source = source
+        db:GetUser(id, function(result)
+            TriggerClientEvent("Gamemode:FetchCoords:10", source, CurrentCoords.Coords, CurrentCoords.Castle, result.weapons)
+        end)
     else
         print("coords were NOT available")
         local r = math.random(1,#AvailableCoords)
         CurrentCoords = AvailableCoords[tonumber(r)]
-        TriggerClientEvent("Gamemode:FetchCoords:10", source, CurrentCoords.Coords, CurrentCoords.Castle)
+        local source = source
+        db:GetUser(id, function(result)
+            TriggerClientEvent("Gamemode:FetchCoords:10", source, CurrentCoords.Coords, CurrentCoords.Castle, result.weapons)
+        end)    
     end
     --print(json.encode(CurrentCoords))
 end)

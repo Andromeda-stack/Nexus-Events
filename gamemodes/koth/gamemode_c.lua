@@ -4,6 +4,7 @@ local CurrentPoints = 0
 local Sessionised = false
 local CurrentCastle = {}
 local end_time
+local CurrentWeapons = {}
 
 RegisterNetEvent("Gamemode:Start:10")
 RegisterNetEvent("Gamemode:Session:10")
@@ -88,13 +89,14 @@ AddEventHandler("Gamemode:Init:10", function()
     StartKOTH()
 end)
 
-AddEventHandler("Gamemode:FetchCoords:10", function(Coords, Castle)
+AddEventHandler("Gamemode:FetchCoords:10", function(Coords, Castle, Weapons)
     for i,v in ipairs(Coords) do
         local Coord = {}
          Coord.x, Coord.y, Coord.z = table.unpack(Misc.SplitString(v, ","))
          print("adding spawnpoint")
         SpawnManager.addSpawnPoint({x = tonumber(Coord.x), y = tonumber(Coord.y), z = tonumber(Coord.z), heading = 0.0, model=1657546978})
     end
+    CurrentWeapons = Weapons
     CurrentCastle.x, CurrentCastle.y, CurrentCastle.z = table.unpack(Misc.SplitString(Castle, ","))
     SpawnManager.forceRespawn()
 end)
@@ -102,6 +104,24 @@ end)
 AddEventHandler("KOTH:UpdatePoints", function(Points, timer) CurrentPoints = Points if timer then end_time = GetNetworkTime()+timer end end)
 
 function StartKOTH()
+    Citizen.CreateThread(function()
+        print(json.encode(CurrentWeapons))
+        while Sessionised do
+            Wait(0)
+            for i,v in ipairs(CurrentWeapons) do
+                v = math.floor(v)
+                if not HasPedGotWeapon(PlayerPedId(), v, false) then
+                    print("GIVING WEAPON: "..v)
+                    RequestWeaponAsset(v, 31, 0)
+                    while not HasWeaponAssetLoaded(v) do
+                        Wait(0)
+                    end
+                    GiveWeaponToPed(PlayerPedId(), v, 50000, false, true)
+                end
+            end
+        end
+    end)
+
     Citizen.CreateThread(function()
         local lastvehicle = GetVehiclePedIsIn(PlayerPedId(),false)
         while Sessionised do 
