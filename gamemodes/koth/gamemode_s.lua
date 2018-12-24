@@ -132,6 +132,7 @@ AddEventHandler("Gamemode:PollRandomCoords:10", function()
     if CurrentCoords.Coords then
         print("coords were available")
         local source = source
+        local id = Misc.GetPlayerSteamId(source)
         db:GetUser(id, function(result)
             TriggerClientEvent("Gamemode:FetchCoords:10", source, CurrentCoords.Coords, CurrentCoords.Castle, result.weapons)
         end)
@@ -140,6 +141,7 @@ AddEventHandler("Gamemode:PollRandomCoords:10", function()
         local r = math.random(1,#AvailableCoords)
         CurrentCoords = AvailableCoords[tonumber(r)]
         local source = source
+        local id = Misc.GetPlayerSteamId(source)
         db:GetUser(id, function(result)
             TriggerClientEvent("Gamemode:FetchCoords:10", source, CurrentCoords.Coords, CurrentCoords.Castle, result.weapons)
         end)    
