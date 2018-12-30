@@ -35,6 +35,7 @@ RegisterNetEvent("Gamemode:Join:4")
 
 AddEventHandler("Gamemode:Join:4", function()
     if SessionActive then
+        print(GetPlayerName(source) .. " joined midgame.")
         TriggerClientEvent("Gamemode:Join:4", source)
     end
 end)

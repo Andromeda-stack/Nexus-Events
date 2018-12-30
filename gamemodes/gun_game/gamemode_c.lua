@@ -36,7 +36,7 @@ AddEventHandler("Gamemode:End:4", function(winner, xp)
         end ]]
         if winner == PlayerServerId then Scaleform.RenderEndScreen(xp, xp/10, true) else Scaleform.RenderEndScreen(xp, xp/10, false) end
         SpawnManager.forceRespawn()
-        
+        Misc.SpectatorMode(false)
     end) 
 end)
 
@@ -123,9 +123,7 @@ AddEventHandler("Gamemode:Init:4", function()
 end)
 
 AddEventHandler("Gamemode:Join:4", function()
-    if Sessionised then
-        --spectator mode:TODO
-    end
+    Misc.SpectatorMode(true)
 end)
 
 local GunLevels = {}

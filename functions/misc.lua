@@ -1,5 +1,6 @@
 Misc = { }
-
+local spectatormode = false
+local spectating = 0
 
 function Misc.LeavingArea(x, y, z, x2, y2, z2, timer, missionmsg, timertext, scaletext1, scaletext2)
     local ShardS = Scaleform.Request("MP_BIG_MESSAGE_FREEMODE")
@@ -102,4 +103,64 @@ end
 
 function Misc.Distance(x1,x2,y1,y2)
 	return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
+end
+
+function Misc.spectatePlayer(targetPed,target,name)
+	local playerPed = PlayerPedId() -- yourself
+	enable = true
+	if targetPed == playerPed then enable = false end
+
+	if(enable)then
+
+			local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
+
+			RequestCollisionAtCoord(targetx,targety,targetz)
+			NetworkSetInSpectatorMode(true, targetPed)
+
+			GUI.DrawGameNotification(string.format("Now spectating: ~g~%s", name), true)
+	else
+
+			local targetx,targety,targetz = table.unpack(GetEntityCoords(targetPed, false))
+
+			RequestCollisionAtCoord(targetx,targety,targetz)
+			NetworkSetInSpectatorMode(false, targetPed)
+
+			GUI.DrawGameNotification("Stopped spectating.", true)
+	end
+end
+
+function Misc.SpectatorMode(toggle)
+	CreateThread(function()
+		if toggle then
+			spectatormode = true
+			while not NetworkIsPlayerActive(spectating) do
+				if spectating < NetworkGetNumConnectedPlayers() then
+					spectating = spectating + 1
+				else
+					spectating = 0
+				end
+			end
+			Misc.spectatePlayer(GetPlayerPed(spectating),spectating,GetPlayerName(spectating))
+			while spectatormode do
+				Wait(0)
+				local instructional = GUI.InstructionalButtons(56, "Next Player")
+				Scaleform.Render2D(instructional)
+				local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(spectating), true))
+				GUI.DrawText3D(x, y, z + 1.0, GetPlayerName(spectating))
+				if IsControlJustReleased(0, 56) then
+					spectating = spectating + 1
+					while not NetworkIsPlayerActive(spectating) do
+						if spectating < NetworkGetNumConnectedPlayers() then
+							spectating = spectating + 1
+						else
+							spectating = 0
+						end
+					end
+					Misc.spectatePlayer(PlayerPedId(),PlayerId(),GetPlayerName(PlayerId()))
+				end
+			end
+		else
+			spectatormode = false
+		end
+	end)
 end
