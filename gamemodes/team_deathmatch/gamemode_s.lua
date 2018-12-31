@@ -44,7 +44,7 @@ end)
 
 AddEventHandler("Gamemode:Join:9", function(s)
     if SessionActive then
-        -- spectator
+        TriggerClientEvent("Gamemode:Join:9", source)
     end
 end)
 
@@ -82,6 +82,9 @@ AddEventHandler("Gamemode:Start:9", function(g)
                     TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10), user.xp + xp)
                 end)
             end
+        end
+        for i,v in ipairs(GetPlayers()) do
+            TriggerClientEvent("Nexus:StopSpectate", v)
         end
         print("^5[INFO]^7 Game ended. Winner: " .. winner)
         SessionActive = false

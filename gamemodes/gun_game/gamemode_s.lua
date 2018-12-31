@@ -192,6 +192,9 @@ function EndGunGame(winner)
                 end)
             end
         end
+        for i,v in ipairs(GetPlayers()) do
+            TriggerClientEvent("Nexus:StopSpectate", v)
+        end
         CurrentCoords = {}
         GunLevels = {}
         PlayerList = {}

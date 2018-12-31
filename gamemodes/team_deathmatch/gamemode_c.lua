@@ -14,6 +14,10 @@ RegisterNetEvent("Gamemode:Init:9")
 RegisterNetEvent("Gamemode:Join:9")
 RegisterNetEvent("TDM:UpdateKills")
 
+AddEventHandler("Gamemode:Join:9", function()
+    Misc.SpectatorMode(true)
+end)
+
 AddEventHandler("Gamemode:End:9", function(winner, xp)
     Sessionised = false
     SpawnManager.removeAllSpawnPoints()
@@ -183,4 +187,5 @@ function EndTDM(winner, xp)
     SetPlayerInvincible(PlayerId(), false)
     Sessionised = false
     end_time = nil
+    Misc.SpectatorMode(false)
 end

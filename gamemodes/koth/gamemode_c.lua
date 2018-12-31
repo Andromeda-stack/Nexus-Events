@@ -14,6 +14,10 @@ RegisterNetEvent("Gamemode:Init:10")
 RegisterNetEvent("Gamemode:Join:10")
 RegisterNetEvent("KOTH:UpdatePoints")
 
+AddEventHandler("Gamemode:Join:10", function()
+    Misc.SpectatorMode(true)
+end)
+
 AddEventHandler("Gamemode:End:10", function(winner, xp)
     Sessionised = false
     SpawnManager.removeAllSpawnPoints()
@@ -181,4 +185,5 @@ function EndKOTH(winner, xp)
    Scaleform.RenderEndScreen(xp, xp/10, winner == PlayerServerId)
    SetPlayerInvincible(PlayerId(), false)
    Sessionised = false
+   Misc.SpectatorMode(true)
 end

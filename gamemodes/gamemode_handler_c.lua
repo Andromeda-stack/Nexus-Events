@@ -7,3 +7,8 @@ AddEventHandler("PrepareGamemode", function(Gamemode, startnow)
         TriggerEvent("Gamemode:Init:"..Gamemode.id)
     end
 end)
+
+RegisterNetEvent("Nexus:StopSpectate")
+AddEventHandler("Nexus:StopSpectate",function()
+    Misc.SpectatorMode(false)
+end)

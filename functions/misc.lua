@@ -156,9 +156,10 @@ function Misc.SpectatorMode(toggle)
 							spectating = 0
 						end
 					end
-					Misc.spectatePlayer(PlayerPedId(),PlayerId(),GetPlayerName(PlayerId()))
+					Misc.spectatePlayer(GetPlayerPed(spectating),spectating,GetPlayerName(spectating))
 				end
 			end
+			Misc.spectatePlayer(PlayerPedId(),PlayerId(),GetPlayerName(PlayerId()))
 		else
 			spectatormode = false
 		end

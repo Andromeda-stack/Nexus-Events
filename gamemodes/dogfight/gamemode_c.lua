@@ -13,6 +13,10 @@ RegisterNetEvent("Gamemode:Init:8")
 RegisterNetEvent("Gamemode:Join:8")
 RegisterNetEvent("dogfight:UpdateKills")
 
+AddEventHandler("Gamemode:Join:8", function()
+    Misc.SpectatorMode(true) 
+end)
+
 AddEventHandler("Gamemode:End:8", function(winner, xp)
     Sessionised = false
     SpawnManager.removeAllSpawnPoints()
@@ -166,4 +170,5 @@ function EndDogfight(winner, xp)
     DeleteVehicle(GetVehiclePedIsIn(PlayerPedId(), false))
     Sessionised = false
     end_time = nil
+    Misc.SpectatorMode(false)
 end

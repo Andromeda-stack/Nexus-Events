@@ -13,6 +13,10 @@ RegisterNetEvent("Gamemode:Init:7")
 RegisterNetEvent("Gamemode:Join:7")
 RegisterNetEvent("demolition:UpdateKills")
 
+AddEventHandler("Gamemode:Join:7", function()
+    Misc.SpectatorMode(true) 
+end)
+
 AddEventHandler("Gamemode:End:7", function(winner, xp)
     Sessionised = false
     SpawnManager.removeAllSpawnPoints()
@@ -216,4 +220,5 @@ function EndDemolition(winner, xp)
    SetEntityAsMissionEntity(GetVehiclePedIsIn(PlayerPedId(), false), 1, 1)
    DeleteVehicle(GetVehiclePedIsIn(PlayerPedId(), false))
    Sessionised = false
+   Misc.SpectatorMode(false)
 end
