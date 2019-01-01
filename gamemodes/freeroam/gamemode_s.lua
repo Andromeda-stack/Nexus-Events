@@ -38,7 +38,7 @@ AddEventHandler("Freeroam:Start", function()
     Citizen.CreateThread(function()
         start = GetGameTimer()
         print(Misc.TableLength(ready), GetNumPlayerIndices())
-        while GetGameTimer() - start < 1200000 and SessionRunning and (Misc.TableLength(ready) < GetNumPlayerIndices()) or GetNumPlayerIndices() == 0 do
+        while GetGameTimer() - start < 1200000 and SessionRunning and (Misc.TableLength(ready) < GetNumPlayerIndices()) or GetNumPlayerIndices() < 2 do
             Wait(0)
         end
         TriggerClientEvent("Freeroam:End", -1)

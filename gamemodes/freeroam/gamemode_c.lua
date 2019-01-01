@@ -76,7 +76,7 @@ function Main(msec)
     Citizen.CreateThread(function()
         local start = GetGameTimer()
         local end_time = GetNetworkTime() + msec
-        while GetGameTimer() - start < msec and Sessionised do 
+        while GetGameTimer() - start < msec or Sessionised do 
             Wait(0)
             if (end_time - GetNetworkTime()) > 0 then
                 local readystr = ready and "~g~READY" or "~r~NOT READY"
@@ -92,6 +92,9 @@ function Main(msec)
             if IsControlJustReleased(0, 57) and not ready then
                 ready = true
                 TriggerServerEvent("Freeroam:ReadyUp")
+            end
+            if NetworkGetNumConnectedPlayers() < 2 then
+                GUI.MissionText("Too few players connected, wait for "..(2-NetworkGetNumConnectedPlayers()).." more players to start a new match.", 1, 1)
             end
         end
         for i,v in ipairs(ammunationblips) do
