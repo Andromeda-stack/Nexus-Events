@@ -103,14 +103,14 @@ AddEventHandler("Gamemode:Start:10", function(g)
         for i,v in ipairs(PlayerList) do
             if v.serverId == winner then
                 local identifier = Misc.GetPlayerSteamId(winner)
-                local xp = 2 * v.kills * 50
+                local xp = 2 * v.kills * 5
                 TriggerClientEvent("Gamemode:End:10", winner, winner, math.floor(xp))
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
                     TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10), user.xp + xp)
                 end)
             else
-                local xp = v.kills * 50
+                local xp = v.kills * 5
                 local identifier = Misc.GetPlayerSteamId(v.serverId)
                 TriggerClientEvent("Gamemode:End:10", v.serverId, winner, math.floor(xp))
                 db:GetUser(identifier, function(user)
