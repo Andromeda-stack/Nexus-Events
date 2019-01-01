@@ -42,6 +42,9 @@ AddEventHandler("playerSpawned", function()
 				lastmoney = Money
 			end
 		end)
+
+		SetMaxWantedLevel(0)
+
 		firstspawn = false
 	else
 		TriggerEvent("Gamemode:Spawn:7")
