@@ -61,12 +61,12 @@ AddEventHandler("Gamemode:Start:4", function(g)
     end)
 
     SessionActive = true
-    --[[ Citizen.CreateThread(function()
-        while SessionActive do
+    Citizen.CreateThread(function()
+        while GetNumPlayerIndices() ~= 0 do
             Wait(100)
-            InitPlayers()
         end
-    end) ]]
+        EndGunGame(0)
+    end)
 end)
 
 AddEventHandler("Gamemode:Kill:4", function(killerid, source)
@@ -153,6 +153,7 @@ function getGunGamePlayerIndex(id)
             return i
         end
     end
+    return 0
 end
 
 function InitGunGamePlayers()

@@ -60,7 +60,7 @@ AddEventHandler("Gamemode:Start:9", function(g)
         TriggerClientEvent("TDM:UpdateKills", -1, 0)
         SessionActive = true
         timer = GetGameTimer()
-        while GetGameTimer() - timer < 600000 and SessionActive do
+        while GetGameTimer() - timer < 600000 and SessionActive and GetNumPlayerIndices() ~= 0 do
             Wait(0)
         end
         local winner = getTDMWinner()
@@ -156,6 +156,7 @@ function getTDMPlayerIndex(id)
             return i
         end
     end
+    return 0
 end
 
 function getTDMWinner()

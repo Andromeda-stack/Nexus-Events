@@ -69,7 +69,7 @@ AddEventHandler("Gamemode:Start:8", function(g)
         TriggerClientEvent("dogfight:UpdateKills", -1, 0)
         SessionActive = true
         timer = GetGameTimer()
-        while GetGameTimer() - timer < 600000 and SessionActive do
+        while GetGameTimer() - timer < 600000 and SessionActive and GetNumPlayerIndices() ~= 0 do
             Wait(0)
         end
         local winner = getDogfightWinner()
@@ -151,6 +151,7 @@ function getDogfightPlayerIndex(id)
             return i
         end
     end
+    return 0
 end
 
 function getDogfightWinner()

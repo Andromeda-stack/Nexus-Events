@@ -96,7 +96,7 @@ AddEventHandler("Gamemode:Start:7", function(g)
         TriggerClientEvent("demolition:UpdateKills", -1, 0)
         SessionActive = true
         timer = GetGameTimer()
-        while GetGameTimer() - timer < 600000 and SessionActive do
+        while GetGameTimer() - timer < 600000 and SessionActive and GetNumPlayerIndices() ~= 0 do
             Wait(0)
         end
         local winner = getDemolitionWinner()
@@ -179,6 +179,7 @@ function getDemolitionPlayerIndex(id)
             return i
         end
     end
+    return 0
 end
 
 function getDemolitionWinner()
