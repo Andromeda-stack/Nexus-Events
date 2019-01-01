@@ -66,6 +66,7 @@ AddEventHandler("Gamemode:Start:4", function(g)
             Wait(100)
         end
         EndGunGame(0)
+        
     end)
 end)
 
@@ -82,7 +83,7 @@ AddEventHandler("Gamemode:Kill:4", function(killerid, source)
         print(GunLevels[tostring(killerid)])
         if GunLevels[tostring(killerid)] == nil then 
             GunLevels[tostring(killerid)] = 1
-        elseif GunLevels[tostring(killerid)] == 4 then
+        elseif GunLevels[tostring(killerid)] == 29 then
             print("Game end, winner: ".. GetPlayerName(killerid))
             EndGunGame(killerid)
         end

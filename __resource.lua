@@ -28,8 +28,6 @@ client_scripts {
 	"voting/vote_c.lua",
 	--MAIN
 	"main/main_c.lua",
-	--ANTICHEAT
-	--"ac/ac_c.lua"
 	-- OTHER
 	"ipls.lua"
 }
@@ -49,8 +47,6 @@ server_scripts {
 	"functions/misc.lua",
 	--SQLITE
 	"db/Db.js",
-	--ANTICHEAT
-	--"ac/ac_s.lua"
 }
 
 

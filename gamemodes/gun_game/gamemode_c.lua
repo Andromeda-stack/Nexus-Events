@@ -129,10 +129,35 @@ end)
 local GunLevels = {}
 
 local WeaponLevels = {
-    "WEAPON_PISTOL",
     "WEAPON_SMG",
+    "WEAPON_ASSAULTRIFLE",
+    "WEAPON_COMBATMG",
+    "WEAPON_CARBINERIFLE",
+    "WEAPON_ADVANCEDRIFLE",
+    "WEAPON_MG",
+    "WEAPON_PUMPSHOTGUN",
+    "WEAPON_SAWNOFFSHOTGUN",
+    "WEAPON_ASSAULTSHOTGUN",
+    "WEAPON_BULLPUPSHOTGUN",
+    "WEAPON_SNIPERRIFLE",
+    "WEAPON_HEAVYSNIPER",
+    "WEAPON_REMOTESNIPER",
+    "WEAPON_GRENADELAUNCHER",
     "WEAPON_RPG",
-    "WEAPON_COMBATMG"
+    "WEAPON_MINIGUN",
+    "WEAPON_SNSPISTOL",
+    "WEAPON_PISTOL",
+    "WEAPON_COMBATPISTOL",
+    "WEAPON_APPISTOL",
+    "WEAPON_PISTOL50",
+    "WEAPON_HEAVYPISTOL",
+    "WEAPON_VINTAGEPISTOL",
+    "WEAPON_MARKSMANPISTOL",
+    "WEAPON_FLAREGUN",
+    "WEAPON_HAMMER",
+    "WEAPON_BAT",
+    "WEAPON_KNIFE",
+    "WEAPON_UNARMED",
     -- needs more guns here, also normally a gun game should have progressively worse guns instead of the opposite as done here :D
 }
 
