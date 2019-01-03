@@ -135,7 +135,7 @@ function Misc.SpectatorMode(toggle)
 		if toggle then
 			spectatormode = true
 			while not NetworkIsPlayerActive(spectating) do
-				if spectating < NetworkGetNumConnectedPlayers() then
+				if spectating < 31 then
 					spectating = spectating + 1
 				else
 					spectating = 0
@@ -151,7 +151,7 @@ function Misc.SpectatorMode(toggle)
 				if IsControlJustReleased(0, 56) then
 					spectating = spectating + 1
 					while not NetworkIsPlayerActive(spectating) do
-						if spectating < NetworkGetNumConnectedPlayers() then
+						if spectating < 31 then
 							spectating = spectating + 1
 						else
 							spectating = 0
@@ -165,4 +165,14 @@ function Misc.SpectatorMode(toggle)
 			spectatormode = false
 		end
 	end)
+end
+
+function Misc.GetNumberOfPlayers()
+	local n = 0
+	for i=0,31 do
+		if NetworkIsPlayerActive(i) then
+			n = n+1
+		end
+	end
+	return n
 end

@@ -88,7 +88,7 @@ function Main(msec)
         local end_time = GetNetworkTime() + msec
         while GetGameTimer() - start < msec or Sessionised do 
             Wait(0)
-            if (end_time - GetNetworkTime()) > 0 or NetworkGetNumConnectedPlayers() < 2 then
+            if (end_time - GetNetworkTime()) > 0 or Misc.GetNumberOfPlayers() < 2 then
                 local readystr = ready and "~g~READY" or "~r~NOT READY"
 		        local instructional = GUI.InstructionalButtons(48, "View Stats", 57, "Set As Ready")
                 GUI.DrawTimerBar(0.13, "NEXT MATCH", ((end_time - GetNetworkTime()) / 1000), 3)
