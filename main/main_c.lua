@@ -1,6 +1,10 @@
 local firstspawn = true
 Money = 0
 XP = 0
+local Notifications = {
+	{"Hey! looks like you got some money to spend... Come check out our guns!", "CHAR_AMMUNATION"},
+	{"Ever wanted to get your ride pimped up a bit? Come check us out at Los Santos Customs!", "CHAR_LS_CUSTOMS"}
+}
 
 RegisterNetEvent("Nexus:UpdateMoney")
 
