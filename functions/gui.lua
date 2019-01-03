@@ -75,7 +75,8 @@ function GUI.DrawBar(width, text, subText, colour, position, isPlayerText)
 end
 
 function GUI.DrawTimerBar(width, text, seconds, position, isPlayerText)
-	local textColour = seconds <= 10 and { r = 224, g = 50, b = 50, a = 255 } or {r = 254, g = 254, b = 254, a = 255 }
+    local textColour = seconds <= 10 and { r = 224, g = 50, b = 50, a = 255 } or {r = 254, g = 254, b = 254, a = 255 }
+    if seconds<0 then seconds = 0 end
 	GUI.DrawBar(width, text, string.format("%02.f", math.floor(seconds / 60))..':'..string.format("%02.f", math.floor(seconds % 60)), textColour, position, isPlayerText)
 end
 
