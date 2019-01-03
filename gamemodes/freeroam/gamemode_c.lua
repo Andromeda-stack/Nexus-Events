@@ -1,5 +1,13 @@
 local ready = false
 local Sessionised = false
+local Notifications = {
+	{"Hey! looks like you got some money to spend... Come check out our guns!", "CHAR_AMMUNATION", "Ammunation"},
+	{"Ever wanted to get your ride pimped up a bit? Come check us out at Los Santos Customs, coming soon to Nexus Events!", "CHAR_LS_CUSTOMS", "Los Santos Customs"},
+	{"Happen to find a ~r~bug~s~? You can contact us through the FiveM Forum or via discord! Do /contacts in chat to know more.", "CHAR_NEXUS", "Nexus Events"},
+	{"Hey, we have a ~b~Discord~s~! Come check it out, https://discord.gg/vJrjTdZ", "CHAR_NEXUS", "Nexus Events"},
+	{"You don't wanna be flying that lame ass lazer forever do you... Come buy some planes from us!", "CHAR_PEGASUS_DELIVERY", "Pegasus"}
+}
+local lastnotification
 RegisterNetEvent("Freeroam:Start")
 RegisterNetEvent("Freeroam:BoughtGun")
 
@@ -102,6 +110,19 @@ function Main(msec)
         end
         ammunationblips = {}
     end)
+
+    Citizen.CreateThread(function()
+        while true do
+            Wait(120000)
+            local r = math.random(1,#Notifications)
+            while Notifications[r] == lastnotification do
+                Wait(0)
+                r = math.random(1,#Notifications)
+            end
+            GUI.DrawGameNotification(Notifications[r][1], true, Notifications[r][2], Notifications[r][2], true, 1, Notifications[r][3], "")
+        end
+    end)
+
 end
 
 AddEventHandler("Freeroam:BoughtGun", function(success, msg)
