@@ -145,5 +145,5 @@ end
 
 AddEventHandler("Freeroam:BoughtGun", function(success, msg, newguns)
     GUI.DrawGameNotification(msg, true)
-    if success then Guns = newguns end
+    if success then Guns = newguns print(json.encode(Guns)) end
 end)
