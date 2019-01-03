@@ -12,9 +12,9 @@ AddEventHandler("Freeroam:BoughtGun", function(w, name)
         db:GetUser(identifier, function(user)
             if user.money > price and not Misc.TableIncludes (user.weapons, w) then
                 user.weapons[#user.weapons + 1] = w
-            db:UpdateUser(identifier, {money = math.floor(user.money - price), weapons = user.weapons},function() print("^4[INFO]^7 IceHax bought a new weapon for $"..price)  end)
-            TriggerClientEvent("Nexus:UpdateMoney", source, math.floor(user.money - price), user.xp)
-            TriggerClientEvent("Freeroam:BoughtGun", source, true, "~g~ You now own "..name.."!")
+                db:UpdateUser(identifier, {money = math.floor(user.money - price), weapons = user.weapons},function() print("^4[INFO]^7 "..GetPlayerName(source).." bought a new weapon for $"..price)  end)
+                TriggerClientEvent("Nexus:UpdateMoney", source, math.floor(user.money - price), user.xp)
+                TriggerClientEvent("Freeroam:BoughtGun", source, true, "~g~ You now own "..name.."!", weapons)
             elseif Misc.TableIncludes (user.weapons, w) then
                 TriggerClientEvent("Freeroam:BoughtGun", source, false, "~r~You already own this gun.")
             else
@@ -34,7 +34,11 @@ AddEventHandler("Freeroam:Start", function()
     ready = {}
     SessionRunning = true
     print("starting freeroam")
-    TriggerClientEvent("Freeroam:Start", -1)
+    for i,v in ipairs(GetPlayers()) do
+        db:GetUser(identifier, function(user)
+            TriggerClientEvent("Freeroam:Start", v, user.weapons)
+        end)
+    end
     Citizen.CreateThread(function()
         start = GetGameTimer()
         print(Misc.TableLength(ready), GetNumPlayerIndices())

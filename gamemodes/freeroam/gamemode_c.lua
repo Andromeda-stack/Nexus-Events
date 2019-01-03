@@ -141,10 +141,9 @@ function Main(msec)
             end
         end
     end)
-
 end
 
 AddEventHandler("Freeroam:BoughtGun", function(success, msg, newguns)
     GUI.DrawGameNotification(msg, true)
-    Guns = newguns
+    if success then Guns = newguns end
 end)
