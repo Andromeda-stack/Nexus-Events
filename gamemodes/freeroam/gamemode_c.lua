@@ -86,9 +86,9 @@ function Main(msec)
     Citizen.CreateThread(function()
         local start = GetGameTimer()
         local end_time = GetNetworkTime() + msec
-        while GetGameTimer() - start < msec or Sessionised do 
+        while GetGameTimer() - start < msec and Sessionised do 
             Wait(0)
-            if (end_time - GetNetworkTime()) > 0 or Misc.GetNumberOfPlayers() < 2 then
+            if GetGameTimer() - start < msec or Misc.GetNumberOfPlayers() < 2 then
                 print("DETECTED PLAYERS: "..Misc.GetNumberOfPlayers().. "RESULT OF THE IF: "..tostring((end_time - GetNetworkTime()) > 0 or Misc.GetNumberOfPlayers() < 2))
                 local readystr = ready and "~g~READY" or "~r~NOT READY"
 		        local instructional = GUI.InstructionalButtons(48, "View Stats", 57, "Set As Ready")
