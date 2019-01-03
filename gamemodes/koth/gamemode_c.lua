@@ -111,7 +111,7 @@ function StartKOTH()
     Citizen.CreateThread(function()
         print(json.encode(CurrentWeapons))
         while Sessionised do
-            Wait(0)
+            Wait(500)
             for i,v in ipairs(CurrentWeapons) do
                 v = math.floor(v)
                 if not HasPedGotWeapon(PlayerPedId(), v, false) then

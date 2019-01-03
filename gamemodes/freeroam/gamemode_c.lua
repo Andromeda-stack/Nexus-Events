@@ -8,13 +8,15 @@ local Notifications = {
 	{"You don't wanna be flying that lame ass lazer forever do you... Come buy some planes from us!", "CHAR_PEGASUS_DELIVERY", "Pegasus"}
 }
 local lastnotification
+local Guns = {}
 RegisterNetEvent("Freeroam:Start")
 RegisterNetEvent("Freeroam:BoughtGun")
 
-AddEventHandler("Freeroam:Start", function(msec)
+AddEventHandler("Freeroam:Start", function(msec,guns)
     if not Sessionised then
         ready = false
         Sessionised = true
+        Guns = guns
         Main(msec)
     end
 end)
@@ -112,7 +114,7 @@ function Main(msec)
     end)
 
     Citizen.CreateThread(function()
-        while true do
+        while Sessionised do
             Wait(120000)
             local r = math.random(1,#Notifications)
             while Notifications[r] == lastnotification do
@@ -123,8 +125,26 @@ function Main(msec)
         end
     end)
 
+    Citizen.CreateThread(function()
+        while Sessionised do
+            Wait(500)
+            for i,v in ipairs(Guns) do
+                v = math.floor(v)
+                if not HasPedGotWeapon(PlayerPedId(), v, false) then
+                    print("GIVING WEAPON: "..v)
+                    RequestWeaponAsset(v, 31, 0)
+                    while not HasWeaponAssetLoaded(v) do
+                        Wait(0)
+                    end
+                    GiveWeaponToPed(PlayerPedId(), v, 50000, false, true)
+                end
+            end
+        end
+    end)
+
 end
 
-AddEventHandler("Freeroam:BoughtGun", function(success, msg)
+AddEventHandler("Freeroam:BoughtGun", function(success, msg, newguns)
     GUI.DrawGameNotification(msg, true)
+    Guns = newguns
 end)
