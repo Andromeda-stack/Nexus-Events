@@ -130,6 +130,7 @@ function Misc.spectatePlayer(targetPed,target,name)
 end
 
 function Misc.SpectatorMode(toggle)
+	local toggle = toggle
 	CreateThread(function()
 		if toggle then
 			spectatormode = true
