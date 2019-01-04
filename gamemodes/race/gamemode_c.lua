@@ -168,9 +168,9 @@ function StartRace()
         end
         for i,v in ipairs(blips) do
             RemoveBlip(v)
-            SetBlipRoute(TargetBlip, false)
-            RemoveBlip(TargetBlip)
         end
+        SetBlipRoute(TargetBlip, false)
+        RemoveBlip(TargetBlip)
     end)
 end
 
