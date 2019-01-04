@@ -110,6 +110,7 @@ end, false)
 
 RegisterNetEvent("race:ChooseVehicle")
 AddEventHandler("race:ChooseVehicle", function(v)
+    print("beginning vehicle selection stuff fuck")
     Vehicles = v
     RaceVehSelection("begin")
 end)
