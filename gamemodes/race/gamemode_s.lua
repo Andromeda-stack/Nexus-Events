@@ -52,6 +52,7 @@ AddEventHandler("Gamemode:Join:2", function(s)
 end)
 
 AddEventHandler("Gamemode:Start:2", function(g)
+    print("STARTING "..json.encode(g))
     Citizen.CreateThread(function()
         CurrentCoords = {}
         TriggerClientEvent("PrepareGamemode", -1, g, false)
