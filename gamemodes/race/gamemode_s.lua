@@ -30,11 +30,11 @@ RegisterNetEvent('Gamemode:UpdateTime:2')
 --RegisterNetEvent("Gamemode:Join:2")
 
 AddEventHandler('Gamemode:UpdateTime:2', function(Timer)
-    local sauce = source
-    PlayerList[sauce].time = Timer
-    TriggerClientEvent('Gamemode:End:2', sauce, true, 5000)
-    for i, v in ipairs(GetPlayers()) do
-        if v ~= sauce then TriggerClientEvent('Gamemode:End:2', -1, false, 350) end
+    local source = source
+    PlayerList[source].time = Timer
+    TriggerClientEvent('Gamemode:End:2', source, true, 5000)
+    for i, v in pairs(PlayerList) do
+        if v ~= source then TriggerClientEvent('Gamemode:End:2', -1, false, 350) end
     end
     Citizen.Wait(1000)
 end)

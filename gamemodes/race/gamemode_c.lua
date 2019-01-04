@@ -146,6 +146,7 @@ function StartRace()
                 blips[#blips + 1] = AddBlipForEntity(entity)
             end
         end
+        SetBlipRoute(TargetBlip, true)
         while Sessionised do 
             Wait(0)
             if not end_time then end_time = GetNetworkTime() + 600000 end
@@ -167,6 +168,7 @@ function StartRace()
         end
         for i,v in ipairs(blips) do
             RemoveBlip(v)
+            SetBlipRoute(TargetBlip, false)
             RemoveBlip(TargetBlip)
         end
     end)
