@@ -5,7 +5,7 @@ Nexus Events is a multi-gamemode server written by Shayan and Icehax. We incorpo
 ## Credits
 
 * Jaymo (as part of the menu API)
-* Syntasu, Indra, throwarray and the testers team for all the help with testing
+* Syntasu, Indra, throwarray, d0p3t and the testers team for all the help with testing
 * Blu (as part of the spectator snippet from easyadmin)
 * TheNunProstitute for moral and community server support
 
