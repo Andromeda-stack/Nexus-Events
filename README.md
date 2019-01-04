@@ -1,6 +1,6 @@
 # Nexus-Events
 
-Nexus Events is a multi-gamemode server written by Shayan and Icehax. We incorporate a bunch of gamemodes such as King of the Hill, Demolition and much more.
+Nexus Events is a multi-gamemode server written by Shayan and Icehax. We incorporate loads of gamemodes such as King of the Hill, Demolition and much more.
 
 ## Credits
 
