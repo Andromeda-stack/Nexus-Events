@@ -2,8 +2,8 @@ Gamemodes = {
   {id = 1, title = "Coming soon™", desc = "Good ol' TDM!", txd = "mpweaponscommon", txn = "signal2"},
   {
     id = 2,
-    title = "Coming soon™",
-    desc = "Two teams try to capture a flag and bring it back to their base.",
+    title = "Race",
+    desc = "Ultimate frisbee! Except nothing like ultimate frisbee...",
     txd = "mpweaponscommon",
     txn = "signal2"
   },
