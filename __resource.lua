@@ -24,6 +24,7 @@ client_scripts {
 	"gamemodes/team_deathmatch/gamemode_c.lua",
 	"gamemodes/koth/gamemode_c.lua",
 	"gamemodes/race/gamemode_c.lua",
+	"gamemodes/race/vehicleselection.lua",
 	--VOTING
 	"voting/vote_c.lua",
 	--MAIN
