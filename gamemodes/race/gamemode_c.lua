@@ -139,9 +139,9 @@ function StartRace()
     SetEntityCollision(veh, true, true)
     Citizen.CreateThread(function()
         local TargetBlip = AddBlipForCoord(TargetCoords.x, TargetCoords.y, TargetCoords.z)
+        local blips = {}
         for i = 0, 255 do
             local entity = GetPlayerPed(i)
-            local blips = {}
             if DoesEntityExist(entity) then
                 blips[#blips + 1] = AddBlipForEntity(entity)
             end
