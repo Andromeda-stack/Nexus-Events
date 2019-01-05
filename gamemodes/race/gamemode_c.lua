@@ -157,6 +157,7 @@ function StartRace()
             end
             
             if (end_time - GetNetworkTime()) > 0 then
+                CurrentTime = 600 - ((end_time - GetNetworkTime())/1000)
                 GUI.MissionText("Finish ~r~First~s~!", 1, 1)
                 GUI.DrawBar(0.13, "TIME", CurrentTime, nil, 2)
                 GUI.DrawTimerBar(0.13, "GAME END", ((end_time - GetNetworkTime()) / 1000), 1)
