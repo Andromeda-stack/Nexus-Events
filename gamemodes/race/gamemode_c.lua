@@ -152,7 +152,7 @@ function StartRace()
             if not end_time then end_time = GetNetworkTime() + 600000 end
             if Vdist(TargetCoords.x, TargetCoords.y, TargetCoords.z, GetEntityCoords(PlayerPedId())) < 5 then
                 TriggerServerEvent('Gamemode:UpdateTime:2', CurrentTime)
-                ShowNotification('~r~' .. GetPlayerName(PlayerId()) .. '~w~ finished in 1st.')
+                GUI.DrawGameNotification('~r~' .. GetPlayerName(PlayerId()) .. '~w~ finished!', true)
                 break
             end
             
