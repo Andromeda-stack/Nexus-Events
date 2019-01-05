@@ -115,10 +115,6 @@ AddEventHandler("Gamemode:PollRandomCoords:2", function()
     print(json.encode(CurrentCoords))
 end)
 
-AddEventHandler("Gamemode:Kill:2", function(time)
-    print('Not needed')
-end)
-
 RegisterNetEvent("Gamemode:UpdatePlayers:2")
 AddEventHandler("Gamemode:UpdatePlayers:2", function(Operation, Player)
     if Operation == "Append" then
