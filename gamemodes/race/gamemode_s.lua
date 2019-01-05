@@ -32,7 +32,6 @@ RegisterNetEvent('Gamemode:UpdateTime:2')
 AddEventHandler('Gamemode:UpdateTime:2', function(Timer)
     local source = source
     PlayerList[source].time = Timer
-    SessionActive = false
 end)
 
 AddEventHandler("Gamemode:Leave:2", function(s)
@@ -74,14 +73,14 @@ AddEventHandler("Gamemode:Start:2", function(g)
         for i,v in ipairs(PlayerList) do
             if v.serverId == winner then
                 local identifier = Misc.GetPlayerSteamId(winner)
-                local xp = 2 * v.time * 50
+                local xp = 10000 - (v.time*10)
                 TriggerClientEvent("Gamemode:End:2", winner, winner, math.floor(xp))
                 db:GetUser(identifier, function(user)
                     db:UpdateUser(identifier, {money = math.floor(user.money + xp/10), xp = user.xp + xp},function() print("^4[INFO]^7 Updated User's Money and XP.")  end)
                     TriggerClientEvent("Nexus:UpdateMoney", v.serverId, math.floor(user.money + xp/10), user.xp + xp)
                 end)
             else
-                local xp = v.time * 50
+                local xp = 10000 - (v.time*15)
                 local identifier = Misc.GetPlayerSteamId(v.serverId)
                 TriggerClientEvent("Gamemode:End:2", v.serverId, winner, math.floor(xp))
                 db:GetUser(identifier, function(user)
@@ -150,7 +149,7 @@ function getRaceWinner()
     for i,v in ipairs(PlayerList) do
         if not winner then
             winner = v.serverId
-        elseif PlayerList[getRacePlayerIndex(winner)].time < v.time then
+        elseif PlayerList[getRacePlayerIndex(winner)].time > v.time then
             winner = v.serverId
         end
     end
