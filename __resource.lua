@@ -13,6 +13,7 @@ client_scripts {
 	"functions/misc.lua",
 	"functions/SpawnManager.lua",
 	"functions/menu.lua",
+	"functions/discordrp.lua",
 	--Gamemodes
 	"gamemodes/gamemode_handler_c.lua",
 	"gamemodes/gun_game/gamemode_c.lua",
