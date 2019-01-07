@@ -114,7 +114,7 @@ function Main(msec)
         ammunationblips = {}
     end)
 
-    Citizen.CreateThread(function()
+    --[[ Citizen.CreateThread(function()
         while Sessionised do
             Wait(120000)
             local r = math.random(1,#Notifications)
@@ -124,7 +124,7 @@ function Main(msec)
             end
             GUI.DrawGameNotification(Notifications[r][1], true, Notifications[r][2], Notifications[r][2], true, 1, Notifications[r][3], "")
         end
-    end)
+    end) ]]
 
     Citizen.CreateThread(function()
         while Sessionised do
