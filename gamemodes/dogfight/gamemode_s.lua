@@ -40,7 +40,9 @@ RegisterNetEvent("Gamemode:Join:8")
 
 AddEventHandler("Gamemode:Leave:8", function(s)
     if SessionActive then
-        table.remove(PlayerList, getDogfightPlayerIndex(s))
+        if getDogfightPlayerIndex(source) ~= 0 then
+            table.remove(PlayerList, getDogfightPlayerIndex(s))
+        end
     end
 end)
 

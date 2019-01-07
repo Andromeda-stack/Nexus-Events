@@ -38,7 +38,9 @@ RegisterNetEvent("Gamemode:Join:9")
 
 AddEventHandler("Gamemode:Leave:9", function(s)
     if SessionActive then
-        table.remove(PlayerList, getTDMPlayerIndex(s))
+        if getTDMPlayerIndex(s) ~= 0 then
+            table.remove(PlayerList, getTDMPlayerIndex(s))
+        end
     end
 end)
 

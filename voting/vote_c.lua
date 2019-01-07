@@ -30,7 +30,6 @@ AddEventHandler("StartVoteScreen", function(SelectedGamemodes)
 		Wait(500)
 		while Citizen.InvokeNative(0x470555300D10B2A5) ~= 5 and Citizen.InvokeNative(0x470555300D10B2A5) ~= 3 do
 			Citizen.Wait(0)
-			print("Waiting")
 		end
 		local Instructional = GUI.InstructionalButtons(176, "Vote")
 		local Gamemodes = SelectedGamemodes
