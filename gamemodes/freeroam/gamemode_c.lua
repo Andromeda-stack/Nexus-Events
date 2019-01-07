@@ -90,10 +90,10 @@ function Main(msec)
         while GetGameTimer() - start < msec and Sessionised do 
             Wait(0)
             if GetGameTimer() - start < msec or Misc.GetNumberOfPlayers() < 2 then
-                local readystr = ready and "~g~READY" or "~r~NOT READY"
+                local readystr = ready and "~g~YES" or "~r~NO"
 		        local instructional = GUI.InstructionalButtons(48, "View Stats", 57, "Set As Ready")
-                GUI.DrawTimerBar(0.13, "NEXT MATCH", ((end_time - GetNetworkTime()) / 1000), 3)
-                GUI.DrawBar(0.13, "STATUS", readystr, nil, 5)
+                GUI.DrawTimerBar(0.13, "NEXT MATCH", ((end_time - GetNetworkTime()) / 1000), 2)
+                GUI.DrawBar(0.13, "READY", readystr, nil, 3)
 		        Scaleform.Render2D(instructional)
             else
                 ready = false
