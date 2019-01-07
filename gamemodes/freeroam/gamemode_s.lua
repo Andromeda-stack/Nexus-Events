@@ -32,7 +32,6 @@ end)
 
 AddEventHandler("Freeroam:Start", function()
     ready = {}
-    SessionRunning = true
     print("starting freeroam")
     print("^5PLAYERS:^7 "..json.encode(GetPlayers()))
     for i,v in ipairs(GetPlayers()) do
@@ -41,10 +40,11 @@ AddEventHandler("Freeroam:Start", function()
             TriggerClientEvent("Freeroam:Start", v, 1200000, user.weapons)
         end)
     end
+    SessionRunning = true
     Citizen.CreateThread(function()
         start = GetGameTimer()
         print(Misc.TableLength(ready), GetNumPlayerIndices())
-        while GetGameTimer() - start < 1200000 and SessionRunning and (Misc.TableLength(ready) < GetNumPlayerIndices()) or GetNumPlayerIndices() < 2 do
+        while (GetGameTimer() - start < 1200000 and SessionRunning and (Misc.TableLength(ready) < GetNumPlayerIndices())) or GetNumPlayerIndices() < 2 do
             Wait(0)
         end
         TriggerClientEvent("Freeroam:End", -1)

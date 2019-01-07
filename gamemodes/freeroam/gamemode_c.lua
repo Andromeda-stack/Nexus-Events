@@ -87,7 +87,7 @@ function Main(msec)
     Citizen.CreateThread(function()
         local start = GetGameTimer()
         local end_time = GetNetworkTime() + msec
-        while GetGameTimer() - start < msec and Sessionised do 
+        while GetGameTimer() - start < msec or Sessionised do 
             Wait(0)
             if GetGameTimer() - start < msec or Misc.GetNumberOfPlayers() < 2 then
                 local readystr = ready and "~g~YES" or "~r~NO"
