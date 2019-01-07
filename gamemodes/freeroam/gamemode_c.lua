@@ -17,6 +17,7 @@ AddEventHandler("Freeroam:Start", function(msec,guns)
         ready = false
         Sessionised = true
         Guns = guns
+        print(json.encode(Guns))
         Main(msec)
     end
 end)

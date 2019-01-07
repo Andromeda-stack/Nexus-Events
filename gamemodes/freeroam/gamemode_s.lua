@@ -34,6 +34,7 @@ AddEventHandler("Freeroam:Start", function()
     ready = {}
     SessionRunning = true
     print("starting freeroam")
+    print("^5PLAYERS:^7 "..json.encode(GetPlayers()))
     for i,v in ipairs(GetPlayers()) do
         local identifier = Misc.GetPlayerSteamId(v)
         db:GetUser(identifier, function(user)
@@ -60,8 +61,12 @@ RegisterNetEvent("Freeroam:Join")
 
 AddEventHandler("Freeroam:Join", function()
     if SessionRunning then
+        local source = source
         print("joined freeroam: "..source)
         print(1200000 - (GetGameTimer()-start))
-        TriggerClientEvent("Freeroam:Start", source, 1200000 - (GetGameTimer()-start))
+        local identifier = Misc.GetPlayerSteamId(source)
+        db:GetUser(identifier, function(user)
+            TriggerClientEvent("Freeroam:Start", source, 1200000 - (GetGameTimer()-start), user.weapons)
+        end)
     end
 end)
