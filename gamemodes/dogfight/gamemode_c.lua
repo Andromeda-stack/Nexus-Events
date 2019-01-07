@@ -161,6 +161,14 @@ function StartDogfight()
             RemoveBlip(v)
         end
     end)
+
+    Citizen.CreateThread(function()
+        while Sessionised do
+            SetDiscordRichPresenceAssetSmallText('Dogfight')
+            SetRichPresence('Dogfight: '..CurrentKills.." Kills")
+            Citizen.Wait(20000)
+        end
+    end)
 end
 
 function EndDogfight(winner, xp)

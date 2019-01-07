@@ -179,6 +179,14 @@ function StartKOTH()
             NetworkSetFriendlyFireOption(true)
         end
     end)
+
+    Citizen.CreateThread(function()
+        while Sessionised do
+            SetDiscordRichPresenceAssetSmallText('King Of The Hill')
+            SetRichPresence('King Of The Hill: '..CurrentPoints.." Points")
+            Citizen.Wait(20000)
+        end
+    end)
 end
 
 function EndKOTH(winner, xp)

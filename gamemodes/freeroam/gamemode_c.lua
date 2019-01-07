@@ -142,6 +142,19 @@ function Main(msec)
             end
         end
     end)
+
+    Citizen.CreateThread(function()
+        while Sessionised do
+            if Misc.GetNumberOfPlayers() < 2 then
+                SetDiscordRichPresenceAssetSmallText('Waiting for more players...')
+                SetRichPresence('Waiting for more players...')
+            else
+                SetDiscordRichPresenceAssetSmallText('Freeroaming')
+                SetRichPresence('Freeroaming')
+            end
+            Citizen.Wait(20000)
+        end
+    end)
 end
 
 AddEventHandler("Freeroam:BoughtGun", function(success, msg, newguns)

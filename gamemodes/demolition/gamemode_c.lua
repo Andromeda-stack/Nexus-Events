@@ -212,6 +212,14 @@ function StartDemolition()
             end
         end
     end)
+    
+    Citizen.CreateThread(function()
+        while Sessionised do
+            SetDiscordRichPresenceAssetSmallText('Demolition')
+            SetRichPresence('Demolition: '..CurrentKills.." Kills")
+            Citizen.Wait(20000)
+        end
+    end)
 end
 
 function EndDemolition(winner, xp)

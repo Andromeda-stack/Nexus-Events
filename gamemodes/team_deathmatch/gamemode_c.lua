@@ -180,6 +180,14 @@ function StartTDM()
             NetworkSetFriendlyFireOption(true)
         end
     end)
+
+    Citizen.CreateThread(function()
+        while Sessionised do
+            SetDiscordRichPresenceAssetSmallText('Team Deathmatch')
+            SetRichPresence('Team Deathmatch: '..CurrentKills.." Kills")
+            Citizen.Wait(20000)
+        end
+    end)
 end
 
 function EndTDM(winner, xp)

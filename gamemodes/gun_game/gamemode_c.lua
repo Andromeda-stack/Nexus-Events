@@ -228,6 +228,13 @@ function StartGunGame()
             end
         end
     end)
+    Citizen.CreateThread(function()
+        while Sessionised do
+            SetDiscordRichPresenceAssetSmallText('Gun Game')
+            SetRichPresence('Gun Game: '..CurrentKills.." Kills")
+            Citizen.Wait(20000)
+        end
+    end)
 end
 
 function UpdateGunLevel(GunLevel)
