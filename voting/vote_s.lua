@@ -82,7 +82,7 @@ function StartVoteCounter()
         while GetNumPlayerIndices() ~= #Voted or GetNumPlayerIndices() == 0 do Wait(0) end
         local TargetGamemode = GetWinner()
         print("Attempting to start "..TargetGamemode)
-        TriggerEvent("Gamemode:Start:"..TargetGamemode,Gamemodes[TargetGamemode])
+        TriggerEvent("Gamemode:Start:"..TargetGamemode,Gamemodes[GetIndexFromId(TargetGamemode)])
         Voted = {}
         voting = false
 
@@ -90,6 +90,13 @@ function StartVoteCounter()
     end)
 end
 
+function GetIndexFromId(id)
+    for i,v in ipairs(Gamemodes) do
+        if id == v.id then
+            return i
+        end
+    end
+end
 
 
 RegisterCommand("votedebug", function(source)
