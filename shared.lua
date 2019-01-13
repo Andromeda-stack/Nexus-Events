@@ -33,6 +33,13 @@ Gamemodes = {
     desc = "A Free for All gamemode, hold the area for the longest time and get the most points",
     txd = "mpweaponsgang0",
     txn = "signal2"
+  },
+  {
+    id = 10,
+    title = "King Of Hill",
+    desc = "A Free for All gamemode, hold the area for the longest time and get the most points",
+    txd = "mpweaponsgang0",
+    txn = "signal2"
   }
 }
 
