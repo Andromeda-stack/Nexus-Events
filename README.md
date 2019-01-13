@@ -1,6 +1,6 @@
 # Nexus-Events
 
-This repository is a mirror of https://git.shayandoust.me/Nexus/Nexus-Events which is still our active internal repository for the project. Most recent changes will be documented there, and PR should also be done there and not here.
+This is the official repository for the nexus events resource.
 
 Nexus Events is a multi-gamemode server written by Shayan and Icehax. We incorporate loads of gamemodes such as King of the Hill, Demolition and much more.
 
