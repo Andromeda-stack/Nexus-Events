@@ -16,3 +16,8 @@ Nexus Events is a multi-gamemode server written by Shayan and Icehax. We incorpo
 Our community server (Nexus-Events) is joinable by searching for it on the server list or direct connecting to 143.159.198.240:30124. In addition to this, you can check out our progress by visiting the following link: https://manage.shayandoust.me/public/board/b233541f2138445b6627fc08e9fc73068d1c4007821f0af2f43cab06bc27
 
 Any feedback, let us know by telling us in our discord guild: https://discord.gg/4sHf688
+
+## Notices
+
+1. It is important to note that baseevents must be started before this resource is started. We will make this as a dependency soon.
+2. Please restart spawnmanager before restarting Nexus-Events resource.
