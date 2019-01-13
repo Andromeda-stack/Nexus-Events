@@ -5,6 +5,8 @@ author 'IceHax & Shayan'
 version 'v0.1'
 resource_type 'gametype' { name = 'Nexus Events' }
 
+dependency 'baseevents'
+
 client_scripts {
 	--FUNCTIONS
 	"functions/scaleforms.lua",
