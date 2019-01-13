@@ -1,13 +1,4 @@
 Gamemodes = {
-  {id = 1, title = "Coming soon™", desc = "Good ol' TDM!", txd = "mpweaponscommon", txn = "signal2"},
-  {
-    id = 2,
-    title = "Coming soon™",
-    desc = "Two teams try to capture a flag and bring it back to their base.",
-    txd = "mpweaponscommon",
-    txn = "signal2"
-  },
-  {id = 3, title = "Coming soon™", desc = "", txd = "mpweaponsgang0", txn = "signal2"},
   {
     id = 4,
     title = "Gun Game",
@@ -15,8 +6,6 @@ Gamemodes = {
     txd = "mpweaponscommon",
     txn = "w_sg_assaultshotgun"
   },
-  {id = 5, title = "Coming soon™", desc = "", txd = "mpweaponsgang0", txn = "signal2"},
-  {id = 6, title = "Sabotage", desc = "Destroy the Objectives.", txd = "mpweaponscommon", txn = "w_ex_pe"},
   {
     id = 7,
     title = "Demolition",
