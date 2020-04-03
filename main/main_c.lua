@@ -32,7 +32,7 @@ AddEventHandler("playerSpawned", function()
 				end
 				if Money ~= lastmoney then
 					StatSetInt("MP0_WALLET_BALANCE", Money, -1)
-					print(Money)
+					--print(Money)
 				end
 				if XP ~= lastxp then
 					Scaleform.InitializeXP(lastxp, math.floor(lastxp/1000)*1000, math.floor((lastxp+1000)/1000)*1000, XP-lastxp)
@@ -55,7 +55,7 @@ end)
 AddEventHandler("Nexus:UpdateMoney", function(money, xp) Money=money XP=xp end)
 
 AddEventHandler('gameEventTriggered', function (name, args)
-	print('game event ' .. name .. ' (' .. json.encode(args) .. ')')
+	--print('game event ' .. name .. ' (' .. json.encode(args) .. ')')
 	if name == "CEventNetworkVehicleUndrivable" then
 		if HasEntityBeenDamagedByEntity(args[1], GetVehiclePedIsIn(PlayerPedId(),false), 1) or HasEntityBeenDamagedByEntity(args[1], PlayerPedId(), 1) then
 			TriggerServerEvent("Gamemode:VehicleDestroyed:7")
